@@ -20,7 +20,6 @@ module.exports = {
   },
   parserOptions: {
     ecmaVersion: 2021,
-    project: './tsconfig.json'
   },
   rules: {
     'react-refresh/only-export-components': [
