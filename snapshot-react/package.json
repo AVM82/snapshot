@@ -1,0 +1,51 @@
+{
+  "name": "snapshot",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "lint:css": "npx stylelint \"src/**/*.scss\""
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.2.3",
+    "d3": "^7.9.0",
+    "localforage": "^1.10.0",
+    "match-sorter": "^6.3.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^9.1.1",
+    "react-router-dom": "^6.22.3",
+    "react-toastify": "^10.0.5",
+    "sort-by": "^1.2.0"
+  },
+  "devDependencies": {
+    "@ls-lint/ls-lint": "^2.2.3",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "editorconfig-checker": "^5.1.5",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "eslint-plugin-simple-import-sort": "^12.1.0",
+    "prettier": "3.2.5",
+    "sass": "^1.75.0",
+    "stylelint": "^14.14.0",
+    "stylelint-config-standard": "^29.0.0",
+    "stylelint-config-standard-scss": "^5.0.0",
+    "stylelint-order": "^5.0.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
+  }
+}
