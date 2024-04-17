@@ -3,46 +3,26 @@ import './App.scss';
 
 import { useEffect, useState } from 'react';
 
-import reactLogo from './assets/react.svg';
 import snapshotApi from './api/request';
 
 export default function App(): JSX.Element {
-  const [count, setCount] = useState(0);
+  const [response, setResponse] = useState<{ [message: string]: string }>({});
 
   useEffect(() => {
-    const sayHello = async () => {
-      const response = await snapshotApi.get('http://localhost:5173/users/hello');
-      console.log(response);
-    }
+    const sayHello = async (): Promise<void> => {
+      const res: { message: string } = (await snapshotApi.get('http://localhost:8080/users/hello'));
+      setResponse(res);
+    };
 
     sayHello();
-  })
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)} type="button">
-          count is
-          {' '}
-          {count}
-        </button>
-        <p>
-          Edit
-          {' '}
-          <code>src/App.tsx</code>
-          {' '}
-          and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      {response.message
+      && response.message.split('').map((item, index) => <p key={String(index)} className={item}>{item}</p>)}
+    </div>
+
   );
 }

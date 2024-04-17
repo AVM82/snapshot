@@ -1,0 +1,61 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  gap: 10px;
+}
+
+.auth-form-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 300px;
+  height: 500px;
+  padding: 10px;
+  border: 2px solid black;
+}
+
+.to-sign-in {
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 18px;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    color: green;
+  }
+}
+
+.auth-form-input {
+  width: 100%;
+}
+
+.auth-form-btn {
+  align-self: center;
+}
+
+.auth-form-error {
+  color: red;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+// .login {
+
+// }
+
+// .paswword {
+
+// }
+
+// .confirm-password {
+
+// }

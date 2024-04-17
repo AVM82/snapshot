@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-shadow */
+
 import './App.scss';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import reactLogo from './assets/react.svg';
 
