@@ -21,7 +21,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api-docs/**", "/h2-console/**").permitAll())
+                        .requestMatchers("/api-docs/**", "/h2-console/**").permitAll()
+                        .anyRequest().permitAll())
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
