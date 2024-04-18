@@ -6,5 +6,6 @@ create table users (
     first_name      varchar(50) not null,
     last_name       varchar(50) not null,
     avatar_img_url  varchar(100),
-    description     varchar(500)
+    description     varchar(500),
+    role            varchar(50)
     );
