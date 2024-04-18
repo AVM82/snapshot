@@ -19,7 +19,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public void register(RegisterRequest request) {
 
         var user = UserEntity.builder()
                 .username(request.getUsername())
@@ -31,20 +31,17 @@ public class AuthenticationService {
                 .build();
 
         userService.create(user);
-
-        var jwt = jwtService.generateToken(user);
-        return new AuthenticationResponse(jwt);
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                request.getUsername(),
+                request.getEmail(),
                 request.getPassword()
         ));
 
         var user = userService
                 .userDetailsService()
-                .loadUserByUsername(request.getUsername());
+                .loadUserByUsername(request.getEmail());
 
         var jwt = jwtService.generateToken(user);
         return new AuthenticationResponse(jwt);
