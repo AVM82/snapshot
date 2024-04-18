@@ -34,6 +34,15 @@ export default function SignUpPage(): JSX.Element {
 
     await snapshotApi.post('http://localhost:8080/auth/register', bodyData);
 
+    const token: { access_token: string } = await snapshotApi.post('http://localhost:8080/auth/authenticate', {
+      email: data.email,
+      password: data.password,
+    });
+
+    if (token) {
+      localStorage.setItem('token', token.access_token);
+      navigate('/');
+    }
     reset();
   };
 
