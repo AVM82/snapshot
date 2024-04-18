@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 function OAuth2(): JSX.Element {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const navigate = useNavigate();
 
   // const login = useGoogleLogin({
@@ -15,7 +16,6 @@ function OAuth2(): JSX.Element {
   //         .unwrap()
   //         .then((action): void => {
   //           storage.setItem(StorageKey.USER, JSON.stringify(action.user));
-
   //           if (action.user.roles.includes('GUEST')) {
   //             storage.removeItem(StorageKey.TOKEN);
   //             navigate('/sign-up', { state: { userData: action.user } });
@@ -31,9 +31,7 @@ function OAuth2(): JSX.Element {
   // });
 
   return (
-    <div
-      className="oauth2"
-    >
+    <div className="oauth2">
       <GoogleButton
         label="Google"
         style={{
@@ -52,4 +50,3 @@ function OAuth2(): JSX.Element {
 }
 
 export default OAuth2;
-
