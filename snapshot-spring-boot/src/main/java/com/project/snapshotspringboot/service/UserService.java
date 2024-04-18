@@ -4,11 +4,14 @@ import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 
@@ -16,7 +19,7 @@ import java.util.Collection;
 @Transactional(readOnly = true)
 @Slf4j
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository repository;
 
     public UserEntity save(UserEntity user) {
@@ -40,14 +43,10 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
     }
+
     public UserEntity getByEmail(String email) {
         return repository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
-
-
-     public UserDetailsService userDetailsService() {
-        return this::getByEmail;
     }
 
     public UserEntity getCurrentUser() {
@@ -58,5 +57,16 @@ public class UserService {
 
     public Collection<UserEntity> findAllUser() {
         return repository.findAll();
+    }
+
+    public UserEntity findById(long id) {
+        return repository
+                .findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return getByEmail(username);
     }
 }

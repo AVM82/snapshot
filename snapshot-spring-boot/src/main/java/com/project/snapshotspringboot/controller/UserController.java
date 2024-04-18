@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/users")
 @AllArgsConstructor
 public class UserController {
@@ -28,6 +27,11 @@ public class UserController {
     @GetMapping("/hello")
     public Map<String, String> getHello() {
         return Map.of("message", "Hello");
+    }
+
+    @GetMapping("/me")
+    public UserDto getMe(@AuthenticationPrincipal UserEntity userEntity) {
+        return toDto(userEntity);
     }
 
     @GetMapping

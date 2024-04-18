@@ -5,9 +5,8 @@ import com.project.snapshotspringboot.dtos.AuthenticationResponse;
 import com.project.snapshotspringboot.dtos.RegisterRequest;
 import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.enumeration.UserRole;
+import com.project.snapshotspringboot.security.JwtService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,6 @@ public class AuthenticationService {
     private final UserService userService;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
 
     public void register(RegisterRequest request) {
 
@@ -34,16 +32,10 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                request.getEmail(),
-                request.getPassword()
-        ));
 
-        var user = userService
-                .userDetailsService()
-                .loadUserByUsername(request.getEmail());
+        var user = userService.getByEmail(request.getEmail());
 
-        var jwt = jwtService.generateToken(user);
+        var jwt = jwtService.generateToken(user.getId());
         return new AuthenticationResponse(jwt);
     }
 }
