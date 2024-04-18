@@ -1,7 +1,6 @@
-package com.project.snapshotspringboot.services;
+package com.project.snapshotspringboot.service;
 
-import com.project.snapshotspringboot.dto.SkillDTO;
-import com.project.snapshotspringboot.dto.SkillTreeDTO;
+import com.project.snapshotspringboot.dtos.SkillDTO;
 import com.project.snapshotspringboot.entity.Skill;
 import com.project.snapshotspringboot.repository.SkillRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +20,10 @@ public class SkillService {
         return skillRepository.findById(id).orElse(null);
     }
 
-    public SkillTreeDTO getSkillTree(Long id) {
+    public List<SkillDTO> getSkillTree(Long id) {
         List<Skill> skillTree = skillRepository.getSkillTree(id);
-        skillTree.get(0).setParentId(0L);
         Map<Long, List<Skill>> skillMap = skillTree.stream().collect(Collectors.groupingBy(Skill::getParentId));
-        return new SkillTreeDTO(createSkillTree(skillMap, id));
+        return createSkillTree(skillMap, id);
     }
 
     public List<SkillDTO> createSkillTree(Map<Long, List<Skill>> skillMap, Long rootId) {

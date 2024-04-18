@@ -1,4 +1,4 @@
-package com.project.snapshotspringboot.dto;
+package com.project.snapshotspringboot.dtos;
 
 import lombok.Data;
 
