@@ -40,9 +40,14 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
     }
+    public UserEntity getByEmail(String email) {
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
 
-    public UserDetailsService userDetailsService() {
-        return this::getByUsername;
+
+     public UserDetailsService userDetailsService() {
+        return this::getByEmail;
     }
 
     public UserEntity getCurrentUser() {
