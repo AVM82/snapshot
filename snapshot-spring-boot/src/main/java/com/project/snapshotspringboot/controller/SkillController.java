@@ -1,9 +1,9 @@
 package com.project.snapshotspringboot.controller;
 
-import com.project.snapshotspringboot.dtos.SkillDTO;
-import com.project.snapshotspringboot.entity.Skill;
+import com.project.snapshotspringboot.dtos.SkillTreeDTO;
 import com.project.snapshotspringboot.service.SkillService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,16 +14,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/skills")
 @RequiredArgsConstructor
+@Slf4j
 public class SkillController {
     private final SkillService skillService;
 
-    @GetMapping("/{id}")
-    public Skill getSkill(@PathVariable Long id) {
-        return skillService.getSkills(id);
-    }
-
     @GetMapping("/tree/{rootId}")
-    public List<SkillDTO> getSkillTree(@PathVariable Long rootId) {
+    public List<SkillTreeDTO> getSkillTree(@PathVariable Long rootId) {
         return skillService.getSkillTree(rootId);
     }
 }

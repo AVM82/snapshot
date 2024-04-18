@@ -1,6 +1,6 @@
 package com.project.snapshotspringboot.repository;
 
-import com.project.snapshotspringboot.entity.Skill;
+import com.project.snapshotspringboot.entity.SkillEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SkillRepository extends JpaRepository<Skill, Long> {
+public interface SkillRepository extends JpaRepository<SkillEntity, Long> {
     @Query(value = """
                 WITH RECURSIVE rectree(id, name, parent_id) AS (
                     SELECT id, name, COALESCE(parent_id, 0)
@@ -21,5 +21,5 @@ public interface SkillRepository extends JpaRepository<Skill, Long> {
                     ON s.parent_id = rectree.id
                 ) SELECT * FROM rectree;
             """, nativeQuery = true)
-    List<Skill> getSkillTree(Long id);
+    List<SkillEntity> getSkillTree(Long id);
 }

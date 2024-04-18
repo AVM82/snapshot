@@ -8,16 +8,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "skills")
-public class Skill {
+public class SkillEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
     @Column(name = "name", nullable = false, length = 124)
     private String name;
-    //    @ManyToOne
-//    @JoinColumn(name = "parent_id")
-//    private Skill parent;
     @Column(name = "parent_id")
     private Long parentId;
 }
