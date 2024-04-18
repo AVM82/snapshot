@@ -7,7 +7,7 @@ plugins:
 rules:
   selector-class-pattern: null
   color-hex-length: long
-  declaration-no-important: true
+  declaration-no-important: null
   max-nesting-depth: 3
   no-descending-specificity: true
   #  scss/at-import-partial-extension: always

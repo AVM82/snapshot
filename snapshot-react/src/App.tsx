@@ -1,38 +1,34 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import './App.scss';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import reactLogo from './assets/react.svg';
+import snapshotApi from './api/request';
 
 export default function App(): JSX.Element {
-  const [count, setCount] = useState(0);
+  const [response, setResponse] = useState<{ [message: string]: string }>({});
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const sayHello = async (): Promise<void> => {
+      const res: { message: string } = (await snapshotApi.get('http://localhost:8080/users/hello'));
+      setResponse(res);
+    };
+
+    sayHello();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <button type="button" onClick={() => navigate('/sign-in')}>To sign-in</button>
+      <button type="button" onClick={() => navigate('/sign-up')}>To sign-up</button>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        {response.message
+      && response.message.split('').map((item, index) => <p key={String(index)} className={item}>{item}</p>)}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)} type="button">
-          count is
-          {' '}
-          {count}
-        </button>
-        <p>
-          Edit
-          {' '}
-          <code>src/App.tsx</code>
-          {' '}
-          and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
+
   );
 }
