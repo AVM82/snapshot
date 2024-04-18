@@ -2,8 +2,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
+import snapshotApi from '../../api/request';
 import { ISignIn } from '../../models/auth/ISignIn';
 import styles from './AuthPage.module.scss';
 import OAuth2 from './OAuth2';
@@ -14,9 +14,11 @@ export default function SignInPage(): JSX.Element {
   } = useForm<ISignIn>();
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<ISignIn> = (data): void => {
-    toast.success(`Логін: ${data.login}
-    Пароль: ${data.password}`);
+  const onSubmit: SubmitHandler<ISignIn> = async (data): Promise<void> => {
+    const token: { access_token: string } = await snapshotApi.post('http://localhost:8080/auth/authenticate', data);
+
+    if (token) localStorage.setItem('token', token.access_token);
+
     reset();
   };
 
@@ -30,7 +32,7 @@ export default function SignInPage(): JSX.Element {
             type="text"
             id="login"
             className={`${styles['auth-form-input']}`}
-            {...register('login')}
+            {...register('email')}
             placeholder="Введіть електронну пошту"
             required
           />

@@ -1,11 +1,10 @@
-/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
+import snapshotApi from '../../api/request';
 import EmailRegexp from '../../common/emailRegexp';
 import PasswordRegex from '../../common/passwordRegexp';
 import { ISignUp } from '../../models/auth/ISignUp';
@@ -24,12 +23,16 @@ export default function SignUpPage(): JSX.Element {
   });
 
   const navigate = useNavigate();
-  const onSubmit: SubmitHandler<ISignUp> = (data): void => {
-    toast.success(`Ім'я: ${data.firstName}
-    Прізвище: ${data.lastName}
-    Нікнейм: ${data.userName}
-    Логін: ${data.login}
-    Пароль: ${data.password}`);
+  const onSubmit: SubmitHandler<ISignUp> = async (data): Promise<void> => {
+    const bodyData = {
+      firstname: data.firstname,
+      lastname: data.lastname,
+      username: data.username,
+      email: data.email,
+      password: data.password,
+    };
+
+    await snapshotApi.post('http://localhost:8080/auth/register', bodyData);
 
     reset();
   };
@@ -44,7 +47,7 @@ export default function SignUpPage(): JSX.Element {
             type="text"
             id="first-name"
             className={`${styles['auth-form-input']}`}
-            {...register('firstName')}
+            {...register('firstname')}
             placeholder="Введіть ім'я"
             required
           />
@@ -53,7 +56,7 @@ export default function SignUpPage(): JSX.Element {
             type="text"
             id="last-name"
             className={`${styles['auth-form-input']}`}
-            {...register('lastName')}
+            {...register('lastname')}
             placeholder="Введіть прізвище"
             required
           />
@@ -62,7 +65,7 @@ export default function SignUpPage(): JSX.Element {
             type="text"
             id="user-name"
             className={`${styles['auth-form-input']}`}
-            {...register('userName', {
+            {...register('username', {
               minLength: {
                 value: 3,
                 message: 'Ім\'я користувача має бути не менше 3-ох символів',
@@ -72,14 +75,14 @@ export default function SignUpPage(): JSX.Element {
             required
           />
           {!!errors && (
-            <p className={styles['auth-form-error']}>{errors.userName?.message}</p>
+            <p className={styles['auth-form-error']}>{errors.username?.message}</p>
           )}
           <label htmlFor="login">Логін *</label>
           <input
             type="text"
             id="login"
             className={`${styles['auth-form-input']}`}
-            {...register('login', {
+            {...register('email', {
               pattern: {
                 value: EmailRegexp,
                 message: 'Incorrect email',
@@ -89,7 +92,7 @@ export default function SignUpPage(): JSX.Element {
             required
           />
           {!!errors && (
-            <p className={styles['auth-form-error']}>{errors.login?.message}</p>
+            <p className={styles['auth-form-error']}>{errors.email?.message}</p>
           )}
           <label htmlFor="paswword">Пароль *</label>
           <input

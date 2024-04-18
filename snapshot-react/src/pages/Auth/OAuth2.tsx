@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 function OAuth2(): JSX.Element {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-
   const navigate = useNavigate();
 
   // const login = useGoogleLogin({
