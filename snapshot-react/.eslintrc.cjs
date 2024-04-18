@@ -5,152 +5,123 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
-    "plugin:import/recommended",
-    "plugin:import/typescript",
+    'plugin:import/recommended',
+    'plugin:import/typescript',
     'airbnb',
-    'airbnb-typescript'
+    'airbnb-typescript',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs', 'vite.config.ts'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh', 'simple-import-sort'],
   settings: {
-    "react": {
-      "version": "18"
-    }
+    'react': {
+      'version': '18',
+    },
   },
   parserOptions: {
     ecmaVersion: 2021,
+    project: ['tsconfig.json'],
+    tsconfigRootDir: __dirname,
   },
   rules: {
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
     ],
-    'react/react-in-jsx-scope': "off",
-    'padding-line-between-statements': "off",
-    'prefer-const': "warn",
-    'indent': [
-      "error",
-      2
-    ],
-    "max-len": [
-      "error",
+    'linebreak-style': ['error', 'unix'],
+    'react/react-in-jsx-scope': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'padding-line-between-statements': 'off',
+    'prefer-const': 'warn',
+    'indent': ['error', 2],
+    'max-len': [
+      'error',
       {
         code: 120,
-        ignoreTemplateLiterals: true
-      }
+        ignoreTemplateLiterals: true,
+      },
     ],
-    "no-tabs": [
-      "error",
+    'no-tabs': [
+      'error',
       {
-        allowIndentationTabs: true
-      }
+        allowIndentationTabs: true,
+      },
     ],
-    "no-multiple-empty-lines": [
-      "error",
+    'no-multiple-empty-lines': [
+      'error',
       {
-        max: 1
-      }
+        max: 1,
+      },
     ],
-    "no-var": "error",
-    "no-console": "warn",
-    "arrow-parens": [
-      "error",
-      "always"
-    ],
-    "no-else-return": [
-      "error",
+    'no-var': 'error',
+    'no-console': 'warn',
+    'arrow-parens': ['error', 'always'],
+    'no-else-return': [
+      'error',
       {
-        allowElseIf: false
-      }
+        allowElseIf: false,
+      },
     ],
-    "jsx-quotes": [
-      "error",
-      "prefer-double"
-    ],
-    semi: [
-      "error",
-      "always"
-    ],
-    "max-params": [
-      "error",
-      5
-    ],
-    "comma-dangle": [
-      "error",
-      "always-multiline"
-    ],
-    "lines-between-class-members": [
-      "error",
-      "always"
-    ],
+    'jsx-quotes': ['error', 'prefer-double'],
+    semi: ['error', 'always'],
+    'max-params': ['error', 5],
+    'comma-dangle': ['error', 'always-multiline'],
+    'lines-between-class-members': ['error', 'always'],
     '@typescript-eslint/explicit-function-return-type': [
-      "error",
+      'error',
       {
-        allowTypedFunctionExpressions: true
-      }
+        allowTypedFunctionExpressions: true,
+      },
     ],
-    '@typescript-eslint/quotes': [
-      "error",
-      "single"
-    ],
-    '@typescript-eslint/object-curly-spacing': [
-      "error",
-      "always"
-    ],
-    '@typescript-eslint/semi': [
-      "error",
-      "always"
-    ],
-    '@typescript-eslint/comma-dangle': [
-      "error",
-      "always-multiline"
-    ],
-    '@typescript-eslint/no-explicit-any': "error",
+    '@typescript-eslint/quotes': ['error', 'single'],
+    '@typescript-eslint/object-curly-spacing': ['error', 'always'],
+    '@typescript-eslint/semi': ['error', 'always'],
+    '@typescript-eslint/comma-dangle': ['error', 'always-multiline'],
+    '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/no-unused-vars': [
-      "error",
+      'error',
       {
-        vars: "all",
-        args: "after-used",
-        argsIgnorePattern: "^_",
-        caughtErrors: "all"
-      }
+        vars: 'all',
+        args: 'after-used',
+        argsIgnorePattern: '^_',
+        caughtErrors: 'all',
+      },
     ],
     '@typescript-eslint/no-empty-interface': [
-      "error",
+      'error',
       {
-        allowSingleExtends: true
-      }
+        allowSingleExtends: true,
+      },
     ],
     '@typescript-eslint/padding-line-between-statements': [
-      "error",
+      'error',
       {
-        blankLine: "always",
-        prev: "*",
+        blankLine: 'always',
+        prev: '*',
         next: [
-          "switch",
-          "class",
-          "function",
-          "if",
-          "return",
-          "try",
-          "interface",
-          "type"
-        ]
-      }
+          'switch',
+          'class',
+          'function',
+          'if',
+          'return',
+          'try',
+          'interface',
+          'type',
+        ],
+      },
     ],
-    '@typescript-eslint/explicit-member-accessibility': "error",
-    'import/no-unresolved': "off",
+    '@typescript-eslint/explicit-member-accessibility': 'error',
+    'import/no-unresolved': 'off',
     'import/newline-after-import': [
-      "error",
+      'error',
       {
-        count: 1
-      }
+        count: 1,
+      },
     ],
-    'import/first': "error",
-    'import/no-duplicates': "error",
-    'import/group-exports': "error",
-    'simple-import-sort/imports': "error",
-    'simple-import-sort/exports': "error"
+    'import/first': 'error',
+    'import/no-duplicates': 'error',
+    'import/group-exports': 'error',
+    'simple-import-sort/imports': 'error',
+    'simple-import-sort/exports': 'error',
   },
-}
+};
