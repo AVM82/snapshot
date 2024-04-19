@@ -6,8 +6,6 @@ import com.project.snapshotspringboot.dtos.RegisterRequest;
 import com.project.snapshotspringboot.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,21 +20,15 @@ public class AuthController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(
-            @RequestBody RegisterRequest request) {
+    public void register(@RequestBody RegisterRequest request) {
         service.register(request);
-        log.info("User created successfully");
-        return ResponseEntity.ok().build();
-
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(
-            @RequestBody AuthenticationRequest request) {
-
-        return ResponseEntity.ok(service.authenticate(request));
-
+    public AuthenticationResponse authenticate(@RequestBody AuthenticationRequest request) {
+        return service.authenticate(request);
     }
 }
+
 
 

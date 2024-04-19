@@ -17,6 +17,7 @@ public class RegisterRequest {
     private String lastname;
     private String email;
     private String password;
-    private UserRole role;
+    private String avatarImgUrl;
+    private String description;
 
 }

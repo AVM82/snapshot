@@ -1,12 +1,10 @@
 package com.project.snapshotspringboot.controller;
 
-import com.project.snapshotspringboot.dtos.UserDto;
+import com.project.snapshotspringboot.dtos.UserResponseDto;
 import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.service.UserService;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +19,6 @@ import java.util.Map;
 public class UserController {
 
     private UserService service;
-    private ModelMapper mapper;
-
 
     @GetMapping("/hello")
     public Map<String, String> getHello() {
@@ -30,18 +26,13 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public UserDto getMe(@AuthenticationPrincipal UserEntity userEntity) {
-        return toDto(userEntity);
+    public UserResponseDto getMe(@AuthenticationPrincipal UserEntity userEntity) {
+        return service.getMe(userEntity);
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllUsers() {
-        List<UserDto> userDtos = service.findAllUser().stream()
-                .map(this::toDto).toList();
-        return new ResponseEntity<>(userDtos, HttpStatus.OK);
+    public List<UserResponseDto> getAllUsers(Pageable pageable) {
+        return service.findAllUser(pageable);
     }
 
-    public UserDto toDto(UserEntity userEntity) {
-        return mapper.map(userEntity, UserDto.class);
-    }
 }
