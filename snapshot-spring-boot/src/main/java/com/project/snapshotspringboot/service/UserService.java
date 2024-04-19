@@ -2,10 +2,10 @@ package com.project.snapshotspringboot.service;
 
 import com.project.snapshotspringboot.dtos.UserResponseDto;
 import com.project.snapshotspringboot.entity.UserEntity;
+import com.project.snapshotspringboot.mapper.UserMapper;
 import com.project.snapshotspringboot.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -25,8 +25,9 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
+
     private final UserRepository repository;
-    private ModelMapper mapper;
+    private final UserMapper userMapper;
 
     public void create(UserEntity user) {
 
@@ -71,7 +72,7 @@ public class UserService implements UserDetailsService {
         log.info("Get all users");
         Page<UserEntity> allUsers = repository.findAll(pageable);
         return allUsers.stream()
-                .map(this::toDto).toList();
+                .map(userMapper::toDto).toList();
     }
 
     public UserEntity findById(long id) {
@@ -81,15 +82,11 @@ public class UserService implements UserDetailsService {
     }
 
     public UserResponseDto getMe(UserEntity userEntity) {
-        return toDto(userEntity);
+        return userMapper.toDto(userEntity);
     }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return getByEmail(username);
     }
-
-    public UserResponseDto toDto(UserEntity userEntity) {
-        return mapper.map(userEntity, UserResponseDto.class);
-    }
-
 }

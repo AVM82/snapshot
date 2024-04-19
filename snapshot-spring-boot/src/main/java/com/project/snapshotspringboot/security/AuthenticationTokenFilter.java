@@ -1,6 +1,7 @@
 package com.project.snapshotspringboot.security;
 
 import com.project.snapshotspringboot.config.AppProps;
+import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -12,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -45,19 +47,25 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
         var authHeader = request.getHeader(HEADER_NAME);
         log.info("header = {}", authHeader);
         if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
-            log.info("No bearer header!");
-            filterChain.doFilter(request, response);
+            log.error("No bearer header!");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
-        var jwt = authHeader.substring(BEARER_PREFIX.length());
-        var userId = jwtService.getUserIdFromToken(jwt);
-        log.info("User id = {}", userId);
-        var user = userService.findById(userId);
-
-        SecurityContextHolder
-                .getContext()
-                .setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
-        filterChain.doFilter(request, response);
+        String jwt = authHeader.substring(BEARER_PREFIX.length());
+        long userId;
+        UserEntity user;
+        try {
+            userId = jwtService.getUserIdFromToken(jwt);
+            log.info("User id = {}", userId);
+            user = userService.findById(userId);
+            SecurityContextHolder
+                    .getContext()
+                    .setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
+            filterChain.doFilter(request, response);
+        } catch (ResponseStatusException exception) {
+            log.error("No user in database", exception);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        }
     }
 }

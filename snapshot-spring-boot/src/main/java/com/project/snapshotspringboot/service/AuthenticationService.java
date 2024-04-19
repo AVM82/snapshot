@@ -7,8 +7,10 @@ import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.enumeration.UserRole;
 import com.project.snapshotspringboot.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +36,10 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
 
         var user = userService.getByEmail(request.getEmail());
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials!");
+        }
 
         var jwt = jwtService.generateToken(user.getId());
         return new AuthenticationResponse(jwt);
