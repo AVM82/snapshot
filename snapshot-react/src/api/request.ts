@@ -3,10 +3,13 @@ import { toast } from 'react-toastify';
 
 import api from '../common/api';
 
+const token = localStorage.getItem('token');
+
 const snapshotApi = axios.create({
   baseURL: api.baseURL,
   headers: {
     'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
   },
 });
 
