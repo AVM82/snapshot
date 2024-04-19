@@ -39,7 +39,15 @@ export default function App(): JSX.Element {
       >
         Отримати дані юзера
       </button>
-      <button type="button" onClick={() => localStorage.removeItem('token')}>Вийти</button>
+      <button
+        type="button"
+        onClick={() => {
+          localStorage.removeItem('token');
+          navigate('/sign-in');
+        }}
+      >
+        Вийти
+      </button>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         {response.message
       && response.message.split('').map((item, index) => <p key={String(index)} className={item}>{item}</p>)}
