@@ -22,4 +22,9 @@ public class SkillController {
     public List<SkillTreeDTO> getSkillTree(@PathVariable Long rootId) {
         return skillService.getSkillTree(rootId);
     }
+
+    @GetMapping("/toplevel/{rootId}")
+    public List<SkillTreeDTO> getTopLevelSkills(@PathVariable Long rootId) {
+        return skillService.getTopLevelSkills(rootId);
+    }
 }
