@@ -48,3 +48,7 @@ values ('Programming', null),
        ('Data Analysis', 5),
        ('Data Visualization', 5),
        ('Data Mining', 5);
+
+insert into users (username, password, email, first_name, last_name, role, avatar_img_url, description)
+values ('user', '$2a$10$4ovMxWrEX9luzTrRt64HCOdmytp1Fp53/9RRVnGW2aEwDojJf34J2', 'username', 'name', 'surname',
+        'SEARCHER', null, null);
