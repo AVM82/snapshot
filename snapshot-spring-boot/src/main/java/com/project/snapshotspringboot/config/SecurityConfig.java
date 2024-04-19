@@ -30,6 +30,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private final AuthenticationTokenFilter jwtAuthenticationFilter;
+    private final AppProps appProps;
 
     @Value("${cors.allowed-headers}")
     private List<String> allowedHeaders;
@@ -51,11 +52,7 @@ public class SecurityConfig {
                 .httpBasic(HttpBasicConfigurer::disable)
                 .formLogin(FormLoginConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/api-docs/**",
-                                "/h2-console/**",
-                                "/users/hello",
-                                "/auth/**").permitAll()
+                        .requestMatchers(appProps.getSecurity().getPermitAllUris()).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -9,11 +9,18 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "app")
 public class AppProps {
     private final JwtProps jwt = new JwtProps();
+    private final SecurityProps security = new SecurityProps();
 
     @Getter
     @Setter
     public static class JwtProps {
         private String secret;
         private long expirationTimeInMinutes;
+    }
+
+    @Getter
+    @Setter
+    public static class SecurityProps {
+        private String[] permitAllUris;
     }
 }
