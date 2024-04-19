@@ -1,14 +1,15 @@
-create table users (
-    id              bigint not null auto_increment primary key,
-    username        varchar(50) not null unique,
-    password        varchar(100) not null,
-    email           varchar(100) not null unique,
-    first_name      varchar(50) not null,
-    last_name       varchar(50) not null,
-    avatar_img_url  varchar(100),
-    description     varchar(500),
-    role            varchar(50)
-    );
+create table users
+(
+    id             bigint       not null auto_increment primary key,
+    username       varchar(50)  not null unique,
+    password       varchar(100) not null,
+    email          varchar(100) not null unique,
+    first_name     varchar(50)  not null,
+    last_name      varchar(50)  not null,
+    avatar_img_url varchar(100),
+    description    varchar(500),
+    role           varchar(50)
+);
 
 create table skills
 (
@@ -16,6 +17,21 @@ create table skills
     name      varchar(50) not null unique,
     parent_id bigint null references skills(id)
 );
+
+create table roles
+(
+    id   bigint primary key auto_increment,
+    name varchar(50)
+);
+
+create table user_role_skill
+(
+    id      bigint primary key auto_increment,
+    user_id bigint references users (id),
+    role_id bigint references roles (id),
+    skill_id bigint references skills (id)
+);
+
 
 insert into skills (name, parent_id)
 values ('Programming', null),
