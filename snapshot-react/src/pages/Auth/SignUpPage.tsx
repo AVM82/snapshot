@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,15 +21,10 @@ export default function SignUpPage(): JSX.Element {
 
   const navigate = useNavigate();
   const onSubmit: SubmitHandler<ISignUp> = async (data): Promise<void> => {
-    const bodyData = {
-      firstname: data.firstname,
-      lastname: data.lastname,
-      username: data.username,
-      email: data.email,
-      password: data.password,
-    };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { confirmPassword, ...userData } = data;
 
-    await snapshotApi.post('http://localhost:8080/auth/register', bodyData);
+    await snapshotApi.post('http://localhost:8080/auth/register', { ...userData });
 
     const token: { access_token: string } = await snapshotApi.post('http://localhost:8080/auth/authenticate', {
       email: data.email,

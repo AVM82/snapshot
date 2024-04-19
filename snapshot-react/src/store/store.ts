@@ -1,15 +1,14 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 const rootReducer = combineReducers({
 
-})
+});
 
-export const setUpStore = () => {
-  return configureStore({
-    reducer: rootReducer,
-  })
-}
+export const setUpStore = () => configureStore({
+  reducer: rootReducer,
+});
 
-export type RootState = ReturnType<typeof rootReducer>
-export type AppStore = ReturnType<typeof setUpStore>
-export type AppDispatch = AppStore['dispatch']
+export type RootState = ReturnType<typeof rootReducer>;
+export type AppStore = ReturnType<typeof setUpStore>;
+export type AppDispatch = AppStore['dispatch'];
