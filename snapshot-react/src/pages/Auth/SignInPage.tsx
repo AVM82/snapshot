@@ -60,9 +60,9 @@ export default function SignInPage(): JSX.Element {
           tabIndex={0}
         >
           <p>Не має акаунта? Зареєструватись</p>
-          <br />
-          <OAuth2 />
         </div>
+        <br />
+        <OAuth2 />
       </div>
     </div>
   );

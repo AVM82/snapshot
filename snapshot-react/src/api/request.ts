@@ -1,15 +1,13 @@
+/* eslint-disable no-param-reassign */
 import axios, { isAxiosError } from 'axios';
 import { toast } from 'react-toastify';
 
 import api from '../common/api';
 
-const token = localStorage.getItem('token');
-
 const snapshotApi = axios.create({
   baseURL: api.baseURL,
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
   },
 });
 
@@ -19,6 +17,21 @@ snapshotApi.interceptors.response.use(
     if (isAxiosError(error)) {
       toast.error(error.message);
     }
+  },
+);
+
+snapshotApi.interceptors.request.use(
+  async (config) => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => {
+    toast.error(error.message);
   },
 );
 
