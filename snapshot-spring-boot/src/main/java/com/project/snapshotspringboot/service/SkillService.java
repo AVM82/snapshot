@@ -6,9 +6,7 @@ import com.project.snapshotspringboot.repository.SkillRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,4 +36,22 @@ public class SkillService {
         return list;
     }
 
+    public List<SkillTreeDTO> getTopLevelSkills(Long id) {
+        List<SkillEntity> skillTree = skillRepository.getSkillTree(id);
+        List<SkillEntity> topLevelSkills = findTopLevelSkills(skillTree);
+        Map<Long, List<SkillEntity>> skillMap = topLevelSkills.stream().collect(Collectors.groupingBy(SkillEntity::getParentId));
+        return createSkillTree(skillMap, id);
+    }
+
+    private List<SkillEntity> findTopLevelSkills(List<SkillEntity> skillTree) {
+        Set<Long> parentIds = skillTree.stream().map(SkillEntity::getParentId).collect(Collectors.toSet());
+        List<SkillEntity> topLevelSkills = new ArrayList<>();
+
+        for (SkillEntity skill : skillTree) {
+            if (parentIds.contains(skill.getId())) {
+                topLevelSkills.add(skill);
+            }
+        }
+        return topLevelSkills;
+    }
 }
