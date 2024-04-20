@@ -5,11 +5,12 @@ import com.project.snapshotspringboot.dtos.AuthenticationResponse;
 import com.project.snapshotspringboot.dtos.RegisterRequest;
 import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.enumeration.UserRole;
+import com.project.snapshotspringboot.security.JwtService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -17,33 +18,30 @@ public class AuthenticationService {
     private final UserService userService;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
 
-    public void register(RegisterRequest request) {
+    public AuthenticationResponse register(RegisterRequest request) {
 
         var user = UserEntity.builder()
                 .username(request.getUsername())
-                .firstName(request.getFirstname())
-                .lastName(request.getLastname())
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(UserRole.SEARCHER)
                 .build();
 
-        userService.create(user);
+        return new AuthenticationResponse(jwtService.generateToken(userService.create(user).getId()));
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                request.getEmail(),
-                request.getPassword()
-        ));
 
-        var user = userService
-                .userDetailsService()
-                .loadUserByUsername(request.getEmail());
+        var user = userService.getByEmail(request.getEmail());
 
-        var jwt = jwtService.generateToken(user);
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials!");
+        }
+
+        var jwt = jwtService.generateToken(user.getId());
         return new AuthenticationResponse(jwt);
     }
 }

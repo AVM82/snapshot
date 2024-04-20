@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,7 +15,10 @@ export default function SignInPage(): JSX.Element {
   const onSubmit: SubmitHandler<ISignIn> = async (data): Promise<void> => {
     const token: { access_token: string } = await snapshotApi.post('http://localhost:8080/auth/authenticate', data);
 
-    if (token) localStorage.setItem('token', token.access_token);
+    if (token) {
+      localStorage.setItem('token', token.access_token);
+      navigate('/');
+    }
 
     reset();
   };
@@ -59,9 +60,9 @@ export default function SignInPage(): JSX.Element {
           tabIndex={0}
         >
           <p>Не має акаунта? Зареєструватись</p>
-          <br />
-          <OAuth2 />
         </div>
+        <br />
+        <OAuth2 />
       </div>
     </div>
   );

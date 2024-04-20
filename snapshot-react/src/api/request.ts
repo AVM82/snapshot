@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import axios, { isAxiosError } from 'axios';
 import { toast } from 'react-toastify';
 
@@ -16,6 +17,21 @@ snapshotApi.interceptors.response.use(
     if (isAxiosError(error)) {
       toast.error(error.message);
     }
+  },
+);
+
+snapshotApi.interceptors.request.use(
+  async (config) => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => {
+    toast.error(error.message);
   },
 );
 
