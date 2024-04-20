@@ -1,11 +1,14 @@
 import './oauth2.scss';
 
-import GoogleButton from 'react-google-button';
 import { useNavigate } from 'react-router-dom';
 
 function OAuth2(): JSX.Element {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const navigate = useNavigate();
+
+  const handleClick = (): void => {
+    navigate('http://localhost:8080/oauth2/authorize/google');
+  };
 
   // const login = useGoogleLogin({
   //   flow: 'auth-code',
@@ -31,8 +34,14 @@ function OAuth2(): JSX.Element {
 
   return (
     <div className="oauth2">
-      <GoogleButton
+      <a href="http://localhost:8080/oauth2/authorize/google?redirect_uri=http:
+      //localhost:8080/oauth2/callback/google"
+      >
+        Login
+      </a>
+      {/* <GoogleButton
         label="Google"
+        onClick={handleClick}
         style={{
           backgroundColor: 'transparent',
           width: '100%',
@@ -43,7 +52,7 @@ function OAuth2(): JSX.Element {
           letterSpacing: '1.25px',
           textAlign: 'center',
         }}
-      />
+      /> */}
     </div>
   );
 }
