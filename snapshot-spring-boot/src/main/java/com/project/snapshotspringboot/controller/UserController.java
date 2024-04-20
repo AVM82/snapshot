@@ -2,6 +2,7 @@ package com.project.snapshotspringboot.controller;
 
 import com.project.snapshotspringboot.dtos.UserResponseDto;
 import com.project.snapshotspringboot.entity.UserEntity;
+import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import com.project.snapshotspringboot.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -26,8 +27,8 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public UserResponseDto getMe(@AuthenticationPrincipal UserEntity userEntity) {
-        return service.getMe(userEntity);
+    public UserResponseDto getMe(@AuthenticationPrincipal AuthDetails authDetails) {
+        return service.getMe(authDetails);
     }
 
     @GetMapping

@@ -2,6 +2,7 @@ package com.project.snapshotspringboot.security;
 
 import com.project.snapshotspringboot.config.AppProps;
 import com.project.snapshotspringboot.entity.UserEntity;
+import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import com.project.snapshotspringboot.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -54,14 +55,17 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
 
         String jwt = authHeader.substring(BEARER_PREFIX.length());
         long userId;
-        UserEntity user;
+        AuthDetails authDetails;
         try {
             userId = jwtService.getUserIdFromToken(jwt);
             log.info("User id = {}", userId);
-            user = userService.findById(userId);
+            authDetails = new AuthDetails(userService.findById(userId));
             SecurityContextHolder
                     .getContext()
-                    .setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
+                    .setAuthentication(new UsernamePasswordAuthenticationToken(
+                            authDetails,
+                            null,
+                            authDetails.getAuthorities()));
             filterChain.doFilter(request, response);
         } catch (ResponseStatusException exception) {
             log.error("No user in database", exception);

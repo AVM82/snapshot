@@ -20,8 +20,8 @@ public class AuthController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    public void register(@RequestBody RegisterRequest request) {
-        service.register(request);
+    public AuthenticationResponse register(@RequestBody RegisterRequest request) {
+        return service.register(request);
     }
 
     @PostMapping("/authenticate")

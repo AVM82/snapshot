@@ -4,6 +4,7 @@ import com.project.snapshotspringboot.dtos.UserResponseDto;
 import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.mapper.UserMapper;
 import com.project.snapshotspringboot.repository.UserRepository;
+import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -29,7 +30,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository repository;
     private final UserMapper userMapper;
 
-    public void create(UserEntity user) {
+    public UserEntity create(UserEntity user) {
 
         if (repository.existsByUsername(user.getUsername())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with the same name already exists");
@@ -39,7 +40,7 @@ public class UserService implements UserDetailsService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with the same email already exists");
         }
         log.info("User created successfully");
-        repository.save(user);
+        return repository.save(user);
     }
 
     public UserEntity getByUsername(String username) {
@@ -59,8 +60,8 @@ public class UserService implements UserDetailsService {
             throw new IllegalStateException("User is not authenticated");
         }
         Object principal = authentication.getPrincipal();
-        if (principal instanceof UserEntity) {
-            return (UserEntity) principal;
+        if (principal instanceof AuthDetails authDetails) {
+            return authDetails.getUserEntity();
         } else {
             String username = authentication.getName();
             return repository.findByUsername(username)
@@ -81,12 +82,12 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
-    public UserResponseDto getMe(UserEntity userEntity) {
-        return userMapper.toDto(userEntity);
+    public UserResponseDto getMe(AuthDetails authDetails) {
+        return userMapper.toDto(authDetails.getUserEntity());
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return getByEmail(username);
+        return new AuthDetails(getByEmail(username));
     }
 }

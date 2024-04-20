@@ -1,6 +1,10 @@
 package com.project.snapshotspringboot.config;
 
 import com.project.snapshotspringboot.security.AuthenticationTokenFilter;
+import com.project.snapshotspringboot.security.oauth2.CustomOAuth2UserService;
+import com.project.snapshotspringboot.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.project.snapshotspringboot.security.oauth2.OAuth2AuthenticationFailureHandler;
+import com.project.snapshotspringboot.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +35,10 @@ public class SecurityConfig {
 
     private final AuthenticationTokenFilter jwtAuthenticationFilter;
     private final AppProps appProps;
+    private final HttpCookieOAuth2AuthorizationRequestRepository authorizationRequestRepository;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
     @Value("${cors.allowed-headers}")
     private List<String> allowedHeaders;
@@ -57,7 +65,25 @@ public class SecurityConfig {
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
+                .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+                .oauth2Login(oauth2 -> {
+
+                    oauth2.authorizationEndpoint(authorization -> {
+                        authorization.baseUri(appProps.getOauth2().getAuthorizationBaseUri());
+                        authorization.authorizationRequestRepository(authorizationRequestRepository);
+                    });
+
+                    oauth2.redirectionEndpoint(redirection ->
+                            redirection.baseUri(appProps.getOauth2().getRedirectionBaseUri())
+                    );
+
+                    oauth2.userInfoEndpoint(userInfo ->
+                            userInfo.userService(customOAuth2UserService)
+                    );
+
+                    oauth2.successHandler(oAuth2AuthenticationSuccessHandler);
+                    oauth2.failureHandler(oAuth2AuthenticationFailureHandler);
+                });
         return http.build();
     }
 

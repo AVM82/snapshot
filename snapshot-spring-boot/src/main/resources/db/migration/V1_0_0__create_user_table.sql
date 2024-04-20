@@ -1,11 +1,11 @@
 create table users
 (
     id             bigint       not null auto_increment primary key,
-    username       varchar(50)  not null unique,
-    password       varchar(100) not null,
+    username       varchar(50) not null,
+    password       varchar(100),
     email          varchar(100) not null unique,
-    first_name     varchar(50)  not null,
-    last_name      varchar(50)  not null,
+    first_name     varchar(50),
+    last_name      varchar(50),
     avatar_img_url varchar(100),
     description    varchar(500),
     role           varchar(50)

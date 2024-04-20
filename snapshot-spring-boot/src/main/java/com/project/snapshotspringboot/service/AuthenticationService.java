@@ -19,18 +19,18 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
-    public void register(RegisterRequest request) {
+    public AuthenticationResponse register(RegisterRequest request) {
 
         var user = UserEntity.builder()
                 .username(request.getUsername())
-                .firstName(request.getFirstname())
-                .lastName(request.getLastname())
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(UserRole.SEARCHER)
                 .build();
 
-        userService.create(user);
+        return new AuthenticationResponse(jwtService.generateToken(userService.create(user).getId()));
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
