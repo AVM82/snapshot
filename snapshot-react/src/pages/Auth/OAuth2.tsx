@@ -1,37 +1,6 @@
 import './oauth2.scss';
 
-import { useNavigate } from 'react-router-dom';
-
 function OAuth2(): JSX.Element {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const navigate = useNavigate();
-
-  const handleClick = (): void => {
-    navigate('http://localhost:8080/oauth2/authorize/google');
-  };
-
-  // const login = useGoogleLogin({
-  //   flow: 'auth-code',
-  //   onSuccess: async (response) => {
-  //     try {
-  //       dispatch(authAction.loginWithOAuth2({ code: response.code }))
-  //         .unwrap()
-  //         .then((action): void => {
-  //           storage.setItem(StorageKey.USER, JSON.stringify(action.user));
-  //           if (action.user.roles.includes('GUEST')) {
-  //             storage.removeItem(StorageKey.TOKEN);
-  //             navigate('/sign-up', { state: { userData: action.user } });
-  //           } else {
-  //             storage.setItem(StorageKey.TOKEN, action.token);
-  //             navigate('/');
-  //           }
-  //         });
-  //     } catch (error) {
-  //       toast.error(`Error making POST request to backend: ${error.message}`);
-  //     }
-  //   },
-  // });
-
   return (
     <div className="oauth2">
       <a href="http://localhost:8080/oauth2/authorize/google?redirect_uri=http://localhost:5173/oauth2/redirect">

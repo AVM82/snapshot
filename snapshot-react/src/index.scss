@@ -1,6 +1,9 @@
 @import './reset';
 
-:root {
+#root {
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: space-between;
   color: rgb(255 255 255 / 87%);
   font-weight: 400;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -24,11 +27,8 @@ a:hover {
 }
 
 body {
-  display: flex;
   min-width: 320px;
-  min-height: 100vh;
   margin: 0;
-  place-items: center;
 }
 
 h1 {
