@@ -1,7 +1,9 @@
 package com.project.snapshotspringboot.repository;
 
 import com.project.snapshotspringboot.entity.SkillEntity;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -22,4 +24,13 @@ public interface SkillRepository extends JpaRepository<SkillEntity, Long> {
                 ) SELECT * FROM rectree;
             """, nativeQuery = true)
     List<SkillEntity> getSkillTree(Long id);
+
+    @Modifying
+    @Transactional
+    @Query(value = """
+                INSERT INTO user_role_skill (user_id, role_id, skill_id)
+                VALUES (:userId, :roleId, :skillId)
+            """, nativeQuery = true)
+    void addSkillToUser(Long userId, Long roleId, Long skillId);
+
 }

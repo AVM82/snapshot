@@ -1,7 +1,7 @@
 package com.project.snapshotspringboot.controller;
 
+import com.project.snapshotspringboot.dtos.RoleDto;
 import com.project.snapshotspringboot.dtos.UserResponseDto;
-import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import com.project.snapshotspringboot.service.UserService;
 import lombok.AllArgsConstructor;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/users")
@@ -36,4 +37,8 @@ public class UserController {
         return service.findAllUser(pageable);
     }
 
+    @GetMapping("/all-roles")
+    public Set<RoleDto> getRoles() {
+        return service.getRoles();
+    }
 }

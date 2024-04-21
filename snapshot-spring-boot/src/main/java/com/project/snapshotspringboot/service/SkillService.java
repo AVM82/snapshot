@@ -1,12 +1,18 @@
 package com.project.snapshotspringboot.service;
 
-import com.project.snapshotspringboot.dtos.SkillTreeDTO;
+import com.project.snapshotspringboot.dtos.SkillTreeDto;
+import com.project.snapshotspringboot.dtos.UserSkillAddDto;
 import com.project.snapshotspringboot.entity.SkillEntity;
+import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.repository.SkillRepository;
+import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -14,20 +20,25 @@ import java.util.stream.Collectors;
 public class SkillService {
     private final SkillRepository skillRepository;
 
-    public List<SkillTreeDTO> getSkillTree(Long id) {
+    public void addUserSkills(AuthDetails authDetails, UserSkillAddDto skillDto) {
+        UserEntity user = authDetails.getUserEntity();
+        skillDto.getSkillIds().forEach(skillId -> skillRepository.addSkillToUser(user.getId(), skillDto.getRoleId(), skillId));
+    }
+
+    public List<SkillTreeDto> getSkillTree(Long id) {
         List<SkillEntity> skillTree = skillRepository.getSkillTree(id);
         Map<Long, List<SkillEntity>> skillMap = skillTree.stream().collect(Collectors.groupingBy(SkillEntity::getParentId));
         return createSkillTree(skillMap, id);
     }
 
-    public List<SkillTreeDTO> createSkillTree(Map<Long, List<SkillEntity>> skillMap, Long rootId) {
-        List<SkillTreeDTO> list = new ArrayList<>();
+    public List<SkillTreeDto> createSkillTree(Map<Long, List<SkillEntity>> skillMap, Long rootId) {
+        List<SkillTreeDto> list = new ArrayList<>();
         List<SkillEntity> skills = skillMap.get(rootId);
         if (skills == null) {
             return list;
         }
         skills.forEach(skill -> {
-            SkillTreeDTO skillTreeDTO = new SkillTreeDTO();
+            SkillTreeDto skillTreeDTO = new SkillTreeDto();
             skillTreeDTO.setId(skill.getId());
             skillTreeDTO.setName(skill.getName());
             skillTreeDTO.setChildren(createSkillTree(skillMap, skill.getId()));
@@ -36,7 +47,7 @@ public class SkillService {
         return list;
     }
 
-    public List<SkillTreeDTO> getTopLevelSkills(Long id) {
+    public List<SkillTreeDto> getTopLevelSkills(Long id) {
         List<SkillEntity> skillTree = skillRepository.getSkillTree(id);
         List<SkillEntity> topLevelSkills = findTopLevelSkills(skillTree);
         Map<Long, List<SkillEntity>> skillMap = topLevelSkills.stream().collect(Collectors.groupingBy(SkillEntity::getParentId));
