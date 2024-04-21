@@ -24,11 +24,11 @@ create table roles
     name varchar(50)
 );
 
-insert into roles (name)
-values ('HR'),
-       ('INTERVIEWER'),
-       ('SEARCHER'),
-       ('ADMIN');
+insert into roles (id, name)
+values (1, 'SEARCHER'),
+       (2, 'INTERVIEWER'),
+       (3, 'HR'),
+       (4, 'ADMIN');
 
 create table user_role_skill
 (

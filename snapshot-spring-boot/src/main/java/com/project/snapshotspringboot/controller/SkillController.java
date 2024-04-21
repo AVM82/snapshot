@@ -2,7 +2,6 @@ package com.project.snapshotspringboot.controller;
 
 import com.project.snapshotspringboot.dtos.SkillTreeDto;
 import com.project.snapshotspringboot.dtos.UserSkillAddDto;
-import com.project.snapshotspringboot.enumeration.UserRole;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import com.project.snapshotspringboot.service.SkillService;
 import lombok.RequiredArgsConstructor;
@@ -19,15 +18,15 @@ import java.util.List;
 public class SkillController {
     private final SkillService skillService;
 
-    @GetMapping("/{role}")
-    public List<SkillTreeDto> getSkillTree(@PathVariable("role") UserRole role) {
-        return skillService.getSkillsByRole(role);
+    @GetMapping("/role/{roleId}")
+    public List<SkillTreeDto> getSkillTree(@PathVariable Long roleId) {
+        return skillService.getSkillsByRoleId(roleId);
     }
 
-    @PostMapping("/user/{role}")
+    @PostMapping("/user/{roleId}")
     public void addUserSkills(@AuthenticationPrincipal AuthDetails authDetails,
                               @RequestBody UserSkillAddDto skillDto,
-                              @PathVariable("role") UserRole role) {
-        skillService.addUserSkills(authDetails, skillDto, role);
+                              @PathVariable Long roleId) {
+        skillService.addUserSkills(authDetails, skillDto, roleId);
     }
 }
