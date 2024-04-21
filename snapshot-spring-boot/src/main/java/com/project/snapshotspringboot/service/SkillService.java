@@ -4,6 +4,7 @@ import com.project.snapshotspringboot.dtos.SkillTreeDto;
 import com.project.snapshotspringboot.dtos.UserSkillAddDto;
 import com.project.snapshotspringboot.entity.SkillEntity;
 import com.project.snapshotspringboot.entity.UserEntity;
+import com.project.snapshotspringboot.enumeration.UserRole;
 import com.project.snapshotspringboot.repository.SkillRepository;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,17 @@ import java.util.stream.Collectors;
 public class SkillService {
     private final SkillRepository skillRepository;
 
-    public void addUserSkills(AuthDetails authDetails, UserSkillAddDto skillDto) {
+    public void addUserSkills(AuthDetails authDetails, UserSkillAddDto skillDto, UserRole role) {
         UserEntity user = authDetails.getUserEntity();
-        skillDto.getSkillIds().forEach(skillId -> skillRepository.addSkillToUser(user.getId(), skillDto.getRoleId(), skillId));
+//        skillDto.getSkillIds().forEach(skillId -> skillRepository.addSkillToUser(user.getId(), skillDto.getRoleId(), skillId));
+    }
+
+    public List<SkillTreeDto> getSkillsByRole(UserRole role) {
+        if (role == UserRole.SEARCHER) {
+            return getSkillTree(0L);
+        } else {
+            return getTopLevelSkills(0L);
+        }
     }
 
     public List<SkillTreeDto> getSkillTree(Long id) {
