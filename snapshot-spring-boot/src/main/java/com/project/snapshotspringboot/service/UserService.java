@@ -1,5 +1,6 @@
 package com.project.snapshotspringboot.service;
 
+import com.project.snapshotspringboot.dtos.RoleDto;
 import com.project.snapshotspringboot.dtos.UserResponseDto;
 import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.mapper.UserMapper;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional(readOnly = true)
@@ -89,5 +91,9 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return new AuthDetails(getByEmail(username));
+    }
+
+    public Set<RoleDto> getRoles() {
+        return repository.findAllRoles();
     }
 }

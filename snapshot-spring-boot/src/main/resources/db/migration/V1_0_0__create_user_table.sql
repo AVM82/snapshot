@@ -24,6 +24,12 @@ create table roles
     name varchar(50)
 );
 
+insert into roles (name)
+values ('HR'),
+       ('INTERVIEWER'),
+       ('SEARCHER'),
+       ('ADMIN');
+
 create table user_role_skill
 (
     id      bigint primary key auto_increment,

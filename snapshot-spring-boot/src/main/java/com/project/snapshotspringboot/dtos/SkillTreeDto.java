@@ -5,8 +5,8 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class SkillTreeDTO {
+public class SkillTreeDto {
     private Long id;
     private String name;
-    private List<SkillTreeDTO> children;
+    private List<SkillTreeDto> children;
 }
