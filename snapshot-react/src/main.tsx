@@ -10,6 +10,7 @@ import Toast from './components/toast/Toast';
 import SignInPage from './pages/Auth/SignInPage';
 import SignUpPage from './pages/Auth/SignUpPage';
 import { setUpStore } from './store/store';
+import OAuth2RedirectHandler from './pages/Auth/OAuth2RedirectHandler';
 
 const store = setUpStore();
 
@@ -21,6 +22,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/" element={<App />} index />
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/sign-up" element={<SignUpPage />} />
+          <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
         </Routes>
       </BrowserRouter>
       <Toast />

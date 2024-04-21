@@ -34,9 +34,7 @@ function OAuth2(): JSX.Element {
 
   return (
     <div className="oauth2">
-      <a href="http://localhost:8080/oauth2/authorize/google?redirect_uri=http:
-      //localhost:8080/oauth2/callback/google"
-      >
+      <a href="http://localhost:8080/oauth2/authorize/google?redirect_uri=http://localhost:5173/oauth2/redirect">
         Login
       </a>
       {/* <GoogleButton
