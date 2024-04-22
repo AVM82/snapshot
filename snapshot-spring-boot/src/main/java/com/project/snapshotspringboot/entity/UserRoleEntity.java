@@ -21,6 +21,6 @@ public class UserRoleEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-//    @ManyToMany(mappedBy = "roles")
-//    private Set<UserRoleSkillEntity> userRoleSkillEntitySet = new HashSet<>();
+    @OneToMany(mappedBy = "role")
+    private Set<UserRoleSkillEntity> userRoleSkillEntitySet = new HashSet<>();
 }
