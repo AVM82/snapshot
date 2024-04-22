@@ -1,0 +1,53 @@
+.container {
+  min-height: 800px;
+  justify-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.skillsContainer {
+  max-width: fit-content;
+  margin-top: 5rem;
+
+  > {
+    max-width: fit-content;
+  }
+
+  li {
+    padding-left: 1.5rem;
+  }
+}
+
+.selectedSkillsContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 5px;
+  max-width: 800px;
+  margin-bottom: 1rem;
+  list-style: none;
+
+  li {
+    padding: 0.2rem;
+    border: 1px solid black;
+    border-radius: 5px;
+  }
+}
+.filteredSkillsContainer{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  div{
+    border: 1px solid black;
+    padding: 5px;
+
+  }
+}
+.input{
+  width: 500px;
+}
