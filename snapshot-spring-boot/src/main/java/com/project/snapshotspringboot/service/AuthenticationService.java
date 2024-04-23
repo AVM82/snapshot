@@ -1,18 +1,26 @@
 package com.project.snapshotspringboot.service;
 
 import com.project.snapshotspringboot.dtos.*;
+import com.project.snapshotspringboot.entity.TempUserEntity;
 import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.enumeration.UserRole;
+import com.project.snapshotspringboot.mapper.UserMapper;
+import com.project.snapshotspringboot.repository.TempUserRepository;
 import com.project.snapshotspringboot.security.JwtService;
 import com.project.snapshotspringboot.security.token.RefreshToken;
 import com.project.snapshotspringboot.security.token.RefreshTokenService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -22,19 +30,25 @@ public class AuthenticationService {
     private final UserService userService;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final TempUserRepository tempUserRepository;
+    private final UserMapper userMapper;
+    private final MailService mailService;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    @Value("${submit.email.redirect}")
+    private String submitRedirectUri;
 
-        var user = UserEntity.builder()
-                .username(request.getUsername())
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(UserRole.SEARCHER)
-                .build();
+    public String register(RegisterRequest request) {
+        tempUserRepository.deleteByEmail(request.getEmail());
 
-        return new AuthenticationResponse(jwtService.generateToken(userService.create(user).getId()));
+        if (userService.existsByEmail(request.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists!");
+        }
+
+        TempUserEntity tempUserEntity = tempUserRepository.save(userMapper.registerToTemp(request));
+        mailService.sendEmailSubmitLetter(
+                tempUserEntity.getEmail(),
+                jwtService.generateTempUserToken(tempUserEntity.getId()));
+        return "Email send successfully!";
     }
 
     public AuthenticationResponseWithRefreshToken authenticate(AuthenticationRequest request) {
@@ -45,8 +59,8 @@ public class AuthenticationService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials!");
         }
 
-        String jwt = jwtService.generateToken(user.getId());
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getUsername());
+        String jwt = jwtService.generateUserToken(user.getId());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
 
         return new AuthenticationResponseWithRefreshToken(jwt, refreshToken.getToken());
     }
@@ -64,11 +78,38 @@ public class AuthenticationService {
                 .setToken(UUID.randomUUID().toString())
                 .setExpiryDate(refreshTokenService.createExpiryDate()));
 
-        String jwt = jwtService.generateToken(refreshToken.getUserEntity().getId());
+        String jwt = jwtService.generateUserToken(refreshToken.getUserEntity().getId());
 
         return AuthenticationResponseWithRefreshToken.builder()
                 .accessToken(jwt)
                 .refreshToken(refreshToken.getToken()).build();
 
+    }
+
+    public void submitEmail(String token,
+                            HttpServletResponse response) {
+        long tempUserId = jwtService.getTempUserIdFromToken(token);
+        tempUserRepository.deleteAllByExpireAtBefore(LocalDateTime.now());
+
+        TempUserEntity tempUserEntity = tempUserRepository
+                .findById(tempUserId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email submit link expired!"));
+
+        UserEntity user = userService.save(userMapper.tempUserToUser(tempUserEntity));
+        tempUserRepository.deleteById(tempUserId);
+
+        String jwt = jwtService.generateUserToken(user.getId());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
+
+        String redirectUrl = UriComponentsBuilder.fromUriString(submitRedirectUri)
+                .queryParam("token", jwt)
+                .queryParam("refresh", refreshToken.getToken())
+                .build().toUriString();
+
+        try {
+            response.sendRedirect(redirectUrl);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Redirect failed!");
+        }
     }
 }

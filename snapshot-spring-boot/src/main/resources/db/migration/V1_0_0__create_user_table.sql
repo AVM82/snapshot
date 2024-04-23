@@ -1,7 +1,6 @@
 create table users
 (
     id             bigint       not null auto_increment primary key,
-    username       varchar(50)  not null,
     password       varchar(100),
     email          varchar(100) not null unique,
     first_name     varchar(50),
@@ -91,8 +90,8 @@ create table question_pool
 
 
 
-insert into users (username, password, email, first_name, last_name, role, avatar_img_url, description)
-values ('user', '$2a$10$4ovMxWrEX9luzTrRt64HCOdmytp1Fp53/9RRVnGW2aEwDojJf34J2', 'username', 'name', 'surname',
+insert into users (password, email, first_name, last_name, role, avatar_img_url, description)
+values ('$2a$10$4ovMxWrEX9luzTrRt64HCOdmytp1Fp53/9RRVnGW2aEwDojJf34J2', 'username', 'name', 'surname',
         'SEARCHER', null, null);
 
 
@@ -220,3 +219,13 @@ FROM ParentIDs
                       ('Forensic Analysis', 'Incident Response'),
                       ('Reporting and Documentation', 'Incident Response')) AS sub(name, parent_name)
               ON ParentIDs.name = sub.parent_name;
+
+create table temp_users
+(
+    id         bigint       not null auto_increment primary key,
+    email      varchar(100) not null unique,
+    password   varchar(100),
+    first_name varchar(50),
+    last_name  varchar(50),
+    expire_at  timestamp
+);

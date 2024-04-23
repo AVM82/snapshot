@@ -20,9 +20,9 @@ public class RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
 
-    public RefreshToken createRefreshToken(String username){
+    public RefreshToken createRefreshToken(long userId) {
         RefreshToken refreshToken = RefreshToken.builder()
-                .userEntity(userRepository.findByUsername(username)
+                .userEntity(userRepository.findById(userId)
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                                 "User not found")))
                 .token(UUID.randomUUID().toString())
@@ -38,9 +38,9 @@ public class RefreshTokenService {
                 .toInstant(ZoneOffset.UTC);
     }
 
-    public RefreshToken findByToken(String token){
+    public RefreshToken findByToken(String token) {
         return refreshTokenRepository.findByToken(token)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                         "Refresh Token is not in db..!!"));
     }
 

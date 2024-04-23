@@ -1,6 +1,8 @@
 package com.project.snapshotspringboot.mapper;
 
+import com.project.snapshotspringboot.dtos.RegisterRequest;
 import com.project.snapshotspringboot.dtos.UserResponseDto;
+import com.project.snapshotspringboot.entity.TempUserEntity;
 import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.enumeration.UserRole;
 import com.project.snapshotspringboot.security.oauth2.model.OAuth2UserInfo;
@@ -8,20 +10,59 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.Named;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.time.LocalDateTime;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
-public interface UserMapper {
+public abstract class UserMapper {
 
-    UserResponseDto toDto(UserEntity userEntity);
+    protected PasswordEncoder passwordEncoder;
+
+    @Value("${registration.emailTokenExpireTimeInMinutes}")
+    protected long registrationEmailTokenExpireTimeInMinutes;
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public abstract UserResponseDto toDto(UserEntity userEntity);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "username", source = "name")
+    @Mapping(target = "firstname", source = "name")
+    @Mapping(target = "lastname", source = "oAuth2UserInfo", qualifiedByName = "emptyString")
     @Mapping(target = "avatarImgUrl", source = "imageUrl")
     @Mapping(target = "role", source = "oAuth2UserInfo", qualifiedByName = "defaultRole")
-    UserEntity oauth2InfoToEntity(OAuth2UserInfo oAuth2UserInfo);
+    public abstract UserEntity oauth2InfoToEntity(OAuth2UserInfo oAuth2UserInfo);
+
+    @Mapping(target = "password", source = "password", qualifiedByName = "encodePassword")
+    @Mapping(target = "expireAt", source = "registerRequest", qualifiedByName = "createExpireAt")
+    public abstract TempUserEntity registerToTemp(RegisterRequest registerRequest);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "role", source = "tempUserEntity", qualifiedByName = "defaultRole")
+    public abstract UserEntity tempUserToUser(TempUserEntity tempUserEntity);
 
     @Named("defaultRole")
-    default UserRole defaultRole(OAuth2UserInfo oAuth2UserInfo) {
+    protected UserRole defaultRole(Object object) {
         return UserRole.SEARCHER;
+    }
+
+    @Named("createExpireAt")
+    protected LocalDateTime currentLocalDateTime(RegisterRequest registerRequest) {
+        return LocalDateTime.now().plusMinutes(registrationEmailTokenExpireTimeInMinutes);
+    }
+
+    @Named("encodePassword")
+    protected String encodePassword(String password) {
+        return passwordEncoder.encode(password);
+    }
+
+    @Named("emptyString")
+    protected String getEmptyString(Object object) {
+        return "";
     }
 }

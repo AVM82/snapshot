@@ -64,6 +64,6 @@ public class AuthDetails implements OAuth2User, UserDetails {
 
     @Override
     public String getName() {
-        return this.userEntity.getUsername();
+        return this.userEntity.getEmail();
     }
 }

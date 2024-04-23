@@ -13,10 +13,27 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 @RequiredArgsConstructor
 public class MailService {
+    private static final String REQUEST_URL_TEMPLATE = "%s?token=%s";
+
     private final JavaMailSender mailSender;
 
     @Value("${spring.mail.username}")
     private String username;
+
+    @Value("${submit.email.endpoint}")
+    private String submitEndpoint;
+
+    @Value("${submit.email.subject}")
+    private String submitSubject;
+
+    @Value("${submit.email.text}")
+    private String submitText;
+
+    public void sendEmailSubmitLetter(String to,
+                                      String token) {
+        String requestUrl = String.format(REQUEST_URL_TEMPLATE, submitEndpoint, token);
+        send(to, submitSubject, String.format(submitText, requestUrl));
+    }
 
     public void send(String to,
                      String subject,

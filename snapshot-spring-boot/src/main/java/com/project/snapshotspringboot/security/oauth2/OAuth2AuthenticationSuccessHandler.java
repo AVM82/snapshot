@@ -4,6 +4,8 @@ import com.project.snapshotspringboot.config.AppProps;
 import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.security.JwtService;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
+import com.project.snapshotspringboot.security.token.RefreshToken;
+import com.project.snapshotspringboot.security.token.RefreshTokenService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,6 +29,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final JwtService jwtService;
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
     private final AppProps appProps;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -59,10 +62,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
         UserEntity user = ((AuthDetails) authentication.getPrincipal()).getUserEntity();
 
-        String token = jwtService.generateToken(user.getId());
+        String token = jwtService.generateUserToken(user.getId());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)
+                .queryParam("refresh", refreshToken.getToken())
                 .build().toUriString();
     }
 

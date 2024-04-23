@@ -1,6 +1,7 @@
 package com.project.snapshotspringboot.security;
 
 import com.project.snapshotspringboot.config.AppProps;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -19,6 +20,9 @@ import java.util.Date;
 @Component
 @Slf4j
 public class JwtService {
+    private static final String AUTH_KEY = "auth";
+    private static final String SUBMIT_KEY = "submit";
+    private static final String KEY_NAME = "key";
 
     private final AppProps appProps;
     private final SecretKey secretKey;
@@ -29,10 +33,60 @@ public class JwtService {
         this.secretKey = Keys.hmacShaKeyFor(appProps.getJwt().getSecret().getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(long userId) {
+    public String generateUserToken(long userId) {
+        return generateToken(userId, AUTH_KEY);
+    }
+
+    public String generateTempUserToken(long tempUserId) {
+        return generateToken(tempUserId, SUBMIT_KEY);
+    }
+
+    public long getUserIdFromToken(String token) {
+        try {
+            Claims claims = getClaims(token);
+
+            if (!AUTH_KEY.equals(claims.get(KEY_NAME, String.class))) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token key!");
+            }
+
+            return Long.parseLong(claims.getSubject());
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Expired token time!", e);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token!", e);
+        }
+    }
+
+    public long getTempUserIdFromToken(String token) {
+        try {
+            Claims claims = getClaims(token);
+
+            if (!SUBMIT_KEY.equals(claims.get(KEY_NAME, String.class))) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token key!");
+            }
+
+            return Long.parseLong(claims.getSubject());
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Expired token time!", e);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token!", e);
+        }
+    }
+
+    private Claims getClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    private String generateToken(long id,
+                                 String key) {
         LocalDateTime currentDateTime = LocalDateTime.now();
         return Jwts.builder()
-                .subject(String.valueOf(userId))
+                .subject(String.valueOf(id))
+                .claim(KEY_NAME, key)
                 .issuedAt(Date.from(currentDateTime
                         .atZone(ZoneId.systemDefault())
                         .toInstant()))
@@ -42,20 +96,5 @@ public class JwtService {
                         .toInstant()))
                 .signWith(secretKey)
                 .compact();
-    }
-
-    public long getUserIdFromToken(String token) {
-        try {
-            return Long.parseLong(Jwts.parser()
-                    .verifyWith(secretKey)
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload()
-                    .getSubject());
-        } catch (ExpiredJwtException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Expired token time!", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token!", e);
-        }
     }
 }

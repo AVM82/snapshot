@@ -34,21 +34,11 @@ public class UserService implements UserDetailsService {
 
     public UserEntity create(UserEntity user) {
 
-        if (repository.existsByUsername(user.getUsername())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with the same name already exists");
-        }
-
         if (repository.existsByEmail(user.getEmail())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with the same email already exists");
         }
         log.info("User created successfully");
         return repository.save(user);
-    }
-
-    public UserEntity getByUsername(String username) {
-        return repository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-
     }
 
     public UserEntity getByEmail(String email) {
@@ -59,16 +49,10 @@ public class UserService implements UserDetailsService {
     public UserEntity getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new IllegalStateException("User is not authenticated");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is not authenticated!");
         }
-        Object principal = authentication.getPrincipal();
-        if (principal instanceof AuthDetails authDetails) {
-            return authDetails.getUserEntity();
-        } else {
-            String username = authentication.getName();
-            return repository.findByUsername(username)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-        }
+
+        return ((AuthDetails) authentication.getPrincipal()).getUserEntity();
     }
 
     public List<UserResponseDto> findAllUser(Pageable pageable) {
@@ -95,5 +79,13 @@ public class UserService implements UserDetailsService {
 
     public Set<RoleDto> getRoles() {
         return repository.findAllRoles();
+    }
+
+    public boolean existsByEmail(String email) {
+        return repository.existsByEmail(email);
+    }
+
+    public UserEntity save(UserEntity userEntity) {
+        return repository.save(userEntity);
     }
 }
