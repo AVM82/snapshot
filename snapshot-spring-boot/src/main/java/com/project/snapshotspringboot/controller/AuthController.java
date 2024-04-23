@@ -1,8 +1,6 @@
 package com.project.snapshotspringboot.controller;
 
-import com.project.snapshotspringboot.dtos.AuthenticationRequest;
-import com.project.snapshotspringboot.dtos.AuthenticationResponse;
-import com.project.snapshotspringboot.dtos.RegisterRequest;
+import com.project.snapshotspringboot.dtos.*;
 import com.project.snapshotspringboot.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +23,13 @@ public class AuthController {
     }
 
     @PostMapping("/authenticate")
-    public AuthenticationResponse authenticate(@RequestBody AuthenticationRequest request) {
+    public AuthenticationResponseWithRefreshToken authenticate(@RequestBody AuthenticationRequest request) {
         return service.authenticate(request);
+    }
+
+    @PostMapping("/refresh-token")
+    public AuthenticationResponseWithRefreshToken refreshToken(@RequestBody RefreshTokenRequestDto request) {
+        return service.refreshToken(request);
     }
 }
 

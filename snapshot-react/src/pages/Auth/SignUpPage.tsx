@@ -33,7 +33,7 @@ export default function SignUpPage(): JSX.Element {
 
     if (token) {
       localStorage.setItem('token', token.access_token);
-      navigate('/');
+      navigate('/profile');
     }
     reset();
   };

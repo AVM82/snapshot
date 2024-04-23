@@ -7,6 +7,7 @@ import OAuth2RedirectHandler from './pages/Auth/OAuth2RedirectHandler';
 import SignInPage from './pages/Auth/SignInPage';
 import SignUpPage from './pages/Auth/SignUpPage';
 import Home from './pages/Home/Home';
+import UserRoles from './pages/Profile/UserRoles';
 
 export default function App(): JSX.Element {
   return (
@@ -16,9 +17,9 @@ export default function App(): JSX.Element {
         <Route path="sign-in" element={<SignInPage />} />
         <Route path="sign-up" element={<SignUpPage />} />
         <Route path="oauth2/redirect" element={<OAuth2RedirectHandler />} />
+        <Route path="profile" element={<UserRoles />} />
         <Route path="*" element={<p>404</p>} />
       </Route>
     </Routes>
-
   );
 }

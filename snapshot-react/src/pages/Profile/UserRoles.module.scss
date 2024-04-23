@@ -1,0 +1,13 @@
+.userProfileContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #242424;
+  gap: 2rem;
+}
+.rolesContainer{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}

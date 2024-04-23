@@ -4,6 +4,9 @@ import com.project.snapshotspringboot.enumeration.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Builder
 @Getter
@@ -40,6 +43,9 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private UserRole role;
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserRoleSkillEntity> userRoleSkillEntitySet = new HashSet<>();
 }
 
 

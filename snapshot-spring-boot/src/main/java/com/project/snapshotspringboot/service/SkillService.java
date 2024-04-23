@@ -20,9 +20,13 @@ import java.util.stream.Collectors;
 public class SkillService {
     private final SkillRepository skillRepository;
 
-    public void addUserSkills(AuthDetails authDetails, UserSkillAddDto skillDto) {
+    public void addUserSkills(AuthDetails authDetails, UserSkillAddDto skillDto, Long roleId) {
         UserEntity user = authDetails.getUserEntity();
-        skillDto.getSkillIds().forEach(skillId -> skillRepository.addSkillToUser(user.getId(), skillDto.getRoleId(), skillId));
+        skillDto.getSkillIds().forEach(skillId -> skillRepository.addSkillToUser(user.getId(), roleId, skillId));
+    }
+
+    public List<SkillTreeDto> getSkillsByRoleId(Long roleId) {
+        return roleId == 1 ? getSkillTree(0L) : getTopLevelSkills(0L);
     }
 
     public List<SkillTreeDto> getSkillTree(Long id) {

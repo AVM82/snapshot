@@ -18,19 +18,15 @@ import java.util.List;
 public class SkillController {
     private final SkillService skillService;
 
-    @GetMapping("/tree/{rootId}")
-    public List<SkillTreeDto> getSkillTree(@PathVariable Long rootId) {
-        return skillService.getSkillTree(rootId);
+    @GetMapping("/role/{roleId}")
+    public List<SkillTreeDto> getSkillTree(@PathVariable Long roleId) {
+        return skillService.getSkillsByRoleId(roleId);
     }
 
-    @GetMapping("/toplevel/{rootId}")
-    public List<SkillTreeDto> getTopLevelSkills(@PathVariable Long rootId) {
-        return skillService.getTopLevelSkills(rootId);
-    }
-
-    @PostMapping("/user")
+    @PostMapping("/user/{roleId}")
     public void addUserSkills(@AuthenticationPrincipal AuthDetails authDetails,
-                              @RequestBody UserSkillAddDto skillDto) {
-        skillService.addUserSkills(authDetails, skillDto);
+                              @RequestBody UserSkillAddDto skillDto,
+                              @PathVariable Long roleId) {
+        skillService.addUserSkills(authDetails, skillDto, roleId);
     }
 }
