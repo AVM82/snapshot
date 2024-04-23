@@ -4,7 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import snapshotApi from '../../api/request';
 import EmailRegexp from '../../common/emailRegexp';
 import PasswordRegex from '../../common/passwordRegexp';
+import { useAppDispatch } from '../../hooks/redux';
 import { ISignUp } from '../../models/auth/ISignUp';
+import getUser from '../../store/reducers/user/actions';
 import styles from './AuthPage.module.scss';
 import OAuth2 from './OAuth2';
 
@@ -18,8 +20,8 @@ export default function SignUpPage(): JSX.Element {
   } = useForm<ISignUp>({
     mode: 'onChange',
   });
-
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const onSubmit: SubmitHandler<ISignUp> = async (data): Promise<void> => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { confirmPassword, ...userData } = data;
@@ -33,7 +35,10 @@ export default function SignUpPage(): JSX.Element {
 
     if (token) {
       localStorage.setItem('token', token.access_token);
-      navigate('/profile');
+      dispatch(getUser());
+      // const user: IUser = await snapshotApi.get('/users/me');
+      // localStorage.setItem('user', JSON.stringify(user));
+      navigate('/');
     }
     reset();
   };

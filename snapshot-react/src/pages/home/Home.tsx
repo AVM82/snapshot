@@ -4,13 +4,15 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import snapshotApi from '../../api/request';
+import { useAppDispatch } from '../../hooks/redux';
 import { IUser } from '../../models/user/IUser';
+import { deleteUser } from '../../store/reducers/user/userSlice';
 
 function Home(): JSX.Element {
   const [response, setResponse] = useState<{ [message: string]: string }>({});
   const [user, setUser] = useState<IUser | null>(null);
   const navigate = useNavigate();
-
+  const dispatch = useAppDispatch();
   const getMe = async (): Promise<void> => {
     const res: IUser = await snapshotApi.get('/users/me');
 
@@ -43,7 +45,9 @@ function Home(): JSX.Element {
         type="button"
         onClick={() => {
           localStorage.removeItem('token');
-          navigate('sign-in');
+          dispatch(deleteUser());
+          // localStorage.removeItem('user');
+          navigate('/sign-in');
         }}
       >
         Вийти

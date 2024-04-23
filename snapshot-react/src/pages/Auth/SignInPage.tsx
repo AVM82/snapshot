@@ -2,7 +2,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import snapshotApi from '../../api/request';
+import { useAppDispatch } from '../../hooks/redux';
 import { ISignIn } from '../../models/auth/ISignIn';
+import getUser from '../../store/reducers/user/actions';
 import styles from './AuthPage.module.scss';
 import OAuth2 from './OAuth2';
 
@@ -11,13 +13,16 @@ export default function SignInPage(): JSX.Element {
     register, handleSubmit, reset,
   } = useForm<ISignIn>();
   const navigate = useNavigate();
-
+  const dispatch = useAppDispatch();
   const onSubmit: SubmitHandler<ISignIn> = async (data): Promise<void> => {
     const token: { access_token: string } = await snapshotApi.post('http://localhost:8080/auth/authenticate', data);
 
     if (token) {
       localStorage.setItem('token', token.access_token);
-      navigate('/profile');
+      dispatch(getUser());
+      // const user: IUser = await snapshotApi.get('/users/me');
+      // localStorage.setItem('user', JSON.stringify(user));
+      navigate('/');
     }
 
     reset();
@@ -37,7 +42,7 @@ export default function SignInPage(): JSX.Element {
             placeholder="Введіть електронну пошту"
             required
           />
-          <label htmlFor="paswword">Пароль *</label>
+          <label htmlFor="password">Пароль *</label>
           <input
             type="password"
             id="password"

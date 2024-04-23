@@ -23,12 +23,26 @@ const initialState: User = {
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    deleteUser: (state) => {
+      state.userData = {
+        id: 0,
+        usernmae: '',
+        firstname: '',
+        lastname: '',
+        email: '',
+        avatarImgUrl: '',
+        description: '',
+      };
+    },
+  },
   extraReducers(builder) {
     builder.addCase(getUser.fulfilled, (state, { payload }: PayloadAction<IUser>) => {
       state.userData = { ...payload };
     });
   },
 });
+
+export const { deleteUser } = userSlice.actions;
 
 export default userSlice.reducer;

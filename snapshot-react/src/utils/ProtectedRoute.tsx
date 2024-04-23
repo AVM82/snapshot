@@ -1,6 +1,8 @@
 import { Navigate, Outlet } from 'react-router-dom';
 
-function ProtectedRoute(token: string): JSX.Element {
+function ProtectedRoute(): JSX.Element {
+  const token = localStorage.getItem('token');
+
   if (!token) {
     return <Navigate to="/sign-in" replace />;
   }
