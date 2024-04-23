@@ -95,7 +95,7 @@ export default function SignUpPage(): JSX.Element {
           {!!errors && (
             <p className={styles['auth-form-error']}>{errors.email?.message}</p>
           )}
-          <label htmlFor="paswword">Пароль *</label>
+          <label htmlFor="password">Пароль *</label>
           <input
             type="password"
             id="password"

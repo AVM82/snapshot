@@ -7,9 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 import App from './App';
 import Toast from './components/Toast/Toast';
-import { setUpStore } from './store/store';
-
-const store = setUpStore();
+import { store } from './store/store';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
