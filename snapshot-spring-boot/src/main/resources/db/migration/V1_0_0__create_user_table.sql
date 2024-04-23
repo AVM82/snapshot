@@ -46,6 +46,51 @@ create table user_role_skill
     skill_id bigint references skills (id)
 );
 
+create table interview_status
+(
+    id   bigint primary key auto_increment,
+    name varchar(25)
+);
+
+insert into interview_status (id, name)
+values (1, 'PLANNED'),
+       (2, 'ACTIVE'),
+       (3, 'FINISHED'),
+       (4, 'COMPLETED'),
+       (5, 'CANCELLED');
+
+create table interview
+(
+    id                bigint primary key auto_increment,
+    title             varchar(100),
+    status_id         bigint references interview_status (id),
+    interviewer_id    bigint references users (id),
+    searcher_id       bigint references users (id),
+    planned_date_time timestamp,
+    start_date_time   timestamp,
+    end_date_time     timestamp,
+    feedback          varchar(500)
+);
+
+create table interview_question
+(
+    id           bigint primary key auto_increment,
+    interview_id bigint references interview (id),
+    skill_id     bigint references skills (id),
+    question     varchar(500),
+    grade        int
+);
+
+create table question_pool
+(
+    id             bigint primary key auto_increment,
+    skill_id       bigint references skills (id),
+    interviewer_id bigint references users (id),
+    question       varchar(500)
+);
+
+
+
 insert into users (username, password, email, first_name, last_name, role, avatar_img_url, description)
 values ('user', '$2a$10$4ovMxWrEX9luzTrRt64HCOdmytp1Fp53/9RRVnGW2aEwDojJf34J2', 'username', 'name', 'surname',
         'SEARCHER', null, null);
