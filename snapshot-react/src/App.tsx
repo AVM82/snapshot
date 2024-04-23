@@ -2,14 +2,14 @@ import './App.scss';
 
 import { Route, Routes } from 'react-router-dom';
 
-import Layout from './components/layout/Layout';
+import Layout from './components/Layout/Layout';
 import OAuth2RedirectHandler from './pages/Auth/OAuth2RedirectHandler';
 import SignInPage from './pages/Auth/SignInPage';
 import SignUpPage from './pages/Auth/SignUpPage';
-import Home from './pages/home/Home';
+import Home from './pages/Home/Home';
 import UserRoles from './pages/Profile/UserRoles';
 
-export default function App(): JSX.Element {
+function App(): JSX.Element {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -23,3 +23,5 @@ export default function App(): JSX.Element {
     </Routes>
   );
 }
+
+export default App;
