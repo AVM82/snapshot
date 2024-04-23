@@ -6,8 +6,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
 import App from './App';
-import Toast from './components/toast/Toast';
-// import OAuth2RedirectHandler from './pages/Auth/OAuth2RedirectHandler';
+import Toast from './components/Toast/Toast';
 import { setUpStore } from './store/store';
 
 const store = setUpStore();
