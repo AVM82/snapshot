@@ -9,7 +9,7 @@ import SignUpPage from './pages/Auth/SignUpPage';
 import Home from './pages/Home/Home';
 import UserRoles from './pages/Profile/UserRoles';
 
-export default function App(): JSX.Element {
+function App(): JSX.Element {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -23,3 +23,5 @@ export default function App(): JSX.Element {
     </Routes>
   );
 }
+
+export default App;
