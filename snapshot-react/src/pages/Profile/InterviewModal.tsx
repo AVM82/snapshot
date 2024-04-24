@@ -1,7 +1,7 @@
 import { useAppSelector } from '../../hooks/redux';
 import Questions from './Questions';
 
-function InterviewModal(): JSX.Element {
+function InterviewModal({ onClose }: { onClose: React.Dispatch<React.SetStateAction<boolean>> }): JSX.Element {
   const user = useAppSelector((state) => state.user.userData);
 
   return (
@@ -13,12 +13,16 @@ function InterviewModal(): JSX.Element {
       height: '100%',
       backgroundColor: 'rgba(0, 0, 0, 0.6)',
       display: 'flex',
+      flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
     }}
     >
+      <button type="button" onClick={() => onClose(false)}>X</button>
       <div style={{
-        display: 'flex', gap: '20px', height: '50%',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '20px',
       }}
       >
         <p>
@@ -30,6 +34,8 @@ function InterviewModal(): JSX.Element {
           {user.lastname}
         </p>
         <Questions />
+        <label htmlFor="feedback">Текстовий фідбек (Підтримується markdown)</label>
+        <textarea name="feedback" id="feedback" cols={30} rows={10} />
       </div>
     </div>
   );

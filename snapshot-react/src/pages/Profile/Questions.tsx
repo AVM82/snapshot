@@ -1,3 +1,5 @@
+import Question from './Question';
+
 function Questions(): JSX.Element {
   const javaQuestions = [
     {
@@ -63,17 +65,9 @@ function Questions(): JSX.Element {
   ];
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
       {javaQuestions.map((question) => (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <p>{ question.question }</p>
-          <div style={{ width: '150px', height: '4px' }}>
-            <div style={{
-              width: question.score, backgroundColor: 'green', height: '4px', borderRadius: '4px',
-            }}
-            />
-          </div>
-        </div>
+        <Question question={question.question} score={question.score} />
       ))}
     </div>
   );

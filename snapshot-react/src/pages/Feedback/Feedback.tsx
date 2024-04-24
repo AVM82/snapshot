@@ -65,7 +65,7 @@ function Feedback(): JSX.Element {
   ];
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
       {javaQuestions.map((question) => <FeedbackItem question={question.question} score={question.score} />)}
     </div>
   );

@@ -21,7 +21,7 @@ function Layout(): JSX.Element {
           <Outlet />
         </ModalContext.Provider>
       </main>
-      {interviewOpened && <InterviewModal />}
+      {interviewOpened && <InterviewModal onClose={setInterviewOpened} />}
       <Footer />
     </>
   );
