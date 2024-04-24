@@ -29,10 +29,10 @@ public class SkillService {
         return roleId == 1 ? getSkillTree(0L) : getTopLevelSkills(0L);
     }
 
-    public List<SkillTreeDto> getSkillTree(Long id) {
-        List<SkillEntity> skillTree = skillRepository.getSkillTree(id);
+    public List<SkillTreeDto> getSkillTree(Long rootId) {
+        List<SkillEntity> skillTree = skillRepository.getSkillTree(rootId);
         Map<Long, List<SkillEntity>> skillMap = skillTree.stream().collect(Collectors.groupingBy(SkillEntity::getParentId));
-        return createSkillTree(skillMap, id);
+        return createSkillTree(skillMap, rootId);
     }
 
     public List<SkillTreeDto> createSkillTree(Map<Long, List<SkillEntity>> skillMap, Long rootId) {
@@ -68,5 +68,43 @@ public class SkillService {
             }
         }
         return topLevelSkills;
+    }
+
+    /**
+     * Method create a skill tree for the user with specified role
+     *
+     * @param userId user which skills are to be fetched
+     * @param roleId role of user for which skills are fetched
+     * @return skill tree for the user
+     */
+    public List<SkillTreeDto> getUserSkillsTree(Long userId, Long roleId) {
+        Set<Long> skillIds = skillRepository.getUserSkills(userId, roleId);
+        List<SkillTreeDto> skillTree = getSkillTree(0L);
+        List<SkillTreeDto> userSkillTree = new ArrayList<>();
+        for (SkillTreeDto s : skillTree) {
+            SkillTreeDto skill = filterSkillTree(s, skillIds);
+            if (skill != null) {
+                userSkillTree.add(skill);
+            }
+        }
+        return userSkillTree;
+    }
+
+    private SkillTreeDto filterSkillTree(SkillTreeDto root, Set<Long> userSkillIds) {
+        if (root == null) {
+            return null;
+        }
+        SkillTreeDto skill = new SkillTreeDto(root.getId(), root.getName(), new ArrayList<>());
+        for (SkillTreeDto childNode : root.getChildren()) {
+            SkillTreeDto filteredChildNode = filterSkillTree(childNode, userSkillIds);
+            // Add childNode if it has children, or it is in the userSkillIds
+            if (filteredChildNode != null) {
+                skill.getChildren().add(filteredChildNode);
+            }
+            if (userSkillIds.contains(childNode.getId())) {
+                skill.getChildren().add(childNode);
+            }
+        }
+        return skill.getChildren().isEmpty() ? null : skill;
     }
 }

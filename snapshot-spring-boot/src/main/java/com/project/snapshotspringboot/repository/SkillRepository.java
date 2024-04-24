@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface SkillRepository extends JpaRepository<SkillEntity, Long> {
@@ -24,6 +25,13 @@ public interface SkillRepository extends JpaRepository<SkillEntity, Long> {
                 ) SELECT * FROM rectree;
             """, nativeQuery = true)
     List<SkillEntity> getSkillTree(Long id);
+
+    @Query(value = """
+                SELECT skill_id
+                FROM user_role_skill
+                WHERE user_id = :userId AND role_id = :roleId
+            """, nativeQuery = true)
+    Set<Long> getUserSkills(Long userId, Long roleId);
 
     @Modifying
     @Transactional

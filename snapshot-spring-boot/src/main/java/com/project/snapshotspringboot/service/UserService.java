@@ -1,6 +1,7 @@
 package com.project.snapshotspringboot.service;
 
 import com.project.snapshotspringboot.dtos.RoleDto;
+import com.project.snapshotspringboot.dtos.SkillTreeDto;
 import com.project.snapshotspringboot.dtos.UserResponseDto;
 import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.mapper.UserMapper;
@@ -30,6 +31,7 @@ import java.util.Set;
 public class UserService implements UserDetailsService {
 
     private final UserRepository repository;
+    private final SkillService skillService;
     private final UserMapper userMapper;
 
     public UserEntity create(UserEntity user) {
@@ -87,5 +89,9 @@ public class UserService implements UserDetailsService {
 
     public UserEntity save(UserEntity userEntity) {
         return repository.save(userEntity);
+    }
+
+    public List<SkillTreeDto> getUserSkills(Long userId, Long roleId) {
+        return skillService.getUserSkillsTree(userId, roleId);
     }
 }

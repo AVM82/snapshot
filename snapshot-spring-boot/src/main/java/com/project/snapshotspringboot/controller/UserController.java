@@ -1,6 +1,7 @@
 package com.project.snapshotspringboot.controller;
 
 import com.project.snapshotspringboot.dtos.RoleDto;
+import com.project.snapshotspringboot.dtos.SkillTreeDto;
 import com.project.snapshotspringboot.dtos.UserResponseDto;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import com.project.snapshotspringboot.service.UserService;
@@ -40,5 +41,10 @@ public class UserController {
     @GetMapping("/all-roles")
     public Set<RoleDto> getRoles() {
         return service.getRoles();
+    }
+
+    @GetMapping("/user-skill-tree")
+    public List<SkillTreeDto> getUserSkillTree(@AuthenticationPrincipal AuthDetails authDetails) {
+        return service.getUserSkills(authDetails.getUserEntity().getId(), 1L);
     }
 }
