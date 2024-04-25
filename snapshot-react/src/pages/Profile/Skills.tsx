@@ -3,24 +3,30 @@ import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import React, { useEffect, useState } from 'react';
 
 import snapshotApi from '../../api/request';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { IRoles } from '../../models/profile/IRoles';
 import { ISkills } from '../../models/profile/ISkills';
+import { getRoleSkills } from '../../store/reducers/skills/actions';
+import { getFilterSkillsByInput } from '../../store/reducers/skills/userSkillsSlice';
+import { RootState } from '../../store/store';
 import styles from './Skills.module.scss';
 
 export default function Skills(props:IRoles):React.JSX.Element {
+  const { allSkills: skills, isLoading, filteredByInputSkills } = useAppSelector((state:RootState) => state.userSkills);
+  const dispatch = useAppDispatch();
   const { id: roleId } = props;
-  const [skills, setSkills] = useState<ISkills[]>();
   const [selectedSkillsId, setSelectedSkillsId] = useState<string[]>([]);
   const [selectedSkillsNames, setSelectedSkillsNames] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isInputEmpty, setIsInputEmpty] = useState(false);
 
   useEffect(() => {
-    (async ():Promise<void> => {
-      const response: ISkills[] = await snapshotApi.get(`http://localhost:8080/skills/role/${roleId}`);
-      setSkills(response);
-    })();
+    dispatch(getRoleSkills(roleId));
   }, [roleId]);
+
+  useEffect(() => {
+    dispatch(getFilterSkillsByInput(inputValue));
+  }, [inputValue]);
 
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>):void => {
     setInputValue(event.target.value);
@@ -34,26 +40,6 @@ export default function Skills(props:IRoles):React.JSX.Element {
       setSelectedSkillsNames(skillNames);
     }
   };
-
-  const filterSkillsByInput = ():ISkills[] => {
-    const filteredSkills:ISkills[] = [];
-
-    function search(node:ISkills):void {
-      if (node.children.length === 0) {
-        if (node.name.toLowerCase().includes(inputValue.toLowerCase())) {
-          if (!selectedSkillsNames.includes(node.name)) filteredSkills.push(node);
-        }
-      } else {
-        node.children.forEach((child) => search(child));
-      }
-    }
-
-    if (skills) {
-      skills.forEach((skill:ISkills) => search(skill));
-    }
-
-    return filteredSkills;
-  };
   const onSubmit = async ():Promise<void> => {
     const data = {
       skillIds: selectedSkillsId,
@@ -62,11 +48,11 @@ export default function Skills(props:IRoles):React.JSX.Element {
     await snapshotApi.post(`http://localhost:8080/skills/user/${roleId}`, data);
   };
 
-  if (!skills) return <>loading...</>;
+  if (!isLoading) return <>loading...</>;
 
   const renderTreeItems = (skill: ISkills[]): React.JSX.Element => (
     <SimpleTreeView className={styles.skillsContainer}>
-      {skill.map(({ id, name, children }) => (
+      { skill && skill.map(({ id, name, children }) => (
         !selectedSkillsNames.includes(name) && (
           <TreeItem
             className={styles.treeItem}
@@ -81,29 +67,25 @@ export default function Skills(props:IRoles):React.JSX.Element {
       ))}
     </SimpleTreeView>
   );
-  const renderFilteredItems = ():React.JSX.Element => {
-    const filteredSkills:ISkills[] = filterSkillsByInput();
-
-    return (
-      <div className={styles.filteredSkillsContainer}>
-        {filteredSkills.map(({ id, name }) => (
-          <div
-            role="button"
-            tabIndex={0}
-            onClick={() => handleSkillClick(id, name)}
-            key={id}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                handleSkillClick(id, name);
-              }
-            }}
-          >
-            {name}
-          </div>
-        ))}
-      </div>
-    );
-  };
+  const renderFilteredItems = ():React.JSX.Element => (
+    <div className={styles.filteredSkillsContainer}>
+      {filteredByInputSkills.map(({ id, name }) => (
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={() => handleSkillClick(id, name)}
+          key={id}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              handleSkillClick(id, name);
+            }
+          }}
+        >
+          {name}
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <div className={styles.container}>
@@ -113,8 +95,10 @@ export default function Skills(props:IRoles):React.JSX.Element {
           <li key={id.toString()}>{skillName}</li>
         ))}
       </ul>
-      <button type="button" onClick={onSubmit}>Підтвердити</button>
-      <h3>Вибиріть навички:</h3>
+      <button type="button" onClick={onSubmit}>
+        Підтвердити
+      </button>
+      <h3>Оберіть навички:</h3>
       <div>
         <input
           className={styles.input}

@@ -2,10 +2,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import userReducer from './reducers/user/userSlice';
+import userSkillsSlice from "./reducers/skills/userSkillsSlice.ts";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    userSkills:userSkillsSlice
+
   },
 });
 
