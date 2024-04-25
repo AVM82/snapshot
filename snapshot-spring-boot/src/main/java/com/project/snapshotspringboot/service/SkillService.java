@@ -79,7 +79,7 @@ public class SkillService {
      */
     public List<SkillTreeDto> getUserSkillsTree(Long userId, Long roleId) {
         Set<Long> skillIds = skillRepository.getUserSkills(userId, roleId);
-        List<SkillTreeDto> skillTree = getSkillTree(0L);
+        List<SkillTreeDto> skillTree = (roleId == 1 ? getSkillTree(0L) : getTopLevelSkills(0L));
         List<SkillTreeDto> userSkillTree = new ArrayList<>();
         for (SkillTreeDto s : skillTree) {
             SkillTreeDto skill = filterSkillTree(s, skillIds);

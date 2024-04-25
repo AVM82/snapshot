@@ -45,25 +45,11 @@ create table user_role_skill
     skill_id bigint references skills (id)
 );
 
-
--- create table interview_status
--- (
---     id   bigint primary key auto_increment,
---     name varchar(25)
--- );
-
--- insert into interview_status (id, name)
--- values (1, 'PLANNED'),
---        (2, 'ACTIVE'),
---        (3, 'FINISHED'),
---        (4, 'COMPLETED'),
---        (5, 'CANCELLED');
-
 create table interviews
 (
     id                bigint primary key auto_increment,
     title             varchar(100),
-    status            varchar(255) not null ,
+    status            varchar(255) not null,
     interviewer_id    bigint references users (id),
     searcher_id       bigint references users (id),
     planned_date_time timestamp,
@@ -88,12 +74,6 @@ create table interviewer_questions
     interviewer_id bigint references users (id),
     question       varchar(500)
 );
-
-
-
-insert into users (password, email, first_name, last_name, role, avatar_img_url, description)
-values ('$2a$10$4ovMxWrEX9luzTrRt64HCOdmytp1Fp53/9RRVnGW2aEwDojJf34J2', 'username', 'name', 'surname','SEARCHER', null, null);
-
 
 -- insert skills level 1
 INSERT INTO skills (name, parent_id)
@@ -231,13 +211,28 @@ create table temp_users
 );
 
 ----------for test, delete later---------
-INSERT INTO interviews (title, status, interviewer_id, searcher_id, planned_date_time, start_date_time, end_date_time, feedback)
-VALUES
-    ('Test', 'COMPLETED', 1, 1, '2024-04-24 09:00:00', '2024-04-24 09:00:00', '2024-04-24 10:00:00', 'Needs improvement');
+insert into users (password, email, first_name, last_name, avatar_img_url, description)
+values ('$2a$10$4ovMxWrEX9luzTrRt64HCOdmytp1Fp53/9RRVnGW2aEwDojJf34J2', 'username', 'name', 'surname', 'i', 'd'),
+       ('$2a$10$KIP8Yy2TYOc8jI.RGdkyqenwy807Uts8d1itK2Bah/Gp9qXBOiCSW', 'username2', 'name2', 'surname2', 'i2', 'd2');
+
+insert into user_role_skill (user_id, role_id, skill_id)
+values (1, 2, 5),
+       (1, 2, 8),
+       (1, 2, 9),
+       (1, 2, 10),
+       (1, 2, 12),
+       (2, 1, 20),
+       (2, 1, 29),
+       (2, 1, 43),
+       (2, 1, 47);
+
+INSERT INTO interviews (title, status, interviewer_id, searcher_id, planned_date_time, start_date_time, end_date_time,
+                        feedback)
+VALUES ('Test', 'COMPLETED', 1, 1, '2024-04-24 09:00:00', '2024-04-24 09:00:00', '2024-04-24 10:00:00',
+        'Needs improvement');
 
 INSERT INTO interview_questions (interview_id, skill_id, question, grade)
-VALUES
-    (1, 56, 'How to configure a firewall for network security?', 100),
-    (1, 57, 'What are IDPS, and how do they collaborate with firewalls?', 50),
-    (1, 58, 'How to implement a VPN, and what technologies ensure data confidentiality?', 0);
+VALUES (1, 56, 'How to configure a firewall for network security?', 100),
+       (1, 57, 'What are IDPS, and how do they collaborate with firewalls?', 50),
+       (1, 58, 'How to implement a VPN, and what technologies ensure data confidentiality?', 0);
 ---------for test, delete later---------
