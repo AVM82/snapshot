@@ -233,11 +233,11 @@ create table temp_users
 ----------for test, delete later---------
 INSERT INTO interviews (title, status, interviewer_id, searcher_id, planned_date_time, start_date_time, end_date_time, feedback)
 VALUES
-    ('Test', 3, 1, 1, '2024-04-24 09:00:00', '2024-04-24 09:00:00', '2024-04-24 10:00:00', 'Needs improvement');
+    ('Test', 'COMPLETED', 1, 1, '2024-04-24 09:00:00', '2024-04-24 09:00:00', '2024-04-24 10:00:00', 'Needs improvement');
 
 INSERT INTO interview_questions (interview_id, skill_id, question, grade)
 VALUES
-    (1, 41, 'How to configure a firewall for network security?', 100),
-    (1, 42, 'What are IDPS, and how do they collaborate with firewalls?', 50),
-    (1, 43, 'How to implement a VPN, and what technologies ensure data confidentiality?', 0);
+    (1, 56, 'How to configure a firewall for network security?', 100),
+    (1, 57, 'What are IDPS, and how do they collaborate with firewalls?', 50),
+    (1, 58, 'How to implement a VPN, and what technologies ensure data confidentiality?', 0);
 ---------for test, delete later---------

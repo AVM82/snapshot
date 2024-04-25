@@ -12,9 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class InterviewResultsDTO {
+public class InterviewResultsDto {
 
-    List<QuestionScoreDTO> questions;
+    List<QuestionScoreDto> questions;
     String feedback;
 
 }

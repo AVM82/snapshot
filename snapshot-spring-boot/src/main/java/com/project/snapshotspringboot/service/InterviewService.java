@@ -1,7 +1,7 @@
 package com.project.snapshotspringboot.service;
 
-import com.project.snapshotspringboot.dtos.InterviewResultsDTO;
-import com.project.snapshotspringboot.dtos.QuestionScoreDTO;
+import com.project.snapshotspringboot.dtos.InterviewResultsDto;
+import com.project.snapshotspringboot.dtos.QuestionScoreDto;
 import com.project.snapshotspringboot.dtos.interview.InterviewCreationDto;
 import com.project.snapshotspringboot.dtos.interview.InterviewDto;
 import com.project.snapshotspringboot.entity.InterviewEntity;
@@ -32,16 +32,17 @@ public class InterviewService {
     final UserService userService;
     final InterviewMapper interviewMapper;
 
-    public InterviewResultsDTO getInterviewResults(Long interviewId) {
+    public InterviewResultsDto getInterviewResults(Long interviewId) {
         Optional<InterviewEntity> optionalInterviewEntity = interviewRepository.findById(interviewId);
         if (optionalInterviewEntity.isPresent()) {
             InterviewEntity interviewEntity = optionalInterviewEntity.get();
             List<InterviewQuestionEntity> questions = interviewQuestionRepository.findByInterviewId(interviewId);
             String feedback = interviewEntity.getFeedback();
 
-            List<QuestionScoreDTO> questionScores = questions.stream().map(question ->
-                            new QuestionScoreDTO(question.getQuestion(), question.getGrade() + "%")).toList();
-            return new InterviewResultsDTO(questionScores, feedback);
+            List<QuestionScoreDto> questionScores = questions.stream().map(question ->
+                    new QuestionScoreDto(question.getQuestion(), question.getGrade() + "%", question.getSkill().getName()))
+                    .toList();
+            return new InterviewResultsDto(questionScores, feedback);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Interview not found");
         }

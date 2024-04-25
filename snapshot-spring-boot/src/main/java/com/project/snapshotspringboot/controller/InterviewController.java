@@ -1,6 +1,6 @@
 package com.project.snapshotspringboot.controller;
 
-import com.project.snapshotspringboot.dtos.InterviewResultsDTO;
+import com.project.snapshotspringboot.dtos.InterviewResultsDto;
 import com.project.snapshotspringboot.dtos.interview.InterviewCreationDto;
 import com.project.snapshotspringboot.dtos.interview.InterviewDto;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
@@ -23,7 +23,7 @@ public class InterviewController {
     final InterviewService interviewService;
 
     @GetMapping("/{interviewId}/results")
-    public InterviewResultsDTO getInterviewResults(@PathVariable Long interviewId) {
+    public InterviewResultsDto getInterviewResults(@PathVariable Long interviewId) {
         return interviewService.getInterviewResults(interviewId);
     }
 
