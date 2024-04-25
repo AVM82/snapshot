@@ -1,6 +1,5 @@
 package com.project.snapshotspringboot.entity;
 
-import com.project.snapshotspringboot.enumeration.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,12 +36,8 @@ public class UserEntity {
     @Column(name = "description")
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private UserRole role;
-
-    @OneToMany(mappedBy = "user")
-    private Set<UserRoleSkillEntity> userRoleSkillEntitySet = new HashSet<>();
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<UserRoleSkillEntity> userRoleSkillEntitySet;
 }
 
 

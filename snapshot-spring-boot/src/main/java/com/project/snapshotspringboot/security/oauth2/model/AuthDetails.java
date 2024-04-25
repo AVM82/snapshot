@@ -1,6 +1,8 @@
 package com.project.snapshotspringboot.security.oauth2.model;
 
 import com.project.snapshotspringboot.entity.UserEntity;
+import com.project.snapshotspringboot.entity.UserRoleEntity;
+import com.project.snapshotspringboot.entity.UserRoleSkillEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -11,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -29,7 +30,14 @@ public class AuthDetails implements OAuth2User, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(userEntity.getRole().name()));
+        return userEntity
+                .getUserRoleSkillEntitySet()
+                .stream()
+                .map(UserRoleSkillEntity::getRole)
+                .map(UserRoleEntity::getName)
+                .distinct()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
     }
 
     @Override

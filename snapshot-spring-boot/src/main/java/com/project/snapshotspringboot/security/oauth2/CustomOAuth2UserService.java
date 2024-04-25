@@ -2,10 +2,10 @@ package com.project.snapshotspringboot.security.oauth2;
 
 import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.mapper.UserMapper;
-import com.project.snapshotspringboot.repository.UserRepository;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import com.project.snapshotspringboot.security.oauth2.model.OAuth2UserInfo;
 import com.project.snapshotspringboot.security.oauth2.model.OAuth2UserInfoFactory;
+import com.project.snapshotspringboot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -22,7 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final UserMapper userMapper;
 
     @Override
@@ -50,13 +50,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "OAuth2 failed!");
         }
 
-        return new AuthDetails(userRepository
+        return new AuthDetails(userService
                 .findByEmail(oAuth2UserInfo.getEmail())
                 .orElseGet(() -> registerNewUser(oAuth2UserInfo)))
                 .setAttributes(oAuth2UserInfo.getAttributes());
     }
 
     private UserEntity registerNewUser(OAuth2UserInfo oAuth2UserInfo) {
-        return userRepository.save(userMapper.oauth2InfoToEntity(oAuth2UserInfo));
+        return userService.saveNewUserWithDefaultRole(userMapper.oauth2InfoToEntity(oAuth2UserInfo));
     }
 }

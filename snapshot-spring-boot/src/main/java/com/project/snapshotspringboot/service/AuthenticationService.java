@@ -3,7 +3,6 @@ package com.project.snapshotspringboot.service;
 import com.project.snapshotspringboot.dtos.*;
 import com.project.snapshotspringboot.entity.TempUserEntity;
 import com.project.snapshotspringboot.entity.UserEntity;
-import com.project.snapshotspringboot.enumeration.UserRole;
 import com.project.snapshotspringboot.mapper.UserMapper;
 import com.project.snapshotspringboot.repository.TempUserRepository;
 import com.project.snapshotspringboot.security.JwtService;
@@ -95,7 +94,8 @@ public class AuthenticationService {
                 .findById(tempUserId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email submit link expired!"));
 
-        UserEntity user = userService.save(userMapper.tempUserToUser(tempUserEntity));
+        UserEntity user = userService.saveNewUserWithDefaultRole(userMapper.tempUserToUser(tempUserEntity));
+
         tempUserRepository.deleteById(tempUserId);
 
         String jwt = jwtService.generateUserToken(user.getId());

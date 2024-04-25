@@ -4,7 +4,6 @@ import com.project.snapshotspringboot.dtos.RegisterRequest;
 import com.project.snapshotspringboot.dtos.UserResponseDto;
 import com.project.snapshotspringboot.entity.TempUserEntity;
 import com.project.snapshotspringboot.entity.UserEntity;
-import com.project.snapshotspringboot.enumeration.UserRole;
 import com.project.snapshotspringboot.security.oauth2.model.OAuth2UserInfo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -35,7 +34,6 @@ public abstract class UserMapper {
     @Mapping(target = "firstname", source = "name")
     @Mapping(target = "lastname", source = "oAuth2UserInfo", qualifiedByName = "emptyString")
     @Mapping(target = "avatarImgUrl", source = "imageUrl")
-    @Mapping(target = "role", source = "oAuth2UserInfo", qualifiedByName = "defaultRole")
     public abstract UserEntity oauth2InfoToEntity(OAuth2UserInfo oAuth2UserInfo);
 
     @Mapping(target = "password", source = "password", qualifiedByName = "encodePassword")
@@ -43,13 +41,7 @@ public abstract class UserMapper {
     public abstract TempUserEntity registerToTemp(RegisterRequest registerRequest);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "role", source = "tempUserEntity", qualifiedByName = "defaultRole")
     public abstract UserEntity tempUserToUser(TempUserEntity tempUserEntity);
-
-    @Named("defaultRole")
-    protected UserRole defaultRole(Object object) {
-        return UserRole.SEARCHER;
-    }
 
     @Named("createExpireAt")
     protected LocalDateTime currentLocalDateTime(RegisterRequest registerRequest) {
