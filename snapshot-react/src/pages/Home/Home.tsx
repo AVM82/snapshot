@@ -1,12 +1,12 @@
 import './Home.scss';
 
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 
 import snapshotApi from '../../api/request';
-import { useAppDispatch } from '../../hooks/redux';
-import { IUser } from '../../models/user/IUser';
-import { deleteUser } from '../../store/reducers/user/userSlice';
+import {useAppDispatch} from '../../hooks/redux';
+import {IUser} from '../../models/user/IUser';
+import {deleteUser} from '../../store/reducers/user/userSlice';
 
 function Home(): JSX.Element {
   const [response, setResponse] = useState<{ [message: string]: string }>({});
