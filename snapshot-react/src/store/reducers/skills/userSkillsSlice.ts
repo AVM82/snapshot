@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { ISkills } from '../../../models/profile/ISkills';
-import { getAllSkills, getRoleSkills } from './actions';
+import getRoleSkills from './actions';
 
 interface IInitialState {
-  id: number,
+  id: string,
   allSkills: ISkills[]
   filteredByInputSkills: ISkills[]
   allLowLevelSkills: ISkills[]
@@ -12,7 +12,7 @@ interface IInitialState {
 }
 
 const initialState: IInitialState = {
-  id: 0, allSkills: [], allLowLevelSkills: [], isLoading: false, filteredByInputSkills: [],
+  id: '0', allSkills: [], allLowLevelSkills: [], isLoading: false, filteredByInputSkills: [],
 };
 
 const handleFulfilledGetSkills = (state: IInitialState, action: PayloadAction<ISkills[]>):IInitialState => {
@@ -54,8 +54,6 @@ const userSkillsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getAllSkills.fulfilled, (state, action) => handleFulfilledGetSkills(state, action));
-
     builder.addCase(getRoleSkills.fulfilled, (state, action) => handleFulfilledGetSkills(state, action));
   },
 });

@@ -6,7 +6,7 @@ import snapshotApi from '../../api/request';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { IRoles } from '../../models/profile/IRoles';
 import { ISkills } from '../../models/profile/ISkills';
-import { getRoleSkills } from '../../store/reducers/skills/actions';
+import getRoleSkills from '../../store/reducers/skills/actions';
 import { getFilterSkillsByInput } from '../../store/reducers/skills/userSkillsSlice';
 import { RootState } from '../../store/store';
 import styles from './Skills.module.scss';
