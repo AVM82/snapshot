@@ -10,6 +10,7 @@ import lombok.Setter;
 public class InterviewerQuestionEntity {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     @JoinColumn(name = "skill_id", referencedColumnName = "id")
