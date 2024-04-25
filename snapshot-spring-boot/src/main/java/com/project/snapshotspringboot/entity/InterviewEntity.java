@@ -18,14 +18,14 @@ public class InterviewEntity {
     @Column(name = "title")
     private String title;
     @Column(name = "status")
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private InterviewStatus status;
     @ManyToOne
     @JoinColumn(name = "interviewer_id", referencedColumnName = "id")
     private UserEntity interviewer;
     @ManyToOne
     @JoinColumn(name = "searcher_id", referencedColumnName = "id")
-    private UserEntity candidate;
+    private UserEntity searcher;
     @Column(name = "planned_date_time")
     private LocalDateTime plannedDateTime;
     @Column(name = "start_date_time")

@@ -1,7 +1,7 @@
 import './Layout.scss';
 
-import {createContext, useState} from 'react';
-import {Outlet} from 'react-router-dom';
+import { createContext, useState } from 'react';
+import { Outlet } from 'react-router-dom';
 
 import InterviewModal from '../../pages/Profile/InterviewModal';
 import Footer from '../Footer/Footer';
@@ -21,7 +21,7 @@ function Layout(): JSX.Element {
           <Outlet />
         </ModalContext.Provider>
       </main>
-      {interviewOpened && <InterviewModal onClose={setInterviewOpened} />}
+      {interviewOpened && <InterviewModal />}
       <Footer />
     </>
   );
