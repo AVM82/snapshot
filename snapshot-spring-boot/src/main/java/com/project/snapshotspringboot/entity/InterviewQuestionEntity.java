@@ -1,6 +1,7 @@
 package com.project.snapshotspringboot.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Getter;
 import lombok.Setter;
 

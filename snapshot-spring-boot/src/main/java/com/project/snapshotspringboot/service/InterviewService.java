@@ -6,7 +6,8 @@ import com.project.snapshotspringboot.dtos.interview.InterviewCreationDto;
 import com.project.snapshotspringboot.dtos.interview.InterviewDto;
 import com.project.snapshotspringboot.dtos.interview.InterviewUpdateDto;
 import com.project.snapshotspringboot.dtos.interview.ShortInterviewDto;
-import com.project.snapshotspringboot.dtos.interviewer.InterviewQuestionDto;
+import com.project.snapshotspringboot.dtos.interviewer.InterviewQuestionRequestDto;
+import com.project.snapshotspringboot.dtos.interviewer.InterviewQuestionResponseDto;
 import com.project.snapshotspringboot.dtos.interviewer.InterviewerQuestionRequestDto;
 import com.project.snapshotspringboot.dtos.interviewer.InterviewerQuestionResponseDto;
 import com.project.snapshotspringboot.entity.*;
@@ -28,6 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -136,7 +138,7 @@ public class InterviewService {
         }
     }
 
-    private void extractedUserAndCheckRole(AuthDetails authDetails) {
+    public void extractedUserAndCheckRole(AuthDetails authDetails) {
         String username = authDetails.getUsername();
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         if (!userHasRole(userDetails)) {
@@ -154,34 +156,23 @@ public class InterviewService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Skill not found with id: " + skillId));
     }
 
-    public QuestionScoreDto evaluateQuestion(AuthDetails authDetails, InterviewQuestionDto interviewQuestionDto) {
+    @Transactional(rollbackFor = {Exception.class})
+    public InterviewQuestionResponseDto evaluateQuestion(AuthDetails authDetails, InterviewQuestionRequestDto interviewQuestionDto) {
         extractedUserAndCheckRole(authDetails);
 
-        Long interviewId = interviewQuestionDto.getInterviewId();
-        if (interviewId == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Interview ID is required.");
-        }
+        InterviewQuestionEntity interviewQuestionEntity = interviewQuestionRepository.findById(interviewQuestionDto.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Question not found."));
+        String grade = interviewQuestionDto.getGrade();
+        interviewQuestionEntity.setGrade(Integer.parseInt(grade));
 
-        SkillEntity skillEntity = getSkillEntity(interviewQuestionDto.getSkillId());
-        if (skillEntity == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Skill ID is required.");
-        }
-
-        int grade = interviewQuestionDto.getGrade();
-
-        InterviewQuestionEntity interviewQuestionEntity = interviewQuestionMapper.toEntity(interviewQuestionDto);
-        interviewQuestionEntity.setGrade(grade);
-        interviewQuestionEntity.setSkill(skillEntity);
         InterviewQuestionEntity savedEntity = interviewQuestionRepository.save(interviewQuestionEntity);
         if (savedEntity.getId() == null) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save question grade.");
         } else {
             log.info("The grade was saved successfully. Id: {}", savedEntity.getId());
-            return QuestionScoreDto.builder()
+            return InterviewQuestionResponseDto.builder()
                     .id(savedEntity.getId())
-                    .question(interviewQuestionDto.getQuestion())
                     .grade(grade + "%")
-                    .skillName(skillEntity.getName())
                     .build();
         }
     }

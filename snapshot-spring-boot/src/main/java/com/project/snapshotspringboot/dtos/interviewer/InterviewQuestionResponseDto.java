@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InterviewQuestionDto {
+public class InterviewQuestionResponseDto {
     private Long id;
-    private Long interviewId;
-    private Long skillId;
-    private String question;
-    private Integer grade;
+    private String grade;
 }

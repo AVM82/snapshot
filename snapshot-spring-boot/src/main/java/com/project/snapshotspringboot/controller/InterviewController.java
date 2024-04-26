@@ -6,7 +6,8 @@ import com.project.snapshotspringboot.dtos.interview.InterviewCreationDto;
 import com.project.snapshotspringboot.dtos.interview.InterviewDto;
 import com.project.snapshotspringboot.dtos.interview.InterviewUpdateDto;
 import com.project.snapshotspringboot.dtos.interview.ShortInterviewDto;
-import com.project.snapshotspringboot.dtos.interviewer.InterviewQuestionDto;
+import com.project.snapshotspringboot.dtos.interviewer.InterviewQuestionRequestDto;
+import com.project.snapshotspringboot.dtos.interviewer.InterviewQuestionResponseDto;
 import com.project.snapshotspringboot.dtos.interviewer.InterviewerQuestionRequestDto;
 import com.project.snapshotspringboot.dtos.interviewer.InterviewerQuestionResponseDto;
 import com.project.snapshotspringboot.enumeration.InterviewStatus;
@@ -115,11 +116,11 @@ public class InterviewController {
     @Operation(summary = "Evaluate question", description = "Evaluate question (set grade)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Question evaluated successfully",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = QuestionScoreDto.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = InterviewQuestionResponseDto.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid question data", content = {@Content})
     })
-    public QuestionScoreDto evaluateQuestion(@AuthenticationPrincipal AuthDetails authDetails,
-                                             @RequestBody @Valid InterviewQuestionDto questionDto) {
+    public InterviewQuestionResponseDto evaluateQuestion(@AuthenticationPrincipal AuthDetails authDetails,
+                                                         @RequestBody @Valid InterviewQuestionRequestDto questionDto) {
         return interviewService.evaluateQuestion(authDetails, questionDto);
     }
 }
