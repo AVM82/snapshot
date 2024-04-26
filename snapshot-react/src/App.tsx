@@ -8,7 +8,9 @@ import SignInPage from './pages/Auth/SignInPage';
 import SignUpPage from './pages/Auth/SignUpPage';
 import Feedback from './pages/Feedback/Feedback';
 import Home from './pages/Home/Home';
+import InterviewPage from './pages/Interview/InterviewPage';
 import InterviewModal from './pages/Profile/InterviewModal';
+import MyInterviews from './pages/Profile/MyInterviews';
 import Profile from './pages/Profile/Profile';
 import ProtectedRoute from './utils/ProtectedRoute';
 
@@ -22,6 +24,8 @@ function App(): JSX.Element {
         <Route path="oauth2/redirect" element={<OAuth2RedirectHandler />} />
         <Route element={<ProtectedRoute />}>
           <Route path="feedback" element={<Feedback />} />
+          <Route path="Myinterview" element={<MyInterviews />} />
+          <Route path="interview" element={<InterviewPage />} />
           <Route path="profile" element={<Profile />}>
             <Route path="profile/interviewItem" element={<InterviewModal />} />
           </Route>

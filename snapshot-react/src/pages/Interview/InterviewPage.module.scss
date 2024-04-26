@@ -1,0 +1,25 @@
+.blockSkills{
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex-wrap: wrap;
+  div{
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid black;
+  }
+}
+.toggleButton{
+
+  border: none;
+
+.arrowUp,.arrowDown{
+  border: none;
+}
+  .arrowDown{
+    transform: rotate(90deg);
+  }
+  .arrowUp{
+transform: rotate(-90deg);
+  }
+}
