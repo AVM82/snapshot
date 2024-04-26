@@ -35,18 +35,19 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain
     ) throws ServletException, IOException {
+        log.info("Request to uri - {}", request.getRequestURI());
 
         if (Objects.nonNull(request.getRequestURI())
                 && Arrays
                 .stream(appProps.getSecurity().getPermitAllUris())
                 .anyMatch(url -> request.getRequestURI().startsWith(url.replace("/**", "")))) {
-            log.info("Permit all uri - {}", request.getRequestURI());
+            log.info("Permit all uri!");
             filterChain.doFilter(request, response);
             return;
         }
 
         var authHeader = request.getHeader(HEADER_NAME);
-        log.info("header = {}", authHeader);
+        log.info("{} header = {}", HEADER_NAME, authHeader);
         if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
             log.error("No bearer header!");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

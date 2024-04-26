@@ -9,6 +9,10 @@ import com.project.snapshotspringboot.dtos.interviewer.InterviewerQuestionReques
 import com.project.snapshotspringboot.dtos.interviewer.InterviewerQuestionResponseDto;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import com.project.snapshotspringboot.service.InterviewService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +23,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/interviews")
+@Tag(name = "Interviews", description = "Interview management endpoints!")
+@SecurityRequirement(name = "jwt")
+@ApiResponse(responseCode = "401", content = {@Content})
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)

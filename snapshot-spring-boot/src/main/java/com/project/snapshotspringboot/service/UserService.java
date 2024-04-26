@@ -102,10 +102,6 @@ public class UserService implements UserDetailsService {
         return repository.save(userEntity);
     }
 
-    public List<SkillTreeDto> getUserSkills(Long userId, Long roleId) {
-        return skillService.getUserSkillsTree(userId, roleId);
-    }
-
     public UserEntity saveNewUserWithDefaultRole(UserEntity userEntity) {
         UserRoleEntity role = roleService.findById(1L);
         userEntity.setId(0L);

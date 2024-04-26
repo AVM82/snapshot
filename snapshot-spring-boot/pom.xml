@@ -13,24 +13,27 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>snapshot-spring-boot</name>
     <description>snapshot-spring-boot</description>
+
     <properties>
         <java.version>21</java.version>
+        <starter.mail.version>3.2.5</starter.mail.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <h2.version>2.2.220</h2.version>
         <starter.data.jpa.version>3.2.4</starter.data.jpa.version>
         <flyway.version>10.11.0</flyway.version>
         <oauth2.client.version>6.2.4</oauth2.client.version>
         <jjwt.version>0.12.5</jjwt.version>
-
+        <springdoc.openapi.starter.webmvc.ui.version>2.5.0</springdoc.openapi.starter.webmvc.ui.version>
         <maven.compile.plugin.version>3.11.0</maven.compile.plugin.version>
     </properties>
+
     <dependencies>
 
         <!--        starter mail-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
-            <version>3.2.5</version>
+            <version>${starter.mail.version}</version>
         </dependency>
 
         <!--        database-->
@@ -101,6 +104,13 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
+        </dependency>
+
+        <!--        swagger-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc.openapi.starter.webmvc.ui.version}</version>
         </dependency>
 
         <!-- test -->

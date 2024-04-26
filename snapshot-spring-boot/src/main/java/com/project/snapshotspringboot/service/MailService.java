@@ -20,8 +20,8 @@ public class MailService {
     @Value("${spring.mail.username}")
     private String username;
 
-    @Value("${submit.email.endpoint}")
-    private String submitEndpoint;
+    @Value("${user.create.endpoint}")
+    private String userCreateEndpoint;
 
     @Value("${submit.email.subject}")
     private String submitSubject;
@@ -31,7 +31,7 @@ public class MailService {
 
     public void sendEmailSubmitLetter(String to,
                                       String token) {
-        String requestUrl = String.format(REQUEST_URL_TEMPLATE, submitEndpoint, token);
+        String requestUrl = String.format(REQUEST_URL_TEMPLATE, userCreateEndpoint, token);
         send(to, submitSubject, String.format(submitText, requestUrl));
     }
 

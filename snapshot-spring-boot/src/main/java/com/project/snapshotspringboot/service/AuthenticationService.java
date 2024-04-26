@@ -33,7 +33,7 @@ public class AuthenticationService {
     private final UserMapper userMapper;
     private final MailService mailService;
 
-    @Value("${submit.email.redirect}")
+    @Value("${user.create.redirect}")
     private String submitRedirectUri;
 
     public String register(RegisterRequest request) {
@@ -85,8 +85,8 @@ public class AuthenticationService {
 
     }
 
-    public void submitEmail(String token,
-                            HttpServletResponse response) {
+    public void createUser(String token,
+                           HttpServletResponse response) {
         long tempUserId = jwtService.getTempUserIdFromToken(token);
         tempUserRepository.deleteAllByExpireAtBefore(LocalDateTime.now());
 
