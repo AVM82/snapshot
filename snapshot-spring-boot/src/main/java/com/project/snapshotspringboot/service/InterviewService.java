@@ -4,13 +4,13 @@ import com.project.snapshotspringboot.dtos.InterviewResultsDto;
 import com.project.snapshotspringboot.dtos.QuestionScoreDto;
 import com.project.snapshotspringboot.dtos.interview.InterviewCreationDto;
 import com.project.snapshotspringboot.dtos.interview.InterviewDto;
+import com.project.snapshotspringboot.dtos.interview.InterviewUpdateDto;
+import com.project.snapshotspringboot.dtos.interview.ShortInterviewDto;
 import com.project.snapshotspringboot.dtos.interviewer.InterviewQuestionDto;
 import com.project.snapshotspringboot.dtos.interviewer.InterviewerQuestionRequestDto;
 import com.project.snapshotspringboot.dtos.interviewer.InterviewerQuestionResponseDto;
-import com.project.snapshotspringboot.entity.InterviewEntity;
-import com.project.snapshotspringboot.entity.InterviewQuestionEntity;
-import com.project.snapshotspringboot.entity.InterviewerQuestionEntity;
-import com.project.snapshotspringboot.entity.SkillEntity;
+import com.project.snapshotspringboot.entity.*;
+import com.project.snapshotspringboot.enumeration.InterviewStatus;
 import com.project.snapshotspringboot.mapper.InterviewMapper;
 import com.project.snapshotspringboot.mapper.InterviewQuestionMapper;
 import com.project.snapshotspringboot.mapper.InterviewerQuestionMapper;
@@ -73,6 +73,36 @@ public class InterviewService {
         InterviewEntity savedInterview = interviewRepository.save(interviewEntity);
         return interviewMapper.toDto(savedInterview);
     }
+
+    public List<ShortInterviewDto> getInterviewList(AuthDetails authDetails) {
+        UserEntity currentUser = authDetails.getUserEntity();
+        List<InterviewEntity> interviews = interviewRepository
+                .findByInterviewer_IdOrSearcher_Id(currentUser.getId(), currentUser.getId());
+        return interviews.stream().map(interviewMapper::toShortDto).toList();
+    }
+
+    public InterviewDto updateInterview(Long interviewId, InterviewUpdateDto interviewDto) {
+        Optional<InterviewEntity> optionalInterviewEntity = interviewRepository.findById(interviewId);
+        if (optionalInterviewEntity.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Interview not found");
+        }
+        InterviewEntity interviewEntity = optionalInterviewEntity.get();
+        interviewEntity.setTitle(interviewDto.getTitle());
+        interviewEntity.setPlannedDateTime(interviewDto.getPlannedDateTime());
+        InterviewEntity savedInterview = interviewRepository.save(interviewEntity);
+        return interviewMapper.toDto(savedInterview);
+    }
+
+    public InterviewDto updateInterviewStatus(Long interviewId, InterviewStatus status) {
+        Optional<InterviewEntity> optionalInterviewEntity = interviewRepository.findById(interviewId);
+        if (optionalInterviewEntity.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Interview not found");
+        }
+        InterviewEntity interviewEntity = optionalInterviewEntity.get();
+        interviewEntity.setStatus(status);
+        return interviewMapper.toDto(interviewRepository.save(interviewEntity));
+    }
+
 
     public InterviewerQuestionResponseDto saveQuestion(AuthDetails authDetails, InterviewerQuestionRequestDto questionDto) {
         extractedUserAndCheckRole(authDetails);
