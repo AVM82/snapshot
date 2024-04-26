@@ -4,4 +4,7 @@ import com.project.snapshotspringboot.entity.InterviewerQuestionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface InterviewerQuestionRepository extends JpaRepository<InterviewerQuestionEntity, Long> {
+
+    boolean existsBySkillIdAndQuestion(Long skillId, String questionText);
+
 }

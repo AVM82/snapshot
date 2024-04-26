@@ -41,4 +41,5 @@ public interface SkillRepository extends JpaRepository<SkillEntity, Long> {
             """, nativeQuery = true)
     void addSkillToUser(Long userId, Long roleId, Long skillId);
 
+    SkillEntity findByName(String name);
 }
