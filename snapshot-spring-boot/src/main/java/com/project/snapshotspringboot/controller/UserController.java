@@ -67,6 +67,10 @@ public class UserController {
         return service.getRoles();
     }
 
+    @Operation(summary = "Get information about an user by email.")
+    @ApiResponse(responseCode = "200",
+            content = {@Content(schema = @Schema(implementation = UserResponseDto.class), mediaType = "application/json")})
+    @ApiResponse(responseCode = "404", content = {@Content})
     @PostMapping("/by-email")
     public UserResponseDto getUserByEmail(@RequestBody EmailDto emailDto) {
         return service.getUserByEmail(emailDto);
