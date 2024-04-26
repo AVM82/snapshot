@@ -1,8 +1,15 @@
+/* eslint-disable import/no-cycle */
+import { useContext, useState } from 'react';
+import Markdown from 'react-markdown';
+
+import { ModalContext } from '../../components/Layout/Layout';
 import { useAppSelector } from '../../hooks/redux';
 import Questions from './Questions';
 
-function InterviewModal({ onClose }: { onClose: React.Dispatch<React.SetStateAction<boolean>> }): JSX.Element {
+function InterviewModal(): JSX.Element {
   const user = useAppSelector((state) => state.user.userData);
+  const [feedbackClicked, setFeedbackClicked] = useState(false);
+  const setInterviewOpened = useContext(ModalContext);
 
   return (
     <div style={{
@@ -18,7 +25,14 @@ function InterviewModal({ onClose }: { onClose: React.Dispatch<React.SetStateAct
       alignItems: 'center',
     }}
     >
-      <button type="button" onClick={() => onClose(false)}>X</button>
+      <button
+        type="button"
+        onClick={() => {
+          if (setInterviewOpened) setInterviewOpened(true);
+        }}
+      >
+        X
+      </button>
       <div style={{
         display: 'flex',
         flexDirection: 'column',
@@ -34,8 +48,23 @@ function InterviewModal({ onClose }: { onClose: React.Dispatch<React.SetStateAct
           {user.lastname}
         </p>
         <Questions />
-        <label htmlFor="feedback">Текстовий фідбек (Підтримується markdown)</label>
-        <textarea name="feedback" id="feedback" cols={30} rows={10} />
+        {feedbackClicked ? (
+          <div
+            style={{ display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
+          >
+            <label htmlFor="feedback">Текстовий фідбек (Підтримується markdown)</label>
+            <textarea name="feedback" id="feedback" cols={30} rows={10} />
+          </div>
+        ) : (
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setFeedbackClicked(!feedbackClicked)}
+            style={{ display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
+          >
+            <Markdown>FEEDBACK</Markdown>
+          </div>
+        )}
       </div>
     </div>
   );

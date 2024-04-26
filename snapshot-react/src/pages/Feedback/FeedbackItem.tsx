@@ -1,9 +1,6 @@
-type Feedback = {
-  question: string,
-  score: string,
-};
+import IFeedbackItem from '../../models/feedback/IFeedbackItem';
 
-function FeedbackItem({ question, score }: Feedback): JSX.Element {
+function FeedbackItem({ question, score, skillName }: IFeedbackItem): JSX.Element {
   return (
     <div style={{
       display: 'flex',
@@ -12,6 +9,7 @@ function FeedbackItem({ question, score }: Feedback): JSX.Element {
       backgroundColor: 'white',
     }}
     >
+      <p style={{ color: 'black' }}>{ skillName }</p>
       <p style={{ color: 'black' }}>{ question }</p>
       <div style={{ width: '150px', height: '4px' }}>
         <div style={{
