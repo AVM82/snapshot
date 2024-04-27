@@ -18,8 +18,9 @@ function Feedback(): JSX.Element {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {questions.map((question) => (
           <FeedbackItem
+            key={question.id}
             question={question.question}
-            score={question.score}
+            score={question.grade}
             skillName={question.skillName}
           />
         ))}

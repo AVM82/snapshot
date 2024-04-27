@@ -1,8 +1,8 @@
-interface Question {
-  id:number
-  question: string,
-  score: string,
-  skillName: string
+interface IQuestion {
+  id: number;
+  question: string;
+  grade: string;
+  skillName: string;
 }
 
-export default Question;
+export default IQuestion;

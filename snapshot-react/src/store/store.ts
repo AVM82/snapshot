@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { configureStore } from '@reduxjs/toolkit';
 
+import feedbackSlice from './reducers/feedback/feedbackSlice';
 import interviewSlice from './reducers/interwiew/interviewSlice';
 import userSkillsSlice from './reducers/skills/userSkillsSlice';
-import userReducer from './reducers/user/userSlice';
+import userSlice from './reducers/user/userSlice';
 
 export const store = configureStore({
   reducer: {
-    user: userReducer,
+    user: userSlice,
     userSkills: userSkillsSlice,
     interview: interviewSlice,
+    feedback: feedbackSlice,
   },
 });
 

@@ -10,6 +10,7 @@ function InterviewModal(): JSX.Element {
   const user = useAppSelector((state) => state.user.userData);
   const [feedbackClicked, setFeedbackClicked] = useState(false);
   const setInterviewOpened = useContext(ModalContext);
+  const { questions, feedback } = useAppSelector((state) => state.feedback);
 
   return (
     <div style={{
@@ -28,7 +29,7 @@ function InterviewModal(): JSX.Element {
       <button
         type="button"
         onClick={() => {
-          if (setInterviewOpened) setInterviewOpened(true);
+          if (setInterviewOpened) setInterviewOpened(false);
         }}
       >
         X
@@ -47,7 +48,7 @@ function InterviewModal(): JSX.Element {
           Surname:
           {user.lastname}
         </p>
-        <Questions />
+        <Questions questions={questions} />
         {feedbackClicked ? (
           <div
             style={{ display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
@@ -62,7 +63,7 @@ function InterviewModal(): JSX.Element {
             onClick={() => setFeedbackClicked(!feedbackClicked)}
             style={{ display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
           >
-            <Markdown>FEEDBACK</Markdown>
+            <Markdown>{feedback}</Markdown>
           </div>
         )}
       </div>
