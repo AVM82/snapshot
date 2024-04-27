@@ -228,11 +228,34 @@ values (1, 2, 5),
 
 INSERT INTO interviews (title, status, interviewer_id, searcher_id, planned_date_time, start_date_time, end_date_time,
                         feedback)
-VALUES ('Test', 'COMPLETED', 1, 1, '2024-04-24 09:00:00', '2024-04-24 09:00:00', '2024-04-24 10:00:00',
+VALUES ('Test', 'COMPLETED', 1, 2, '2024-04-24 09:00:00', '2024-04-24 09:00:00', '2024-04-24 10:00:00',
         'Needs improvement');
 
 INSERT INTO interview_questions (interview_id, skill_id, question, grade)
 VALUES (1, 56, 'How to configure a firewall for network security?', 100),
        (1, 57, 'What are IDPS, and how do they collaborate with firewalls?', 50),
        (1, 58, 'How to implement a VPN, and what technologies ensure data confidentiality?', 0);
+
+INSERT INTO interviews (title, status, interviewer_id, searcher_id, planned_date_time, start_date_time, end_date_time,
+                        feedback)
+VALUES ('Second', 'COMPLETED', 1, 2, '2024-04-26 18:30:00', '2024-04-26 18:27:34', '2024-04-26 20:03:12',
+        'Needs improvement');
+
+INSERT INTO interview_questions (interview_id, skill_id, question, grade)
+VALUES (1, 29, 'What is the difference between == and .equals() when comparing objects in Java?', 100),
+       (1, 29, 'Explain the concept of inheritance in Java and provide an example.', 75),
+       (1, 47, 'What is MongoDB, and how does it differ from traditional relational databases?', 50);
+
+INSERT INTO interviewer_questions (interviewer_id, skill_id, question)
+VALUES (1, 29, 'What is the difference between == and .equals() when comparing objects in Java?'),
+       (1, 29, 'Explain the concept of inheritance in Java and provide an example.'),
+       (1, 29,
+        'What are the different access modifiers in Java, and how do they affect the visibility of variables and methods?'),
+       (1, 29, 'Describe the purpose and usage of the static keyword in Java.'),
+       (1, 29, 'How does exception handling work in Java? Discuss the try-catch-finally blocks.'),
+       (1, 47, 'What is MongoDB, and how does it differ from traditional relational databases?'),
+       (1, 47, 'Explain the concept of document-oriented databases and how it applies to MongoDB.'),
+       (1, 47, 'What is a MongoDB replica set, and what are its benefits in a distributed database environment?'),
+       (1, 47, 'Describe the aggregation framework in MongoDB and provide an example of its usage.'),
+       (1, 47, 'What are the advantages of using sharding in MongoDB, and how does it help with scalability?');
 ---------for test, delete later---------

@@ -1,7 +1,6 @@
 package com.project.snapshotspringboot.controller;
 
 import com.project.snapshotspringboot.dtos.InterviewResultsDto;
-import com.project.snapshotspringboot.dtos.QuestionScoreDto;
 import com.project.snapshotspringboot.dtos.interview.InterviewCreationDto;
 import com.project.snapshotspringboot.dtos.interview.InterviewDto;
 import com.project.snapshotspringboot.dtos.interview.InterviewUpdateDto;
@@ -14,6 +13,7 @@ import com.project.snapshotspringboot.enumeration.InterviewStatus;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import com.project.snapshotspringboot.service.InterviewService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -122,5 +122,17 @@ public class InterviewController {
     public InterviewQuestionResponseDto evaluateQuestion(@AuthenticationPrincipal AuthDetails authDetails,
                                                          @RequestBody @Valid InterviewQuestionRequestDto questionDto) {
         return interviewService.evaluateQuestion(authDetails, questionDto);
+    }
+
+    @GetMapping("/questions/skill/{id}")
+    @Operation(summary = "Get interviewer questions by skill id.")
+    @ApiResponse(responseCode = "200",
+            content = {@Content(
+                    array = @ArraySchema(schema = @Schema(implementation = InterviewerQuestionResponseDto.class)),
+                    mediaType = "application/json")})
+    public List<InterviewerQuestionResponseDto> getMyQuestionsBySkillId(
+            @AuthenticationPrincipal AuthDetails authDetails,
+            @RequestParam(name = "id") long id) {
+        return interviewService.getMyQuestionsBySkillId(authDetails, id);
     }
 }

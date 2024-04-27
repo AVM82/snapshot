@@ -177,4 +177,12 @@ public class InterviewService {
         }
     }
 
+    public List<InterviewerQuestionResponseDto> getMyQuestionsBySkillId(AuthDetails authDetails,
+                                                                        long id) {
+        return interviewerQuestionRepository
+                .findAllByInterviewerIdAndSkillId(authDetails.getUserEntity().getId(), id)
+                .stream()
+                .map(interviewerQuestionMapper::toResponseDto)
+                .toList();
+    }
 }
