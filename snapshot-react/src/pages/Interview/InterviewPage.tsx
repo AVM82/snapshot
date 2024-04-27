@@ -143,7 +143,6 @@ export default function InterviewPage(): React.JSX.Element {
           </form>
         </div>
       )}
-      <button type="button" />
     </div>
   );
 }
