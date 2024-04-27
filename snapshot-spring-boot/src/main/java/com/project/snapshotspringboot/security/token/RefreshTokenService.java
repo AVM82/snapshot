@@ -9,6 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
@@ -32,9 +33,8 @@ public class RefreshTokenService {
     }
 
     public Instant createExpiryDate() {
-
-        return LocalDateTime.now()
-                .plusMinutes(appProps.getJwt().getJwtRefreshExpirationTimeInMinutes())
+        return LocalDateTime.now(ZoneId.of("Z"))
+                .plusDays(appProps.getJwt().getJwtRefreshExpirationTimeInDays())
                 .toInstant(ZoneOffset.UTC);
     }
 

@@ -19,7 +19,7 @@ public class AppProps {
     public static class JwtProps {
         private String secret;
         private long expirationTimeInMinutes;
-        private long jwtRefreshExpirationTimeInMinutes;
+        private long jwtRefreshExpirationTimeInDays;
     }
 
     @Getter
