@@ -14,7 +14,6 @@ export default function InterviewPage(): React.JSX.Element {
   const [question, setQuestion] = useState('');
   const [currentSkillId, setCurrentSkillId] = useState(0);
   const handleQuestionChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    // Обновляем состояние question при изменении текстового поля
     setQuestion(e.target.value);
   };
   const {
@@ -51,7 +50,7 @@ export default function InterviewPage(): React.JSX.Element {
     dispatch(addQuestion(questionData));
     setShowQuestionTextField(false);
   };
-  const handleSkillOnClick = (skillId:number) => {
+  const handleSkillOnClick = (skillId:number):void => {
     setCurrentSkillId(skillId);
     setShowQuestionTextField(!showQuestionTextField);
   };
