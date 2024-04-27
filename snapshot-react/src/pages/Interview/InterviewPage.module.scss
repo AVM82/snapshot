@@ -1,3 +1,7 @@
+.pageContainer{
+  padding-top: 1rem;
+  position: relative;
+}
 .blockSkills{
   display: flex;
   flex-direction: row;
@@ -7,6 +11,25 @@
   padding: 5px;
   border-radius: 5px;
   border: 1px solid black;
+  }
+}
+.header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.status{
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+
+  div{
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: green;
   }
 }
 .toggleButton{
@@ -22,4 +45,15 @@
   .arrowUp{
 transform: rotate(-90deg);
   }
+}
+.active{
+  background: #8de3db;
+  cursor: pointer;
+}
+.skillTextArea{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+
 }

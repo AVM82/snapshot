@@ -1,90 +1,99 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import IQuestion from '../../../models/feedback/IQuestion';
+import { IInterview } from '../../../models/profile/IInterview';
 import { ISkills } from '../../../models/profile/ISkills';
 import { IUser } from '../../../models/user/IUser';
+import {
+  calculateAndSortSharedSkills,
+  flattenSkillsHierarchy,
+} from '../../../utils/interview/calculateAndSortSharedSkills';
 import getUser from '../user/actions';
-import { getAllSkills, getUserByEmail } from './actions';
+import {
+  addQuestion, getAllSkills, getInterviewData, getUserByEmail,
+} from './actions';
 
-interface IInitialState {
-  id: string
+const defaultUser:IUser = {
+  id: 0,
+  username: '',
+  firstname: '',
+  lastname: '',
+  email: '',
+  avatarImgUrl: '',
+  description: '',
+  roles: [{
+    id: 0,
+    name: '',
+    skills: [],
+  }],
+};
+
+interface IInitialState extends IInterview {
   allSkills:ISkills[]
-  allLowLvlSkills:ISkills[]
-  userSkills:ISkills[]
   sharedSkills:ISkills[]
   isLoading:boolean
-  currentUser: IUser
-  interviewee:IUser
-  intervieweeSkills: ISkills[]
+  interviewer: IUser
+  searcher:IUser
+  lowLvlSkills:ISkills[]
+  questions:IQuestion[]
 }
 
 const initialState:IInitialState = {
-  id: '0',
+  id: 0,
+  title: '',
+  status: 'prepare',
+  interviewer_id: 0,
+  interviewer: { ...defaultUser },
+  searcher_id: 0,
+  searcher: { ...defaultUser },
   allSkills: [],
-  userSkills: [],
   sharedSkills: [],
-  allLowLvlSkills: [],
   isLoading: false,
-  currentUser: {
-    id: 0,
-    usernmae: '',
-    firstname: '',
-    lastname: '',
-    email: '',
-    avatarImgUrl: '',
-    description: '',
-  },
-  interviewee: {
-    id: 0,
-    usernmae: '',
-    firstname: '',
-    lastname: '',
-    email: '',
-    avatarImgUrl: '',
-    description: '',
-  },
-  intervieweeSkills: [],
-};
+  planned_date_time: null,
+  start_date_time: null,
+  end_date_time: null,
+  feedback: '',
+  lowLvlSkills: [],
+  questions: [],
 
-const getLowLvlSkills = (skills:ISkills[]):
-ISkills[] => {
-  function getLowLevelSkills(skill: ISkills): ISkills[] {
-    if (skill.children.length === 0) {
-      return [skill];
-    }
-
-    return skill.children.flatMap((child) => getLowLevelSkills(child));
-  }
-
-  const lowLevelSkills: ISkills[] = [];
-  skills.forEach((skill) => {
-    const lowLevelSkill = getLowLevelSkills(skill);
-    lowLevelSkills.push(...lowLevelSkill);
-  });
-
-  return lowLevelSkills;
 };
 
 const interviewSlice = createSlice({
   name: 'interview',
   initialState,
   reducers: {
-
   },
   extraReducers: (builder) => {
+    builder.addCase(getInterviewData.fulfilled, (state, action) => ({
+      ...state,
+      ...action.payload,
+    }));
     builder.addCase(getUser.fulfilled, (state, action) => ({
       ...state,
-      currentUser: action.payload,
+      interviewer: action.payload,
+      sharedSkills:
+        calculateAndSortSharedSkills(state.lowLvlSkills, state.allSkills, action.payload.roles[0].skills)
+      ,
     }));
     builder.addCase(getUserByEmail.fulfilled, (state, action) => ({
       ...state,
-      interviewee: action.payload,
+      searcher: action.payload,
+      sharedSkills:
+        calculateAndSortSharedSkills(
+          state.lowLvlSkills,
+          action.payload.roles[0].skills,
+          state.interviewer.roles[0].skills,
+        ),
     }));
     builder.addCase(getAllSkills.fulfilled, (state, action) => ({
       ...state,
       allSkills: action.payload,
-      allLowLvlSkills: getLowLvlSkills(action.payload),
+      lowLvlSkills: flattenSkillsHierarchy(action.payload),
+    }));
+    builder.addCase(addQuestion.fulfilled, (state, action) => ({
+      ...state,
+      questions: [...state.questions, action.payload],
     }));
   },
 });
-
 export default interviewSlice.reducer;

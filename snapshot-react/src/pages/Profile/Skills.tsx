@@ -15,7 +15,7 @@ export default function Skills(props:IRoles):React.JSX.Element {
   const { allSkills: skills, isLoading, filteredByInputSkills } = useAppSelector((state:RootState) => state.userSkills);
   const dispatch = useAppDispatch();
   const { id: roleId } = props;
-  const [selectedSkillsId, setSelectedSkillsId] = useState<string[]>([]);
+  const [selectedSkillsId, setSelectedSkillsId] = useState<number[]>([]);
   const [selectedSkillsNames, setSelectedSkillsNames] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isInputEmpty, setIsInputEmpty] = useState(false);
@@ -32,7 +32,7 @@ export default function Skills(props:IRoles):React.JSX.Element {
     setInputValue(event.target.value);
     setIsInputEmpty(Boolean(event.target.value));
   };
-  const handleSkillClick = (skillId:string, skillName:string):void => {
+  const handleSkillClick = (skillId:number, skillName:string):void => {
     if (!selectedSkillsId.includes(skillId)) {
       const updatedSkills = [...selectedSkillsId, skillId];
       const skillNames = [...selectedSkillsNames, skillName];

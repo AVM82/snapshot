@@ -11,12 +11,13 @@ type User = {
 const initialState: User = {
   userData: {
     id: 0,
-    usernmae: '',
+    username: '',
     firstname: '',
     lastname: '',
     email: '',
     avatarImgUrl: '',
     description: '',
+    roles: [],
   },
 };
 
@@ -27,12 +28,13 @@ const userSlice = createSlice({
     deleteUser: (state) => {
       state.userData = {
         id: 0,
-        usernmae: '',
+        username: '',
         firstname: '',
         lastname: '',
         email: '',
         avatarImgUrl: '',
         description: '',
+        roles: [],
       };
     },
   },

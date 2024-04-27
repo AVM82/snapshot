@@ -1,5 +1,5 @@
 export interface ISkills {
-  id: string;
+  id: number;
   name: string;
   children: ISkills[];
 }
