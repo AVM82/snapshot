@@ -1,5 +1,6 @@
 package com.project.snapshotspringboot.handler;
 
+import com.project.snapshotspringboot.exception.StateTransitionException;
 import com.project.snapshotspringboot.handler.dto.InvalidFieldDto;
 import com.project.snapshotspringboot.handler.dto.ResponseExceptionDto;
 import com.project.snapshotspringboot.handler.dto.ResponseValidationExceptionDto;
@@ -62,6 +63,18 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
         log.error("{}", responseBody.getMessage(), exception);
         return handleExceptionInternal(exception, responseBody, new HttpHeaders(), exception.getStatusCode(), request);
+    }
+
+    @ExceptionHandler(StateTransitionException.class)
+    public ResponseEntity<Object> handleStateTransitionException(StateTransitionException exception,
+                                                                WebRequest request) {
+        ResponseExceptionDto responseBody = createResponseExceptionDto(
+                HttpStatus.BAD_REQUEST.value(),
+                exception.getMessage(),
+                3);
+
+        log.info("{}", responseBody.getMessage(), exception);
+        return handleExceptionInternal(exception, responseBody, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(Exception.class)
