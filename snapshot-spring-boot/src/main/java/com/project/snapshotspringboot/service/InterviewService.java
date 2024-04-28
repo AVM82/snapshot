@@ -101,6 +101,8 @@ public class InterviewService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Interview not found");
         }
         InterviewEntity interviewEntity = optionalInterviewEntity.get();
+        InterviewStatus.validateStatusTransition(interviewEntity.getStatus(), status);
+        log.debug("Interview id = {} status updated from {} to {}", interviewId, interviewEntity.getStatus(), status);
         interviewEntity.setStatus(status);
         return interviewMapper.toDto(interviewRepository.save(interviewEntity));
     }
