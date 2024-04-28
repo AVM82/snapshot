@@ -1,17 +1,15 @@
 package com.project.snapshotspringboot.dtos.interview;
 
+import com.project.snapshotspringboot.dtos.QuestionScoreDto;
 import com.project.snapshotspringboot.dtos.UserResponseDto;
 import com.project.snapshotspringboot.enumeration.InterviewStatus;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-public class InterviewDto {
+@Data
+public class InterviewFullDto {
     private Long id;
     private String title;
     private InterviewStatus status;
@@ -20,5 +18,6 @@ public class InterviewDto {
     private LocalDateTime plannedDateTime;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
+    private List<QuestionScoreDto> questions;
     private String feedback;
 }

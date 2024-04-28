@@ -2,10 +2,7 @@ package com.project.snapshotspringboot.service;
 
 import com.project.snapshotspringboot.dtos.InterviewResultsDto;
 import com.project.snapshotspringboot.dtos.QuestionScoreDto;
-import com.project.snapshotspringboot.dtos.interview.InterviewCreationDto;
-import com.project.snapshotspringboot.dtos.interview.InterviewDto;
-import com.project.snapshotspringboot.dtos.interview.InterviewUpdateDto;
-import com.project.snapshotspringboot.dtos.interview.ShortInterviewDto;
+import com.project.snapshotspringboot.dtos.interview.*;
 import com.project.snapshotspringboot.dtos.interviewer.*;
 import com.project.snapshotspringboot.entity.*;
 import com.project.snapshotspringboot.enumeration.InterviewStatus;
@@ -29,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,6 +61,16 @@ public class InterviewService {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Interview not found");
         }
+    }
+
+    public InterviewFullDto getInterviewById(Long interviewId) {
+        Optional<InterviewEntity> interviewEntity = interviewRepository.findById(interviewId);
+        if (interviewEntity.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Interview not found");
+        }
+        List<InterviewQuestionEntity> questions = interviewQuestionRepository.findByInterviewId(interviewId);
+        List<QuestionScoreDto> questionScores =interviewQuestionMapper.toScoreDtoList(questions);
+        return interviewMapper.toFullDto(interviewEntity.get(), questionScores);
     }
 
     public InterviewDto createInterview(AuthDetails authDetails, InterviewCreationDto interviewCreationDto) {
