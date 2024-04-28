@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { INewInterview } from '../../models/profile/INewInterview';
 import {
-  addQuestion, getAllSkills,
-  getUserByEmail,
+  addInterview,
+  addQuestion, getAllSkills, getUserByEmail,
 } from '../../store/reducers/interwiew/actions';
+import { setTitle } from '../../store/reducers/interwiew/interviewSlice';
 import getUser from '../../store/reducers/user/actions';
 import Timer from './components/Timer/Timer';
 import styles from './InterviewPage.module.scss';
@@ -14,31 +17,41 @@ export default function InterviewPage(): React.JSX.Element {
   const [showQuestionTextField, setShowQuestionTextField] = useState(false);
   const [question, setQuestion] = useState('');
   const [currentSkillId, setCurrentSkillId] = useState(0);
+  const [titleText, setTitleText] = useState('');
+  const {
+    searcher, interviewer, sharedSkills, status: interviewStatus, questions, title,
+  } = useAppSelector((state) => state.interview);
   const handleQuestionChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
     setQuestion(e.target.value);
   };
-  const {
-    searcher, interviewer, sharedSkills, status: InterviewStatus, questions,
-  } = useAppSelector((state) => state.interview);
+
+  const { id } = useParams();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    // dispatch(getInterviewData());
-
     dispatch(getAllSkills());
+    dispatch(getUser());
+  }, [dispatch]);
 
-    if (!interviewer.firstname) {
-      dispatch(getUser());
+  const addNewInterview = () :void => {
+    if (title && searcher.id) {
+      const addInterviewData:INewInterview = {
+        status: 'PLANNED',
+        searcherId: searcher.id,
+        title,
+      };
+      dispatch(addInterview(addInterviewData));
     }
-  }, [dispatch, interviewer.firstname]);
-
+  };
   const getSearcher = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
     dispatch(getUserByEmail(event.currentTarget.userEmail.value));
   };
-
-  const toggleExpand = ():void => {
-    setIsExpanded(!isExpanded);
+  const handleSetInterviewTitle = (event: React.ChangeEvent<HTMLInputElement>):void => {
+    setTitleText(event.target.value);
+  };
+  const submitTitle = ():void => {
+    dispatch(setTitle(titleText));
   };
   const handleAddNewQuestion = (e:React.FormEvent<HTMLFormElement>):void => {
     e.preventDefault();
@@ -62,9 +75,19 @@ export default function InterviewPage(): React.JSX.Element {
         <Timer />
         <div className={styles.status}>
           <div />
-          <p>{InterviewStatus}</p>
+          <p>{interviewStatus}</p>
         </div>
-        <button type="button" className={styles.headerButton}>{InterviewStatus}</button>
+        <div>
+          {title ? (<h3>{title}</h3>)
+            : (
+              <div>
+                <label htmlFor="title">Title:</label>
+                <input type="text" id="title" value={titleText} onChange={handleSetInterviewTitle} />
+                <button type="button" onClick={submitTitle}>Submit</button>
+              </div>
+            )}
+        </div>
+        <button type="button" onClick={addNewInterview} className={styles.headerButton}>{interviewStatus}</button>
       </div>
       <div className={styles.blockSearcer}>
         {searcher.firstname ? (
@@ -90,7 +113,7 @@ export default function InterviewPage(): React.JSX.Element {
 
       <div>
         {sharedSkills.length > 5 && (
-          <button type="button" onClick={toggleExpand} className={styles.toggleButton}>
+          <button type="button" onClick={() => setIsExpanded(!isExpanded)} className={styles.toggleButton}>
             {isExpanded
               ? <div className={styles.arrowUp}>{'>'}</div>
               : <div className={styles.arrowDown}>{'>'}</div>}
@@ -99,8 +122,6 @@ export default function InterviewPage(): React.JSX.Element {
         <div className={styles.blockSkills}>
           {sharedSkills.slice(0, 7).map((skill) => (
             <div
-              role="button"
-              tabIndex={0}
               key={skill.id}
               className={skill.shared ? `${styles.active}` : ''}
               onClick={skill.shared ? ():void => handleSkillOnClick(skill.id) : ():null => null}
@@ -110,11 +131,9 @@ export default function InterviewPage(): React.JSX.Element {
           ))}
           {isExpanded && sharedSkills.slice(7).map((skill) => (
             <div
-              role="button"
-              tabIndex={0}
               key={skill.id}
               className={skill.shared ? `${styles.active}` : ''}
-              onClick={skill.shared ? (): void => handleSkillOnClick(skill.id) : ():null => null}
+              onClick={skill.shared ? () => handleSkillOnClick(skill.id) : ():null => null}
             >
               {skill.name}
             </div>
@@ -123,7 +142,7 @@ export default function InterviewPage(): React.JSX.Element {
             <div key={q.id}>
               <div>{q.skillName}</div>
               <p>{q.question}</p>
-              <div>{q.grade}</div>
+              <div>{q.score}</div>
             </div>
           ))}
         </div>

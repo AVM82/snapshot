@@ -8,7 +8,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @SpringBootApplication
 @EnableConfigurationProperties(AppProps.class)
 public class SnapshotSpringBootApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(SnapshotSpringBootApplication.class, args);
     }

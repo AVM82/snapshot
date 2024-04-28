@@ -1,66 +1,62 @@
-.pageContainer {
-  position: relative;
+.pageContainer{
   padding-top: 1rem;
-}
-
-.blockSkills {
+  position: relative;
   display: flex;
-  flex-flow: row wrap;
+  flex-direction: column;
+  gap: 5rem;
+}
+.blockSkills{
+  display: flex;
+  flex-direction: row;
   gap: 1rem;
-
-  div {
-    padding: 5px;
-    border: 1px solid black;
-    border-radius: 5px;
+  flex-wrap: wrap;
+  div{
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid black;
   }
 }
-
-.header {
+.header{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
 }
-
-.status {
+.status{
   display: flex;
   flex-direction: row;
-  align-items: center;
   gap: 1rem;
+  align-items: center;
 
-  div {
+  div{
     width: 8px;
     height: 8px;
-    background: green;
     border-radius: 50%;
+    background: green;
   }
 }
+.toggleButton{
 
-.toggleButton {
   border: none;
 
-  .arrowUp,
-  .arrowDown {
-    border: none;
-  }
-
-  .arrowDown {
+.arrowUp,.arrowDown{
+  border: none;
+}
+  .arrowDown{
     transform: rotate(90deg);
   }
-
-  .arrowUp {
-    transform: rotate(-90deg);
+  .arrowUp{
+transform: rotate(-90deg);
   }
 }
-
-.active {
+.active{
   background: #8de3db;
   cursor: pointer;
 }
-
-.skillTextArea {
+.skillTextArea{
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
+
 }
