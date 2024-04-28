@@ -4,5 +4,5 @@ export interface INewInterview {
   title:string
   searcherId:number
   status:InterviewStatuses
-  plannedDateTime?:Date
+  plannedDateTime:Date
 }

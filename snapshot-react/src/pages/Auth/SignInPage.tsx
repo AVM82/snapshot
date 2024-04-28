@@ -15,7 +15,7 @@ export default function SignInPage(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const onSubmit: SubmitHandler<ISignIn> = async (data): Promise<void> => {
-    const token: { access_token: string } = await snapshotApi.post('http://localhost:8080/auth/authenticate', data);
+    const token: { access_token: string } = await snapshotApi.post('auth/authenticate', data);
 
     if (token) {
       localStorage.setItem('token', token.access_token);
