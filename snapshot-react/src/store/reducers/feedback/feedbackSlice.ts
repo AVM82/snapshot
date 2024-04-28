@@ -2,7 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import IFeedback from '../../../models/feedback/IFeedback.';
-import getFeedback from './actions';
+import { changeGrade, getFeedback } from './actions';
 
 const initialState: IFeedback = {
   questions: [],
@@ -14,10 +14,18 @@ const feedbackSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(getFeedback.fulfilled, (state, { payload }) => {
-      state.questions = [...payload.questions];
-      state.feedback = payload.feedback;
-    });
+    builder
+      .addCase(getFeedback.fulfilled, (state, { payload }) => {
+        state.questions = [...payload.questions];
+        state.feedback = payload.feedback;
+      })
+      .addCase(changeGrade.fulfilled, (state, { payload }) => {
+        state.questions.forEach((question) => {
+          if (question.id === payload.id) {
+            question.grade = payload.grade;
+          }
+        });
+      });
   },
 });
 

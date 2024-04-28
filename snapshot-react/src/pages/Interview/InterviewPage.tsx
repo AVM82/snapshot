@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
-  addQuestion, getAllSkills, getInterviewData, getUserByEmail,
+  addQuestion, getAllSkills,
+  getUserByEmail,
 } from '../../store/reducers/interwiew/actions';
 import getUser from '../../store/reducers/user/actions';
 import Timer from './components/Timer/Timer';
@@ -29,7 +30,7 @@ export default function InterviewPage(): React.JSX.Element {
     if (!interviewer.firstname) {
       dispatch(getUser());
     }
-  }, [interviewer.firstname]);
+  }, [dispatch, interviewer.firstname]);
 
   const getSearcher = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
@@ -98,6 +99,8 @@ export default function InterviewPage(): React.JSX.Element {
         <div className={styles.blockSkills}>
           {sharedSkills.slice(0, 7).map((skill) => (
             <div
+              role="button"
+              tabIndex={0}
               key={skill.id}
               className={skill.shared ? `${styles.active}` : ''}
               onClick={skill.shared ? ():void => handleSkillOnClick(skill.id) : ():null => null}
@@ -107,9 +110,11 @@ export default function InterviewPage(): React.JSX.Element {
           ))}
           {isExpanded && sharedSkills.slice(7).map((skill) => (
             <div
+              role="button"
+              tabIndex={0}
               key={skill.id}
               className={skill.shared ? `${styles.active}` : ''}
-              onClick={skill.shared ? () => handleSkillOnClick(skill.id) : ():null => null}
+              onClick={skill.shared ? (): void => handleSkillOnClick(skill.id) : ():null => null}
             >
               {skill.name}
             </div>
@@ -118,7 +123,7 @@ export default function InterviewPage(): React.JSX.Element {
             <div key={q.id}>
               <div>{q.skillName}</div>
               <p>{q.question}</p>
-              <div>{q.score}</div>
+              <div>{q.grade}</div>
             </div>
           ))}
         </div>

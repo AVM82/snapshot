@@ -10,4 +10,25 @@ const getFeedback = createAsyncThunk(ActionType.GET_FEEDBACK, async (): Promise<
   return response;
 });
 
-export default getFeedback;
+type PatchQuestion = {
+  id: number,
+  interviewId: number,
+  grade: string,
+};
+
+type PatchedQuestion = {
+  id: number,
+  grade: string,
+};
+
+const changeGrade = createAsyncThunk(
+  ActionType.CHANGE_GRADE,
+  async (data: PatchQuestion): Promise<PatchedQuestion> => {
+    const response: PatchedQuestion = await snapshotApi.patch('/interviews/question/grade', data);
+
+    return response;
+  },
+);
+
+export { changeGrade, getFeedback };
+
