@@ -1,7 +1,9 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import emailRegexp from '../../../../common/emailRegexp';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
+import { INewInterview } from '../../../../models/profile/INewInterview';
+import { addInterview, getUserByEmail } from '../../../../store/reducers/interwiew/actions';
 import styles from './InterviewScheduler.module.scss';
 
 interface CustomProps {
@@ -11,9 +13,27 @@ interface CustomProps {
 type CombinedProps = CustomProps & React.HTMLProps<HTMLFormElement>;
 
 function InterviewScheduler({ onClose, ...rest }:CombinedProps):React.JSX.Element {
-  const { register, handleSubmit } = useForm();
-  const handleOnsubmit = ():void => {
-    console.log('Функцію handleOnsubmit було викликано');
+  const { register, handleSubmit, watch } = useForm();
+  const { searcher } = useAppSelector((state) => state.interview);
+  const dispatch = useAppDispatch();
+  const login = watch('login');
+  const title = watch('title');
+  const date = watch('date');
+
+  const getSearcher = ():void => {
+    dispatch(getUserByEmail(login));
+  };
+  const handleOnsubmit = async ():Promise<void> => {
+    const formattedDateString = date.toLocaleString('en-US', { timeZone: 'UTC-0' });
+    const formattedDate = new Date(formattedDateString);
+    const addInterviewData:INewInterview = {
+      status: 'PLANNED',
+      plannedDateTime: formattedDate,
+      searcherId: searcher.id,
+      title,
+    };
+    dispatch(addInterview(addInterviewData));
+    onClose();
   };
 
   return (
@@ -29,26 +49,23 @@ function InterviewScheduler({ onClose, ...rest }:CombinedProps):React.JSX.Elemen
         <input
           type="text"
           id="login"
-          {...register('email', {
+          {...register('login', {
             required: {
               value: true,
               message: 'Введіть логін шукача',
             },
-            pattern: {
-              value: emailRegexp,
-              message: 'невірний формат',
-            },
           })}
+          onBlur={getSearcher}
           placeholder='"Введіть електронну пошту"'
         />
       </div>
 
       <div>
-        <label htmlFor="interviewTitle" />
+        <label htmlFor="title" />
         <input
           type="text"
-          id="interviewTitle"
-          {...register('interviewTitle', {
+          id="title"
+          {...register('title', {
             required: {
               value: true,
               message: 'Введіть назву інтерв\'ю',
@@ -83,7 +100,6 @@ function InterviewScheduler({ onClose, ...rest }:CombinedProps):React.JSX.Elemen
         X
       </button>
     </form>
-
   );
 }
 

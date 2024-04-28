@@ -3,6 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import snapshotApi from '../../../api/request';
 import IQuestion from '../../../models/feedback/IQuestion';
 import { IInterview } from '../../../models/profile/IInterview';
+import { INewInterview } from '../../../models/profile/INewInterview';
 import { ISkills } from '../../../models/profile/ISkills';
 import { IUser } from '../../../models/user/IUser';
 import ActionType from './common';
@@ -17,11 +18,6 @@ const getAllSkills = createAsyncThunk(
   async ():Promise<ISkills[]> => snapshotApi.get('skills/role/1'),
 );
 
-const getInterviewData = createAsyncThunk(
-  ActionType.GET_INTERVIEW_DATA,
-  async ():Promise<IInterview> => snapshotApi.get('asd'),
-);
-
 const addQuestion = createAsyncThunk(
   ActionType.ADD_QUESTION_TO_SKILL,
   async (data:{
@@ -31,7 +27,11 @@ const addQuestion = createAsyncThunk(
     question:string
   }):Promise<IQuestion> => snapshotApi.post('/interviews/question', { ...data }),
 );
+const addInterview = createAsyncThunk(
+  ActionType.Add_INTERVIEW,
+  async (data:INewInterview):Promise<IInterview> => snapshotApi.post('/interviews', { ...data }),
+);
 
 export {
-  addQuestion, getAllSkills, getInterviewData, getUserByEmail,
+  addInterview, addQuestion, getAllSkills, getUserByEmail,
 };

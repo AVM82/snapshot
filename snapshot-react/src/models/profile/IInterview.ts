@@ -1,4 +1,4 @@
-type InterviewStatuses = 'prepare' | 'start' | 'finish' | 'end';
+type InterviewStatuses = 'PLANNED' | 'ACTIVE' | 'FINISHED' | 'COMPLETED' | 'CANCELLED';
 
 interface IInterview {
   id:number,

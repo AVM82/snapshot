@@ -10,7 +10,8 @@ import {
 } from '../../../utils/interview/calculateAndSortSharedSkills';
 import getUser from '../user/actions';
 import {
-  addQuestion, getAllSkills, getInterviewData, getUserByEmail,
+  addInterview,
+  addQuestion, getAllSkills, getUserByEmail,
 } from './actions';
 
 const defaultUser:IUser = {
@@ -41,7 +42,7 @@ interface IInitialState extends IInterview {
 const initialState:IInitialState = {
   id: 0,
   title: '',
-  status: 'prepare',
+  status: 'PLANNED',
   interviewer_id: 0,
   interviewer: { ...defaultUser },
   searcher_id: 0,
@@ -55,16 +56,14 @@ const initialState:IInitialState = {
   feedback: '',
   lowLvlSkills: [],
   questions: [],
-
 };
 
 const interviewSlice = createSlice({
   name: 'interview',
   initialState,
-  reducers: {
-  },
+  reducers: { },
   extraReducers: (builder) => {
-    builder.addCase(getInterviewData.fulfilled, (state, action) => ({
+    builder.addCase(addInterview.fulfilled, (state, action) => ({
       ...state,
       ...action.payload,
     }));
@@ -96,4 +95,5 @@ const interviewSlice = createSlice({
     }));
   },
 });
+
 export default interviewSlice.reducer;
