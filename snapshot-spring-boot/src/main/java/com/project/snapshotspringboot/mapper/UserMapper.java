@@ -1,6 +1,7 @@
 package com.project.snapshotspringboot.mapper;
 
 import com.project.snapshotspringboot.dtos.RegisterRequest;
+import com.project.snapshotspringboot.dtos.RoleWithSkillsDto;
 import com.project.snapshotspringboot.dtos.UserResponseDto;
 import com.project.snapshotspringboot.entity.TempUserEntity;
 import com.project.snapshotspringboot.entity.UserEntity;
@@ -14,11 +15,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {RoleMapper.class})
 public abstract class UserMapper {
 
     protected PasswordEncoder passwordEncoder;
+
+    protected RoleMapper roleMapper;
 
     @Value("${registration.emailTokenExpireTimeInMinutes}")
     protected long registrationEmailTokenExpireTimeInMinutes;
@@ -28,6 +32,12 @@ public abstract class UserMapper {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Autowired
+    public void setRoleMapper(RoleMapper roleMapper) {
+        this.roleMapper = roleMapper;
+    }
+
+    @Mapping(target = "roles", source = "userEntity", qualifiedByName = "mapSkills")
     public abstract UserResponseDto toDto(UserEntity userEntity);
 
     @Mapping(target = "id", ignore = true)
@@ -56,5 +66,10 @@ public abstract class UserMapper {
     @Named("emptyString")
     protected String getEmptyString(Object object) {
         return "";
+    }
+
+    @Named("mapSkills")
+    protected Set<RoleWithSkillsDto> mapSkills(UserEntity userEntity) {
+        return roleMapper.userRoleSkillsToDto(userEntity.getId(), userEntity.getUserRoleSkillEntitySet());
     }
 }
