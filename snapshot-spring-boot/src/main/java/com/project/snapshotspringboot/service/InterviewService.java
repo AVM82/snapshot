@@ -6,10 +6,7 @@ import com.project.snapshotspringboot.dtos.interview.InterviewCreationDto;
 import com.project.snapshotspringboot.dtos.interview.InterviewDto;
 import com.project.snapshotspringboot.dtos.interview.InterviewUpdateDto;
 import com.project.snapshotspringboot.dtos.interview.ShortInterviewDto;
-import com.project.snapshotspringboot.dtos.interviewer.InterviewQuestionRequestDto;
-import com.project.snapshotspringboot.dtos.interviewer.InterviewQuestionResponseDto;
-import com.project.snapshotspringboot.dtos.interviewer.InterviewerQuestionRequestDto;
-import com.project.snapshotspringboot.dtos.interviewer.InterviewerQuestionResponseDto;
+import com.project.snapshotspringboot.dtos.interviewer.*;
 import com.project.snapshotspringboot.entity.*;
 import com.project.snapshotspringboot.enumeration.InterviewStatus;
 import com.project.snapshotspringboot.mapper.InterviewMapper;
@@ -163,8 +160,8 @@ public class InterviewService {
         InterviewQuestionEntity interviewQuestionEntity = interviewQuestionRepository.findById(interviewQuestionDto.getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Question not found."));
         String grade = interviewQuestionDto.getGrade();
-        interviewQuestionEntity.setGrade(Integer.parseInt(grade));
-
+        String gradeWithoutPercentage = grade.replaceAll("[^\\d.]", "");
+        interviewQuestionEntity.setGrade(Integer.parseInt(gradeWithoutPercentage));
         InterviewQuestionEntity savedEntity = interviewQuestionRepository.save(interviewQuestionEntity);
         if (savedEntity.getId() == null) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save question grade.");
@@ -172,7 +169,7 @@ public class InterviewService {
             log.info("The grade was saved successfully. Id: {}", savedEntity.getId());
             return InterviewQuestionResponseDto.builder()
                     .id(savedEntity.getId())
-                    .grade(grade + "%")
+                    .grade(grade)
                     .build();
         }
     }
