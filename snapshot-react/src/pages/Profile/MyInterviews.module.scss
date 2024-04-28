@@ -41,3 +41,14 @@
   border: 1px solid #00ffff;
   border-radius: 8px;
 }
+.asd{
+  display: flex;
+  flex-direction: column;
+}
+.bbb{
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #00ffff;
+  gap: 2px;
+  padding: 6px;
+}

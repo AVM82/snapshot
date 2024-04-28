@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import Markdown from 'react-markdown';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { getFeedback } from '../../store/reducers/feedback/actions';
+import getFeedback from '../../store/reducers/feedback/actions';
 import FeedbackItem from './FeedbackItem';
 
 function Feedback(): JSX.Element {
