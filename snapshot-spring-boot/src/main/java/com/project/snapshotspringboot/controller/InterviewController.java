@@ -132,4 +132,15 @@ public class InterviewController {
             @RequestParam(name = "id") long id) {
         return interviewService.getMyQuestionsBySkillId(authDetails, id);
     }
+
+    @PatchMapping("/{interviewId}/feedback")
+    @Operation(summary = "Update feedback", description = "Update the feedback to the interview")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Feedback updated successfully",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))}),
+            @ApiResponse(responseCode = "400", description = "Interview not found", content = {@Content})
+    })
+    public String updateFeedback(@PathVariable Long interviewId, @RequestBody String feedback) {
+        return interviewService.updateFeedback(interviewId, feedback);
+    }
 }

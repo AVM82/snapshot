@@ -184,4 +184,16 @@ public class InterviewService {
                 .map(interviewerQuestionMapper::toResponseDto)
                 .toList();
     }
+
+    public String updateFeedback(Long interviewId, String feedback) {
+        Optional<InterviewEntity> optionalInterviewEntity = interviewRepository.findById(interviewId);
+        if (optionalInterviewEntity.isPresent()) {
+            InterviewEntity interviewEntity = optionalInterviewEntity.get();
+            interviewEntity.setFeedback(feedback);
+            interviewRepository.save(interviewEntity);
+            return interviewEntity.getFeedback();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Interview not found");
+        }
+    }
 }
