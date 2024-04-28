@@ -22,6 +22,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,7 +54,7 @@ public class InterviewController {
     @GetMapping
     @Operation(summary = "Get all interviews", description = "Get all interviews of user")
     @ApiResponse(responseCode = "200", description = "Interviews found",
-            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ShortInterviewDto.class))})
+            content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ShortInterviewDto.class)))})
     public List<ShortInterviewDto> getAllInterviews(@AuthenticationPrincipal AuthDetails authDetails) {
         return interviewService.getInterviewList(authDetails);
     }
@@ -86,6 +87,7 @@ public class InterviewController {
 
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create interview", description = "Create interview")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Interview created successfully",
