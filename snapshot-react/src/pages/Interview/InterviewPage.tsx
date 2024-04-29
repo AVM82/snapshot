@@ -8,6 +8,7 @@ import {
   getAllSkills,
   getUserByEmail,
 } from '../../store/reducers/interwiew/actions';
+import { setTitle } from '../../store/reducers/interwiew/interviewSlice';
 import getUser from '../../store/reducers/user/actions';
 import Timer from './components/Timer/Timer';
 import styles from './InterviewPage.module.scss';
@@ -58,9 +59,9 @@ export default function InterviewPage(): React.JSX.Element {
   ): void => {
     setTitleText(event.target.value);
   };
-  // const submitTitle = ():void => {
-  //   dispatch(titleText);
-  // };
+  const submitTitle = (): void => {
+    dispatch(setTitle(titleText));
+  };
   const handleAddNewQuestion = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     const questionData = {
