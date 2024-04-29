@@ -25,6 +25,7 @@ function App(): JSX.Element {
         <Route element={<ProtectedRoute />}>
           <Route path="feedback" element={<Feedback />} />
           <Route path="interview" element={<InterviewPage />} />
+          <Route path="interview/:id" element={<InterviewPage />} />
           <Route path="profile" element={<Profile />}>
             <Route path="interview-journal" element={<MyInterviews />}>
               <Route path=":interviewId" element={<InterviewModal />} />

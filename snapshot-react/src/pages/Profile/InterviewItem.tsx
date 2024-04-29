@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { ModalContext } from '../../components/Layout/Layout';
 import { useAppDispatch } from '../../hooks/redux';
@@ -25,6 +25,9 @@ function InterviewItem({ id, title, status }: Partial<IInterviewPreview>): JSX.E
       tabIndex={0}
       style={{ cursor: 'pointer' }}
     >
+      <button type="button">
+        <Link onClick={(event) => event.stopPropagation()} to={`/interview/${id}`}>Сторінка Інтервью</Link>
+      </button>
       <p>{title}</p>
       <p>{status}</p>
       <p>with: user228</p>

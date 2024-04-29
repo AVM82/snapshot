@@ -41,6 +41,16 @@
   border: 1px solid #00ffff;
   border-radius: 8px;
 }
+.interviewList{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  div{
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid black;
+  }
+}
 .asd{
   display: flex;
   flex-direction: column;

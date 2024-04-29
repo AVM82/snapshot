@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { configureStore } from '@reduxjs/toolkit';
 
 import feedbackSlice from './reducers/feedback/feedbackSlice';

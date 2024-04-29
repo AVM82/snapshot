@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/comma-dangle */
-/* eslint-disable comma-dangle */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import snapshotApi from '../../../api/request';
 import IQuestion from '../../../models/feedback/IQuestion';
-import { IInterview } from '../../../models/profile/IInterview';
+import { IInterview, InterviewStatuses } from '../../../models/profile/IInterview';
 import { INewInterview } from '../../../models/profile/INewInterview';
 import { ISkills } from '../../../models/profile/ISkills';
 import { IUser } from '../../../models/user/IUser';
@@ -30,13 +28,17 @@ const addQuestion = createAsyncThunk(
   }):Promise<IQuestion> => snapshotApi.post('/interviews/question', { ...data }),
 );
 
-const addInterview = createAsyncThunk(ActionType.Add_INTERVIEW, async (data: INewInterview): Promise<IInterview> => {
-  const response: IInterview = await snapshotApi.post('/interviews', { ...data });
-
-  return response;
-});
+const addInterview = createAsyncThunk(
+  ActionType.Add_INTERVIEW,
+  async (data: INewInterview): Promise<IInterview> => snapshotApi.post('/interviews', { ...data }),
+);
+const updateInterviewStatus = createAsyncThunk(
+  ActionType.CHANGE_INTERVIEW_STATUS,
+  async ({ id, status }: { id: number, status: InterviewStatuses }):Promise<IInterview> => snapshotApi.patch(`/interviews/status/${id}?status=${status}`),
+);
 
 export {
-  addInterview, addQuestion, getAllSkills, getUserByEmail
+  addInterview, addQuestion, getAllSkills, getUserByEmail,
+  updateInterviewStatus,
 };
 

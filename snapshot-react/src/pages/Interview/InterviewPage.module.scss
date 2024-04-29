@@ -1,5 +1,4 @@
 .pageContainer {
-  position: relative;
   display: flex;
   flex-direction: column;
   gap: 5rem;
@@ -10,12 +9,7 @@
   display: flex;
   flex-flow: row wrap;
   gap: 1rem;
-
-  div {
-    padding: 5px;
-    border: 1px solid black;
-    border-radius: 5px;
-  }
+  position: relative;
 }
 
 .header {
@@ -38,7 +32,9 @@
     border-radius: 50%;
   }
 }
-
+.skillContainer{
+  position: relative;
+}
 .toggleButton {
   border: none;
 
@@ -57,13 +53,22 @@
 }
 
 .active {
-  background: #8de3db;
+  background: #8de3db !important;
   cursor: pointer;
 }
 
 .skillTextArea {
   position: absolute;
-  top: 50%;
+  top: -100%;
   left: 50%;
-  transform: translateX(-50%) translateY(-50%);
+  transform: translateX(0) translateY(-100%);
+}
+.questionList{
+  display: flex;
+  flex-direction: column;
+  div{
+    padding: 2px;
+    border: 1px solid #636b74 ;
+    gap: 1rem
+  }
 }

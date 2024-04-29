@@ -20,9 +20,6 @@ function InterviewScheduler({ onClose, ...rest }:CombinedProps):React.JSX.Elemen
   const title = watch('title');
   const date = watch('date');
 
-  const getSearcher = ():void => {
-    dispatch(getUserByEmail(login));
-  };
   const handleOnsubmit = async ():Promise<void> => {
     const formattedDateString = date.toLocaleString('en-US', { timeZone: 'UTC-0' });
     const formattedDate = new Date(formattedDateString);
@@ -34,6 +31,9 @@ function InterviewScheduler({ onClose, ...rest }:CombinedProps):React.JSX.Elemen
     };
     dispatch(addInterview(addInterviewData));
     onClose();
+  };
+  const getSearcher = async ():Promise<void> => {
+    dispatch(getUserByEmail(login));
   };
 
   return (
