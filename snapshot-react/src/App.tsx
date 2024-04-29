@@ -24,10 +24,11 @@ function App(): JSX.Element {
         <Route path="oauth2/redirect" element={<OAuth2RedirectHandler />} />
         <Route element={<ProtectedRoute />}>
           <Route path="feedback" element={<Feedback />} />
-          <Route path="Myinterview" element={<MyInterviews />} />
           <Route path="interview" element={<InterviewPage />} />
           <Route path="profile" element={<Profile />}>
-            <Route path="profile/interviewItem" element={<InterviewModal />} />
+            <Route path="interview-journal" element={<MyInterviews />}>
+              <Route path=":interviewId" element={<InterviewModal />} />
+            </Route>
           </Route>
         </Route>
         <Route path="*" element={<p>404</p>} />

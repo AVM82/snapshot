@@ -3,7 +3,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { IInterview } from '../../../models/profile/IInterview';
 import IInterviewPreview from '../../../models/profile/IInterviewPreview';
-import { changeFeedback, changeGrade, getMyInterviews } from './actions';
+import {
+  changeFeedback, changeGrade, getInterviewById, getMyInterviews,
+} from './actions';
 
 interface IProfile {
   interviews: IInterviewPreview[],
@@ -52,6 +54,9 @@ const profileSlice = createSlice({
     builder
       .addCase(getMyInterviews.fulfilled, (state, { payload }) => {
         state.interviews = payload;
+      })
+      .addCase(getInterviewById.fulfilled, (state, { payload }) => {
+        state.interview = payload;
       })
       .addCase(changeFeedback.fulfilled, (state, { payload }) => {
         state.interview.feedback = payload.feedback;

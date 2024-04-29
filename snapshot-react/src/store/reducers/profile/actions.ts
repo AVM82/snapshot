@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/comma-dangle */
+/* eslint-disable comma-dangle */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import snapshotApi from '../../../api/request';
+import { IInterview } from '../../../models/profile/IInterview';
 import IInterviewPreview from '../../../models/profile/IInterviewPreview';
 import ActionType from './common';
 
@@ -47,5 +50,16 @@ const getMyInterviews = createAsyncThunk(
   },
 );
 
-export { changeFeedback, changeGrade, getMyInterviews };
+const getInterviewById = createAsyncThunk(
+  ActionType.GET_INTERVIEW_BY_ID,
+  async (id: number): Promise<IInterview> => {
+    const response: IInterview = await snapshotApi.get(`/interviews/${id}`);
+
+    return response;
+  },
+);
+
+export {
+  changeFeedback, changeGrade, getInterviewById, getMyInterviews
+};
 

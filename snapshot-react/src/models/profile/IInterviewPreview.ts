@@ -1,5 +1,5 @@
 interface IInterviewPreview {
-  id: 0,
+  id: number,
   title: string,
   status: string,
   interviewerFullName: string,
