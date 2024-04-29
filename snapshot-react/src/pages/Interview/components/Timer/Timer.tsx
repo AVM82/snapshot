@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 import styles from './Timer.module.scss';
 
-interface CustomProps {}
+type CombinedProps = React.HTMLProps<HTMLDivElement>;
 
-type CombinedProps = CustomProps & React.HTMLProps<HTMLDivElement>;
-
-function Timer(rest :CombinedProps):React.JSX.Element {
+function Timer(rest: CombinedProps): React.JSX.Element {
   const [time, setTime] = useState(0);
 
   useEffect(() => {
@@ -24,11 +22,7 @@ function Timer(rest :CombinedProps):React.JSX.Element {
   return (
     <div {...rest}>
       <div className={styles.stopwatch}>
-        Час співбесіди:
-        {' '}
-        <span>
-          {clock}
-        </span>
+        Час співбесіди: <span>{clock}</span>
       </div>
     </div>
   );

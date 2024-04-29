@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import './Layout.scss';
 
 import { createContext, useState } from 'react';
@@ -19,7 +20,6 @@ function Layout(): JSX.Element {
       <ModalContext.Provider value={setInterviewOpened}>
         <main className="container">
           <Outlet />
-
         </main>
         {interviewOpened && <InterviewModal />}
       </ModalContext.Provider>

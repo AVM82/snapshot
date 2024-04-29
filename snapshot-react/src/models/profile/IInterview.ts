@@ -1,6 +1,7 @@
+import IQuestion from '../feedback/IQuestion';
 import { IUser } from '../user/IUser';
 
-type InterviewStatuses = 'PLANNED' | 'ACTIVE' | 'FINISHED' | 'COMPLETED' | 'CANCELLED';
+type InterviewStatuses = 'PLANNED' | 'ACTIVE' | 'FINISHED' | 'COMPLETED' | 'CANCELLED' | '';
 
 interface IInterview {
   id:number,
@@ -12,5 +13,7 @@ interface IInterview {
   startDateTime:Date | null
   endDateTime:Date | null
   feedback: string
+  questions: IQuestion[]
 }
 export type { IInterview, InterviewStatuses };
+

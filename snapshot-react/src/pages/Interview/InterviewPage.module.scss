@@ -1,62 +1,69 @@
-.pageContainer{
-  padding-top: 1rem;
+.pageContainer {
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 5rem;
+  padding-top: 1rem;
 }
-.blockSkills{
+
+.blockSkills {
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   gap: 1rem;
-  flex-wrap: wrap;
-  div{
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid black;
+
+  div {
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
   }
 }
-.header{
+
+.header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
 }
-.status{
+
+.status {
   display: flex;
   flex-direction: row;
-  gap: 1rem;
   align-items: center;
+  gap: 1rem;
 
-  div{
+  div {
     width: 8px;
     height: 8px;
-    border-radius: 50%;
     background: green;
+    border-radius: 50%;
   }
 }
-.toggleButton{
 
+.toggleButton {
   border: none;
 
-.arrowUp,.arrowDown{
-  border: none;
-}
-  .arrowDown{
+  .arrowUp,
+  .arrowDown {
+    border: none;
+  }
+
+  .arrowDown {
     transform: rotate(90deg);
   }
-  .arrowUp{
-transform: rotate(-90deg);
+
+  .arrowUp {
+    transform: rotate(-90deg);
   }
 }
-.active{
+
+.active {
   background: #8de3db;
   cursor: pointer;
 }
-.skillTextArea{
+
+.skillTextArea {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
-
 }

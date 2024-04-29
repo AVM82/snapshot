@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/comma-dangle */
+/* eslint-disable comma-dangle */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import snapshotApi from '../../../api/request';
@@ -27,10 +29,14 @@ const addQuestion = createAsyncThunk(
     question:string
   }):Promise<IQuestion> => snapshotApi.post('/interviews/question', { ...data }),
 );
-const addInterview = createAsyncThunk(ActionType.Add_INTERVIEW, async (data:INewInterview):Promise<IInterview> => {
-  const response :IInterview = snapshotApi.post('/interviews', { ...data });
+
+const addInterview = createAsyncThunk(ActionType.Add_INTERVIEW, async (data: INewInterview): Promise<IInterview> => {
+  const response: IInterview = await snapshotApi.post('/interviews', { ...data });
+
   return response;
 });
+
 export {
-  addInterview, addQuestion, getAllSkills, getUserByEmail,
+  addInterview, addQuestion, getAllSkills, getUserByEmail
 };
+
