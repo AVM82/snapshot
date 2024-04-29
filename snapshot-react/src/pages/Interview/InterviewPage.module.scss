@@ -6,10 +6,10 @@
 }
 
 .blockSkills {
+  position: relative;
   display: flex;
   flex-flow: row wrap;
   gap: 1rem;
-  position: relative;
 }
 
 .header {
@@ -32,9 +32,11 @@
     border-radius: 50%;
   }
 }
-.skillContainer{
+
+.skillContainer {
   position: relative;
 }
+
 .toggleButton {
   border: none;
 
@@ -63,12 +65,14 @@
   left: 50%;
   transform: translateX(0) translateY(-100%);
 }
-.questionList{
+
+.questionList {
   display: flex;
   flex-direction: column;
-  div{
+
+  div {
+    gap: 1rem;
     padding: 2px;
-    border: 1px solid #636b74 ;
-    gap: 1rem
+    border: 1px solid #636b74;
   }
 }

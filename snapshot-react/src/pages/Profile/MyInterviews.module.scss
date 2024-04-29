@@ -41,24 +41,28 @@
   border: 1px solid #00ffff;
   border-radius: 8px;
 }
-.interviewList{
+
+.interviewList {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  div{
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid black;
+
+  div {
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
   }
 }
-.asd{
+
+.asd {
   display: flex;
   flex-direction: column;
 }
-.bbb{
+
+.bbb {
   display: flex;
   flex-direction: row;
-  border: 1px solid #00ffff;
   gap: 2px;
   padding: 6px;
+  border: 1px solid #00ffff;
 }
