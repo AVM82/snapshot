@@ -16,6 +16,7 @@ function OAuth2RedirectHandler(): JSX.Element {
       toast.error(error);
     }
     navigate('/');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // eslint-disable-next-line react/jsx-no-useless-fragment

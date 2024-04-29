@@ -22,11 +22,11 @@ export default function Skills(props:IRoles):React.JSX.Element {
 
   useEffect(() => {
     dispatch(getRoleSkills(roleId));
-  }, [roleId]);
+  }, [dispatch, roleId]);
 
   useEffect(() => {
     dispatch(getFilterSkillsByInput(inputValue));
-  }, [inputValue]);
+  }, [dispatch, inputValue]);
 
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>):void => {
     setInputValue(event.target.value);

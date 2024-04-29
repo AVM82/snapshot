@@ -12,7 +12,6 @@
     "lint:fix": "eslint . --ext ts,tsx --fix"
   },
   "lint-staged": {
-    "*.{tsx,html}": "prettier --write --ignore-unknown",
     "*.{css,scss}": "stylelint --fix"
   },
   "dependencies": {

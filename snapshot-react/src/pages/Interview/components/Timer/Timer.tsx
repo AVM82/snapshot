@@ -22,7 +22,9 @@ function Timer(rest: CombinedProps): React.JSX.Element {
   return (
     <div {...rest}>
       <div className={styles.stopwatch}>
-        Час співбесіди: <span>{clock}</span>
+        Час співбесіди:
+        {' '}
+        <span>{clock}</span>
       </div>
     </div>
   );

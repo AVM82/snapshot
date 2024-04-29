@@ -117,7 +117,9 @@ export default function InterviewPage(): React.JSX.Element {
           <div className={styles.blockDisplayUser}>
             {searcher.avatarImgUrl}
             <h2>
-              {searcher.firstname} {searcher.lastname}
+              {searcher.firstname}
+              {' '}
+              {searcher.lastname}
             </h2>
           </div>
         ) : (
@@ -159,8 +161,8 @@ export default function InterviewPage(): React.JSX.Element {
               {skill.name}
             </div>
           ))}
-          {isExpanded &&
-            sharedSkills.slice(7).map((skill) => (
+          {isExpanded
+            && sharedSkills.slice(7).map((skill) => (
               <div
                 role="button"
                 tabIndex={0}
@@ -175,8 +177,8 @@ export default function InterviewPage(): React.JSX.Element {
                 {skill.name}
               </div>
             ))}
-          {questions &&
-            questions.map((q) => (
+          {questions
+            && questions.map((q) => (
               <div key={q.id}>
                 <div>{q.skillName}</div>
                 <p>{q.question}</p>
