@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @Entity(name = "interview_questions")
 public class InterviewQuestionEntity {
     @Id

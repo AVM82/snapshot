@@ -3,7 +3,7 @@ package com.project.snapshotspringboot.service;
 import com.project.snapshotspringboot.dtos.InterviewResultsDto;
 import com.project.snapshotspringboot.dtos.QuestionScoreDto;
 import com.project.snapshotspringboot.dtos.interview.*;
-import com.project.snapshotspringboot.dtos.interviewer.*;
+import com.project.snapshotspringboot.dtos.question.*;
 import com.project.snapshotspringboot.entity.*;
 import com.project.snapshotspringboot.enumeration.InterviewStatus;
 import com.project.snapshotspringboot.mapper.InterviewMapper;
@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,7 +68,7 @@ public class InterviewService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Interview not found");
         }
         List<InterviewQuestionEntity> questions = interviewQuestionRepository.findByInterviewId(interviewId);
-        List<QuestionScoreDto> questionScores =interviewQuestionMapper.toScoreDtoList(questions);
+        List<QuestionScoreDto> questionScores = interviewQuestionMapper.toScoreDtoList(questions);
         return interviewMapper.toFullDto(interviewEntity.get(), questionScores);
     }
 
@@ -112,37 +111,64 @@ public class InterviewService {
         return interviewMapper.toDto(interviewRepository.save(interviewEntity));
     }
 
-
-    public InterviewerQuestionResponseDto saveQuestion(AuthDetails authDetails, InterviewerQuestionRequestDto questionDto) {
+    @Transactional(rollbackFor = Exception.class)
+    public InterviewQuestionResponseDto saveQuestion(AuthDetails authDetails, InterviewQuestionRequestDto questionDto) {
         extractedUserAndCheckRole(authDetails);
-
+        InterviewEntity interviewEntity = getInterviewEntity(questionDto);
+        if (!interviewEntity.getInterviewer().getId().equals(questionDto.getInterviewerId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "The interviewer Id for the interview does not match the interviewer Id provided in the request");
+        }
+        Long interviewId = questionDto.getInterviewId();
         Long skillId = questionDto.getSkillId();
         SkillEntity skillEntity = getSkillEntity(skillId);
         String questionText = questionDto.getQuestion();
 
-        if (interviewerQuestionRepository.existsBySkillIdAndQuestion(skillId, questionText)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Question already exists.");
-        }
-
-        InterviewerQuestionEntity entity = interviewerQuestionMapper.toEntity(questionDto);
-        entity.setSkill(skillEntity);
-        InterviewerQuestionEntity savedEntity = interviewerQuestionRepository.save(entity);
         InterviewQuestionEntity interviewQuestionEntity = interviewQuestionMapper.toEntity(questionDto);
         interviewQuestionEntity.setSkill(skillEntity);
-        InterviewQuestionEntity savedInterviewQuestionEntity = interviewQuestionRepository.save(interviewQuestionEntity);
 
-        if (savedEntity.getId() == null || savedInterviewQuestionEntity.getId() == null) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save question.");
+        InterviewerQuestionEntity interviewerQuestionEntity = interviewerQuestionMapper.toEntity(questionDto);
+        interviewerQuestionEntity.setSkill(skillEntity);
+
+        InterviewerQuestionEntity savedInterviewerQuestion;
+        InterviewQuestionEntity savedInterviewQuestion;
+        if (interviewerQuestionRepository.existsBySkillIdAndQuestion(skillId, questionText) &&
+                !interviewQuestionRepository.existsByInterviewIdAndSkillIdAndQuestion(interviewId, skillId, questionText)) {
+            log.info("Question already exists.");
+            log.warn("Such a question is already in the interviewer's list of questions, " +
+                    "the question will be added only to the current interview");
+            savedInterviewerQuestion = getInterviewerQuestionEntity(skillId, questionText);
+            savedInterviewQuestion = interviewQuestionRepository.save(interviewQuestionEntity);
+        } else if (interviewQuestionRepository.existsByInterviewIdAndSkillIdAndQuestion(interviewId, skillId, questionText)) {
+            log.info("Question already exists.");
+            savedInterviewerQuestion = getInterviewerQuestionEntity(skillId, questionText);
+            savedInterviewQuestion = getInterviewQuestionEntity(interviewId, skillId, questionText);
         } else {
-
-            log.info("Question saved successfully. Id: {}, Skill: {}", savedEntity.getId(), skillEntity.getName());
-
-            return InterviewerQuestionResponseDto.builder()
-                    .id(savedEntity.getId())
-                    .skillName(skillMapper.toDto(skillEntity).getName())
-                    .question(questionDto.getQuestion())
-                    .build();
+            savedInterviewerQuestion = interviewerQuestionRepository.save(interviewerQuestionEntity);
+            savedInterviewQuestion = interviewQuestionRepository.save(interviewQuestionEntity);
         }
+        log.info("The question has been successfully saved (or it already exists) in the interviewer's question database. Id: {}, Skill: {}", savedInterviewerQuestion.getId(), skillEntity.getName());
+        log.info("The question has been successfully saved (or it already exists) in the database of interview questions. Id: {}, Skill: {}", savedInterviewQuestion.getId(), skillEntity.getName());
+        return InterviewQuestionResponseDto.builder()
+                .id(savedInterviewQuestion.getId())
+                .skillName(skillEntity.getName())
+                .question(questionDto.getQuestion())
+                .build();
+    }
+
+    public InterviewEntity getInterviewEntity(InterviewQuestionRequestDto questionDto) {
+        return interviewRepository.findById(questionDto.getInterviewId()).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Interview not found with Id: " + questionDto.getInterviewId()));
+    }
+
+    public InterviewQuestionEntity getInterviewQuestionEntity(Long interviewId, Long skillId, String questionText) {
+        return interviewQuestionRepository.findByInterviewIdAndSkillIdAndQuestion(interviewId, skillId, questionText).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Question not fount with skill Id: " + skillId + ", question text: " + questionText));
+    }
+
+    public InterviewerQuestionEntity getInterviewerQuestionEntity(Long skillId, String questionText) {
+        return interviewerQuestionRepository.findBySkillIdAndQuestion(skillId, questionText).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Question not fount with skill Id: " + skillId + ", question text: " + questionText));
     }
 
     public void extractedUserAndCheckRole(AuthDetails authDetails) {
@@ -164,28 +190,37 @@ public class InterviewService {
     }
 
     @Transactional(rollbackFor = {Exception.class})
-    public InterviewQuestionResponseDto evaluateQuestion(AuthDetails authDetails, InterviewQuestionRequestDto interviewQuestionDto) {
+    public InterviewQuestionGradeResponseDto evaluateQuestion(AuthDetails authDetails, InterviewQuestionGradeRequestDto interviewQuestionDto) {
         extractedUserAndCheckRole(authDetails);
+
+        interviewRepository.findById(interviewQuestionDto.getInterviewId()).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Interview not found with Id: " + interviewQuestionDto.getInterviewId()));
 
         InterviewQuestionEntity interviewQuestionEntity = interviewQuestionRepository.findById(interviewQuestionDto.getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Question not found."));
+
+        if (!interviewQuestionDto.getInterviewId().equals(interviewQuestionEntity.getInterviewId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "The interview Id for question Id does not match the interview Id provided in the request");
+        }
         String grade = interviewQuestionDto.getGrade();
         String gradeWithoutPercentage = grade.replaceAll("[^\\d.]", "");
+
         interviewQuestionEntity.setGrade(Integer.parseInt(gradeWithoutPercentage));
         InterviewQuestionEntity savedEntity = interviewQuestionRepository.save(interviewQuestionEntity);
         if (savedEntity.getId() == null) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save question grade.");
         } else {
             log.info("The grade was saved successfully. Id: {}", savedEntity.getId());
-            return InterviewQuestionResponseDto.builder()
+            return InterviewQuestionGradeResponseDto.builder()
                     .id(savedEntity.getId())
                     .grade(grade)
                     .build();
         }
     }
 
-    public List<InterviewerQuestionResponseDto> getMyQuestionsBySkillId(AuthDetails authDetails,
-                                                                        long id) {
+    public List<InterviewQuestionResponseDto> getMyQuestionsBySkillId(AuthDetails authDetails,
+                                                                      long id) {
         return interviewerQuestionRepository
                 .findAllByInterviewerIdAndSkillId(authDetails.getUserEntity().getId(), id)
                 .stream()

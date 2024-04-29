@@ -1,4 +1,4 @@
-package com.project.snapshotspringboot.dtos.interviewer;
+package com.project.snapshotspringboot.dtos.question;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,19 +11,19 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InterviewerQuestionRequestDto {
+public class InterviewQuestionRequestDto {
 
-    @NotNull
+    @NotNull(message = "Interview ID is required.")
     private Long interviewId;
 
-    @NotNull
+    @NotNull(message = "Interviewer ID is required.")
     private Long interviewerId;
 
-    @NotNull
+    @NotNull(message = "Skill ID is required.")
     private Long skillId;
 
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Question is required.")
+    @NotBlank(message = "Question must be entered.")
     private String question;
 
 }

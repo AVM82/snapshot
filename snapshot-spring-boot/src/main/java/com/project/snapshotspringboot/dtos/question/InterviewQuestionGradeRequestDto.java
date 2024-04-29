@@ -1,4 +1,4 @@
-package com.project.snapshotspringboot.dtos.interviewer;
+package com.project.snapshotspringboot.dtos.question;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InterviewQuestionRequestDto {
+public class InterviewQuestionGradeRequestDto {
 
     @NotNull(message = "Question ID is required.")
     private Long id;
@@ -20,5 +20,6 @@ public class InterviewQuestionRequestDto {
 
     @NotNull(message = "Grade is required.")
     @NotBlank(message = "An estimate must be issued.")
+    @Pattern(regexp = "^(100|[1-9]?[0-9])%$", message = "Grade must be in the format X%, where X is a number from 0 to 100.")
     private String grade;
 }

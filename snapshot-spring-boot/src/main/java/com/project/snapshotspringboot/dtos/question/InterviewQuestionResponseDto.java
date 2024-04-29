@@ -1,4 +1,4 @@
-package com.project.snapshotspringboot.dtos.interviewer;
+package com.project.snapshotspringboot.dtos.question;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InterviewerQuestionResponseDto {
+public class InterviewQuestionResponseDto {
 
     private Long id;
     private String skillName;

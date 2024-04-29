@@ -3,9 +3,11 @@ package com.project.snapshotspringboot.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @Entity(name = "interviewer_questions")
 public class InterviewerQuestionEntity {
     @Id

@@ -1,7 +1,7 @@
 package com.project.snapshotspringboot.mapper;
 
-import com.project.snapshotspringboot.dtos.interviewer.InterviewerQuestionRequestDto;
-import com.project.snapshotspringboot.dtos.interviewer.InterviewerQuestionResponseDto;
+import com.project.snapshotspringboot.dtos.question.InterviewQuestionRequestDto;
+import com.project.snapshotspringboot.dtos.question.InterviewQuestionResponseDto;
 import com.project.snapshotspringboot.entity.InterviewerQuestionEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,8 +14,8 @@ public interface InterviewerQuestionMapper {
     @Mapping(target = "interviewer.id", source = "interviewerId")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "question", source = "question")
-    InterviewerQuestionEntity toEntity(InterviewerQuestionRequestDto questionDto);
+    InterviewerQuestionEntity toEntity(InterviewQuestionRequestDto questionDto);
 
     @Mapping(target = "skillName", source = "skill.name")
-    InterviewerQuestionResponseDto toResponseDto(InterviewerQuestionEntity entity);
+    InterviewQuestionResponseDto toResponseDto(InterviewerQuestionEntity entity);
 }

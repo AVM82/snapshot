@@ -1,8 +1,8 @@
 package com.project.snapshotspringboot.mapper;
 
 import com.project.snapshotspringboot.dtos.QuestionScoreDto;
-import com.project.snapshotspringboot.dtos.interviewer.InterviewQuestionResponseDto;
-import com.project.snapshotspringboot.dtos.interviewer.InterviewerQuestionRequestDto;
+import com.project.snapshotspringboot.dtos.question.InterviewQuestionGradeResponseDto;
+import com.project.snapshotspringboot.dtos.question.InterviewQuestionRequestDto;
 import com.project.snapshotspringboot.entity.InterviewQuestionEntity;
 import com.project.snapshotspringboot.entity.SkillEntity;
 import org.mapstruct.Mapper;
@@ -15,9 +15,9 @@ import java.util.List;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface InterviewQuestionMapper {
 
-    InterviewQuestionEntity toEntity(InterviewerQuestionRequestDto questionDto);
+    InterviewQuestionEntity toEntity(InterviewQuestionRequestDto questionDto);
 
-    InterviewQuestionResponseDto toDto(InterviewQuestionEntity interviewQuestionEntity);
+    InterviewQuestionGradeResponseDto toDto(InterviewQuestionEntity interviewQuestionEntity);
 
     @Mapping(target = "skillName", source = "skill", qualifiedByName = "getSkillName")
     @Mapping(target = "grade", source = "grade", qualifiedByName = "mapToPercent")

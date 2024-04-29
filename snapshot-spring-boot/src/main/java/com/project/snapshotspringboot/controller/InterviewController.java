@@ -2,7 +2,7 @@ package com.project.snapshotspringboot.controller;
 
 import com.project.snapshotspringboot.dtos.InterviewResultsDto;
 import com.project.snapshotspringboot.dtos.interview.*;
-import com.project.snapshotspringboot.dtos.interviewer.*;
+import com.project.snapshotspringboot.dtos.question.*;
 import com.project.snapshotspringboot.enumeration.InterviewStatus;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import com.project.snapshotspringboot.service.InterviewService;
@@ -100,20 +100,20 @@ public class InterviewController {
     @PostMapping("/question")
     @Operation(summary = "Save question", description = "Save question")
     @ApiResponse(responseCode = "200", description = "Question saved successfully",
-            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = InterviewerQuestionResponseDto.class))})
+            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = InterviewQuestionResponseDto.class))})
     @ApiResponse(responseCode = "400", description = "Invalid question data", content = {@Content})
-    public InterviewerQuestionResponseDto saveQuestion(@AuthenticationPrincipal AuthDetails authDetails,
-                                                       @RequestBody @Valid InterviewerQuestionRequestDto questionRequestDto) {
+    public InterviewQuestionResponseDto saveQuestion(@AuthenticationPrincipal AuthDetails authDetails,
+                                                     @RequestBody @Valid InterviewQuestionRequestDto questionRequestDto) {
         return interviewService.saveQuestion(authDetails, questionRequestDto);
     }
 
     @PatchMapping("/question/grade")
     @Operation(summary = "Evaluate question", description = "Evaluate question (set grade)")
     @ApiResponse(responseCode = "200", description = "Question evaluated successfully",
-            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = InterviewQuestionResponseDto.class))})
+            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = InterviewQuestionGradeResponseDto.class))})
     @ApiResponse(responseCode = "400", description = "Invalid question data", content = {@Content})
-    public InterviewQuestionResponseDto evaluateQuestion(@AuthenticationPrincipal AuthDetails authDetails,
-                                                         @RequestBody @Valid InterviewQuestionRequestDto questionDto) {
+    public InterviewQuestionGradeResponseDto evaluateQuestion(@AuthenticationPrincipal AuthDetails authDetails,
+                                                              @RequestBody @Valid InterviewQuestionGradeRequestDto questionDto) {
         return interviewService.evaluateQuestion(authDetails, questionDto);
     }
 
@@ -121,9 +121,9 @@ public class InterviewController {
     @Operation(summary = "Get interviewer questions by skill id.")
     @ApiResponse(responseCode = "200",
             content = {@Content(
-                    array = @ArraySchema(schema = @Schema(implementation = InterviewerQuestionResponseDto.class)),
+                    array = @ArraySchema(schema = @Schema(implementation = InterviewQuestionResponseDto.class)),
                     mediaType = "application/json")})
-    public List<InterviewerQuestionResponseDto> getMyQuestionsBySkillId(
+    public List<InterviewQuestionResponseDto> getMyQuestionsBySkillId(
             @AuthenticationPrincipal AuthDetails authDetails,
             @RequestParam(name = "id") long id) {
         return interviewService.getMyQuestionsBySkillId(authDetails, id);
