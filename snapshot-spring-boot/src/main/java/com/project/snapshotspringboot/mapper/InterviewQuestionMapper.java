@@ -21,6 +21,7 @@ public interface InterviewQuestionMapper {
 
     @Mapping(target = "skillName", source = "skill", qualifiedByName = "getSkillName")
     @Mapping(target = "grade", source = "grade", qualifiedByName = "mapToPercent")
+    @Mapping(source = "createAt", target = "createdAt")
     QuestionScoreDto toScoreDto(InterviewQuestionEntity interviewQuestionEntity);
 
     default List<QuestionScoreDto> toScoreDtoList(List<InterviewQuestionEntity> interviewQuestionEntities) {
