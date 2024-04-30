@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/skills")
+@RequestMapping("${rest.prefix}/skills")
 @Tag(name = "Skills", description = "Skill management endpoints!")
 @SecurityRequirement(name = "jwt")
 @ApiResponse(responseCode = "401", content = {@Content})

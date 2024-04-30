@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -30,6 +32,9 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
     private final UserService userService;
     private final AppProps appProps;
 
+    @Value("${rest.prefix}")
+    private String restPrefix;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -37,10 +42,12 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         log.info("Request to uri - {}", request.getRequestURI());
 
-        if (Objects.nonNull(request.getRequestURI())
-                && Arrays
+        boolean isPermitAllUri = Arrays
                 .stream(appProps.getSecurity().getPermitAllUris())
-                .anyMatch(url -> request.getRequestURI().startsWith(url.replace("/**", "")))) {
+                .anyMatch(url -> request.getRequestURI().startsWith(url.replace("/**", "")));
+        boolean isUriNotStartFromRestPrefix = !request.getRequestURI().startsWith(restPrefix);
+
+        if (isPermitAllUri || isUriNotStartFromRestPrefix) {
             log.info("Permit all uri!");
             filterChain.doFilter(request, response);
             return;

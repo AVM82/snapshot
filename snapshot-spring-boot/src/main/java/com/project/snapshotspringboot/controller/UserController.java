@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("${rest.prefix}/users")
 @Tag(name = "Users", description = "User management endpoints!")
 @SecurityRequirement(name = "jwt")
 @ApiResponse(responseCode = "401", content = {@Content})

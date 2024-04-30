@@ -1,9 +1,13 @@
 import './oauth2.scss';
 
 function OAuth2(): JSX.Element {
+  const frontUri = 'http://localhost:5173';
+  const backUri = 'http://localhost:8080';
+  const googleAuthUri = `${backUri}/rest/oauth2/authorize/google?redirect_uri=${frontUri}/oauth2/redirect`;
+
   return (
     <div className="oauth2">
-      <a href="http://localhost:8080/oauth2/authorize/google?redirect_uri=http://localhost:5173/oauth2/redirect">
+      <a href={googleAuthUri}>
         Login
       </a>
       {/* <GoogleButton
