@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/interviews")
+@RequestMapping("${rest.prefix}/interviews")
 @Tag(name = "Interviews", description = "Interview management endpoints!")
 @SecurityRequirement(name = "jwt")
 @ApiResponse(responseCode = "401", content = {@Content})

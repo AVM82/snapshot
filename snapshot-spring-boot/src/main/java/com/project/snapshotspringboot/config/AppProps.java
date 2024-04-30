@@ -26,6 +26,7 @@ public class AppProps {
     @Setter
     public static class SecurityProps {
         private String[] permitAllUris;
+        private String[] securedUris;
     }
 
     @Getter

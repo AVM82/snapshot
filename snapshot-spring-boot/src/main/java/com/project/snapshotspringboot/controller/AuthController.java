@@ -18,7 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/auth", produces = "application/json")
+@RequestMapping(value = "${rest.prefix}/auth", produces = "application/json")
 @Tag(name = "Auth", description = "Authentication management endpoints!")
 @RequiredArgsConstructor
 @Slf4j

@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.project</groupId>
     <artifactId>snapshot-spring-boot</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>snapshot-spring-boot</name>
     <description>snapshot-spring-boot</description>
 
@@ -25,6 +25,9 @@
         <jjwt.version>0.12.5</jjwt.version>
         <springdoc.openapi.starter.webmvc.ui.version>2.5.0</springdoc.openapi.starter.webmvc.ui.version>
         <maven.compile.plugin.version>3.11.0</maven.compile.plugin.version>
+        <node.version>v20.12.0</node.version>
+        <npm.version>10.5.0</npm.version>
+        <maven.resources.plugin.version>3.3.1</maven.resources.plugin.version>
     </properties>
 
     <dependencies>
@@ -162,5 +165,79 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>build-frontend</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <version>1.15.0</version>
+                        <configuration>
+                            <nodeVersion>${node.version}</nodeVersion>
+                            <workingDirectory>./../snapshot-react</workingDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>install node and npm</id>
+                                <goals>
+                                    <goal>install-node-and-npm</goal>
+                                </goals>
+                                <configuration>
+                                    <nodeVersion>${node.version}</nodeVersion>
+                                    <npmVersion>${npm.version}</npmVersion>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm install</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>install</arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm run build</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>run build</arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>${maven.resources.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>copy build folder</id>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <resources>
+                                        <resource>
+                                            <directory>./../snapshot-react/dist</directory>
+                                        </resource>
+                                    </resources>
+                                    <outputDirectory>${basedir}/target/classes/static</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

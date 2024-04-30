@@ -59,7 +59,8 @@ public class SecurityConfig {
                 .formLogin(FormLoginConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(appProps.getSecurity().getPermitAllUris()).permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers(appProps.getSecurity().getSecuredUris()).authenticated()
+                        .anyRequest().permitAll())
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
