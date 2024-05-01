@@ -1,10 +1,11 @@
 package com.project.snapshotspringboot.entity;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -24,4 +25,6 @@ public class InterviewQuestionEntity {
     private String question;
     @Column(name = "grade")
     private Integer grade;
+    @Column(name = "create_at")
+    private LocalDateTime createAt;
 }

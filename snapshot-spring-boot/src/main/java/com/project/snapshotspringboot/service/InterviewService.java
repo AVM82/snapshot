@@ -3,7 +3,10 @@ package com.project.snapshotspringboot.service;
 import com.project.snapshotspringboot.dtos.InterviewResultsDto;
 import com.project.snapshotspringboot.dtos.QuestionScoreDto;
 import com.project.snapshotspringboot.dtos.interview.*;
-import com.project.snapshotspringboot.dtos.question.*;
+import com.project.snapshotspringboot.dtos.question.InterviewQuestionGradeRequestDto;
+import com.project.snapshotspringboot.dtos.question.InterviewQuestionGradeResponseDto;
+import com.project.snapshotspringboot.dtos.question.InterviewQuestionRequestDto;
+import com.project.snapshotspringboot.dtos.question.InterviewQuestionResponseDto;
 import com.project.snapshotspringboot.entity.*;
 import com.project.snapshotspringboot.enumeration.InterviewStatus;
 import com.project.snapshotspringboot.mapper.InterviewMapper;
@@ -26,6 +29,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,9 +58,7 @@ public class InterviewService {
             List<InterviewQuestionEntity> questions = interviewQuestionRepository.findByInterviewId(interviewId);
             String feedback = interviewEntity.getFeedback();
 
-            List<QuestionScoreDto> questionScores = questions.stream().map(question ->
-                            new QuestionScoreDto(question.getId(), question.getQuestion(), question.getGrade() + "%", question.getSkill().getName()))
-                    .toList();
+            List<QuestionScoreDto> questionScores = interviewQuestionMapper.toScoreDtoList(questions);
             return new InterviewResultsDto(questionScores, feedback);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Interview not found");
@@ -125,6 +128,7 @@ public class InterviewService {
         String questionText = questionDto.getQuestion();
 
         InterviewQuestionEntity interviewQuestionEntity = interviewQuestionMapper.toEntity(questionDto);
+        interviewQuestionEntity.setCreateAt(LocalDateTime.now(ZoneId.of("UTC")));
         interviewQuestionEntity.setSkill(skillEntity);
 
         InterviewerQuestionEntity interviewerQuestionEntity = interviewerQuestionMapper.toEntity(questionDto);
@@ -153,6 +157,7 @@ public class InterviewService {
                 .id(savedInterviewQuestion.getId())
                 .skillName(skillEntity.getName())
                 .question(questionDto.getQuestion())
+                .createdAt(savedInterviewQuestion.getCreateAt())
                 .build();
     }
 
