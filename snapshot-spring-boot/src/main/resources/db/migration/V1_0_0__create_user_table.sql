@@ -233,9 +233,9 @@ VALUES ('Test', 'COMPLETED', 1, 2, '2024-04-24 09:00:00', '2024-04-24 09:00:00',
         'Needs improvement');
 
 INSERT INTO interview_questions (interview_id, skill_id, question, grade, create_at)
-VALUES (1, 56, 'How to configure a firewall for network security?', 100, '2024-04-30 09:00:00'),
-       (1, 57, 'What are IDPS, and how do they collaborate with firewalls?', 50, '2024-04-30 09:01:00'),
-       (1, 58, 'How to implement a VPN, and what technologies ensure data confidentiality?', 0, '2024-04-30 09:02:00');
+VALUES (1, 56, 'How to configure a firewall for network security?', 100, '2024-04-30 09:00:00.000001'),
+       (1, 57, 'What are IDPS, and how do they collaborate with firewalls?', 50, '2024-04-30 09:01:00.000001'),
+       (1, 58, 'How to implement a VPN, and what technologies ensure data confidentiality?', 0, '2024-04-30 09:02:00.000001');
 
 INSERT INTO interviews (title, status, interviewer_id, searcher_id, planned_date_time, start_date_time, end_date_time,
                         feedback)
@@ -243,9 +243,9 @@ VALUES ('Second', 'COMPLETED', 1, 2, '2024-04-26 18:30:00', '2024-04-26 18:27:34
         'Needs improvement');
 
 INSERT INTO interview_questions (interview_id, skill_id, question, grade, create_at)
-VALUES (1, 29, 'What is the difference between == and .equals() when comparing objects in Java?', 100, '2024-04-30 09:03:00'),
-       (1, 29, 'Explain the concept of inheritance in Java and provide an example.', 75, '2024-04-30 09:04:00'),
-       (1, 47, 'What is MongoDB, and how does it differ from traditional relational databases?', 50, '2024-04-30 09:05:00');
+VALUES (1, 29, 'What is the difference between == and .equals() when comparing objects in Java?', 100, '2024-04-30 09:03:00.000001'),
+       (1, 29, 'Explain the concept of inheritance in Java and provide an example.', 75, '2024-04-30 09:04:00.000001'),
+       (1, 47, 'What is MongoDB, and how does it differ from traditional relational databases?', 50, '2024-04-30 09:05:00.000001');
 
 INSERT INTO interviewer_questions (interviewer_id, skill_id, question)
 VALUES (1, 29, 'What is the difference between == and .equals() when comparing objects in Java?'),
