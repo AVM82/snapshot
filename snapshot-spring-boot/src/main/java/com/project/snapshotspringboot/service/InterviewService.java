@@ -31,6 +31,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -157,7 +158,7 @@ public class InterviewService {
                 .id(savedInterviewQuestion.getId())
                 .skillName(skillEntity.getName())
                 .question(questionDto.getQuestion())
-                .createdAt(savedInterviewQuestion.getCreateAt())
+                .createdAt(savedInterviewQuestion.getCreateAt().truncatedTo(ChronoUnit.SECONDS))
                 .build();
     }
 
