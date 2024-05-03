@@ -36,9 +36,23 @@ const updateInterviewStatus = createAsyncThunk(
   ActionType.CHANGE_INTERVIEW_STATUS,
   async ({ id, status }: { id: number, status: InterviewStatuses }):Promise<IInterview> => snapshotApi.patch(`/interviews/status/${id}?status=${status}`),
 );
+const getInterviewId = createAsyncThunk(
+  ActionType.GET_INTERVIEW_ID,
+  async (data:INewInterview):Promise<number> => {
+    const response:IInterview = await snapshotApi.post('/interviews', { ...data });
+
+    return response.id;
+  },
+);
+const getSkillQuestions = createAsyncThunk(
+  ActionType.GET_SKILL_QUESTIONS_BY_ID,
+  async (skillId:number):Promise<IQuestion[]> => snapshotApi.get(`interviews/questions/skill/${skillId}?id=${skillId}`),
+);
 
 export {
-  addInterview, addQuestion, getAllSkills, getUserByEmail,
+  addInterview, addQuestion, getAllSkills, getInterviewId,
+  getSkillQuestions,
+  getUserByEmail,
   updateInterviewStatus,
 };
 

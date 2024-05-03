@@ -59,13 +59,6 @@
   cursor: pointer;
 }
 
-.skillTextArea {
-  position: absolute;
-  top: -100%;
-  left: 50%;
-  transform: translateX(0) translateY(-100%);
-}
-
 .questionList {
   display: flex;
   flex-direction: column;
