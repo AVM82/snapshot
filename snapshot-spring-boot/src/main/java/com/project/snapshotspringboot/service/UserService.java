@@ -1,12 +1,11 @@
 package com.project.snapshotspringboot.service;
 
 import com.project.snapshotspringboot.dtos.*;
-import com.project.snapshotspringboot.entity.UserEntity;
-import com.project.snapshotspringboot.entity.UserRoleEntity;
-import com.project.snapshotspringboot.entity.UserRoleSkillEntity;
+import com.project.snapshotspringboot.dtos.result.SkillResultDto;
+import com.project.snapshotspringboot.dtos.result.UserResultsByInterviewsResponseDto;
+import com.project.snapshotspringboot.entity.*;
 import com.project.snapshotspringboot.mapper.UserMapper;
-import com.project.snapshotspringboot.repository.UserRepository;
-import com.project.snapshotspringboot.repository.UserRoleSkillRepository;
+import com.project.snapshotspringboot.repository.*;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +32,9 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository repository;
     private final UserRoleSkillRepository userRoleSkillRepository;
+    private final SkillRepository skillRepository;
+    private final InterviewRepository interviewRepository;
+    private final InterviewQuestionRepository interviewQuestionRepository;
     private final RoleService roleService;
     private final SkillService skillService;
     private final UserMapper userMapper;
@@ -152,5 +151,41 @@ public class UserService implements UserDetailsService {
                         user.getId(),
                         user.getUserRoleSkillEntitySet()
                 ));
+    }
+
+    public List<UserResultsByInterviewsResponseDto> getUserInterviewsResults(Long userId) {
+        List<UserResultsByInterviewsResponseDto> userInterviewResults = new ArrayList<>();
+
+        List<InterviewEntity> interviews = interviewRepository.findBySearcherId(userId);
+
+        for (InterviewEntity interview : interviews) {
+            UserResultsByInterviewsResponseDto userInterviewDto = new UserResultsByInterviewsResponseDto();
+            userInterviewDto.setInterviewId(interview.getId());
+            userInterviewDto.setUserId(userId);
+            userInterviewDto.setInterviewDateTime(interview.getEndDateTime());
+
+            List<InterviewQuestionEntity> interviewQuestions = interviewQuestionRepository.findByInterviewId(interview.getId());
+
+            List<SkillResultDto> skillResults = new ArrayList<>();
+
+            Map<Long, List<Integer>> skillGrades = new HashMap<>();
+            for (InterviewQuestionEntity question : interviewQuestions) {
+                skillGrades.computeIfAbsent(question.getSkill().getId(), k -> new ArrayList<>()).add(question.getGrade());
+            }
+
+            for (Map.Entry<Long, List<Integer>> entry : skillGrades.entrySet()) {
+                Long skillId = entry.getKey();
+                double averageGrade = entry.getValue().stream().mapToInt(Integer::intValue).average().orElse(0.0);
+                SkillResultDto skillResult = new SkillResultDto();
+                skillResult.setSkillName(skillRepository.findById(skillId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Skill not found by id: " + skillId)).getName());
+                skillResult.setAverageGrade(averageGrade);
+                skillResults.add(skillResult);
+            }
+
+            userInterviewDto.setSkillResults(skillResults);
+
+            userInterviewResults.add(userInterviewDto);
+        }
+        return userInterviewResults;
     }
 }
