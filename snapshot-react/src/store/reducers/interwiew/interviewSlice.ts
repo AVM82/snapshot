@@ -40,7 +40,7 @@ interface IInitialState extends IInterview {
 }
 
 const initialState:IInitialState = {
-  id: NaN,
+  id: 0,
   title: '',
   status: '',
   interviewer: { ...defaultUser },

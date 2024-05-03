@@ -19,7 +19,7 @@ export default function InterviewPage(): React.JSX.Element {
   const [showQuestionTextField, setShowQuestionTextField] = useState(false);
   const [currentSkillId, setCurrentSkillId] = useState(0);
   const [titleText, setTitleText] = useState('');
-  const navigator = useNavigate();
+  const navigate = useNavigate();
   const {
     searcher, id: interviewId, sharedSkills, status: interviewStatus, isLoading, questions, title,
   } = useAppSelector((state) => state.interview);
@@ -37,7 +37,7 @@ export default function InterviewPage(): React.JSX.Element {
 
   useEffect(() => {
     if (interviewId && !id) {
-      navigator(`/interview/${interviewId}`);
+      navigate(`/interview/${interviewId}`);
     }
   }, [interviewId]);
 
