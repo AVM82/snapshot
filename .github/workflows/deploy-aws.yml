@@ -27,7 +27,7 @@ jobs:
 
       - name: Find JAR file
         id: find-jar
-        run: echo "jar_file=$(find snapshot-spring-boot -name '*.jar' -type f)" >> $GITHUB_ENV
+        run: echo "jar_file=$(find $PWD/snapshot-spring-boot -name '*.jar' -type f)" >> $GITHUB_ENV
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v21
