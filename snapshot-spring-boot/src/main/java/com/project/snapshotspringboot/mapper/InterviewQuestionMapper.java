@@ -10,6 +10,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.Named;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
@@ -21,7 +23,7 @@ public interface InterviewQuestionMapper {
 
     @Mapping(target = "skillName", source = "skill", qualifiedByName = "getSkillName")
     @Mapping(target = "grade", source = "grade", qualifiedByName = "mapToPercent")
-    @Mapping(source = "createAt", target = "createdAt")
+    @Mapping(source = "createAt", target = "createdAt", qualifiedByName = "formatDateTime")
     QuestionScoreDto toScoreDto(InterviewQuestionEntity interviewQuestionEntity);
 
     default List<QuestionScoreDto> toScoreDtoList(List<InterviewQuestionEntity> interviewQuestionEntities) {
@@ -36,5 +38,10 @@ public interface InterviewQuestionMapper {
     @Named("mapToPercent")
     default String getPercent(Integer grade) {
         return grade + "%";
+    }
+
+    @Named("formatDateTime")
+    default LocalDateTime formatDateTime(LocalDateTime dateTime) {
+        return dateTime.truncatedTo(ChronoUnit.SECONDS);
     }
 }

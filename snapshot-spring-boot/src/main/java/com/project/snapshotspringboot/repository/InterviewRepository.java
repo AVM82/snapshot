@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface InterviewRepository extends JpaRepository<InterviewEntity, Long> {
     List<InterviewEntity> findByInterviewer_IdOrSearcher_Id(Long id, Long id1);
+
+    List<InterviewEntity> findBySearcherId(Long id);
 }

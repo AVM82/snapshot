@@ -3,6 +3,7 @@ package com.project.snapshotspringboot.controller;
 import com.project.snapshotspringboot.dtos.EmailDto;
 import com.project.snapshotspringboot.dtos.RoleDto;
 import com.project.snapshotspringboot.dtos.UserResponseDto;
+import com.project.snapshotspringboot.dtos.result.UserResultsByInterviewsResponseDto;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import com.project.snapshotspringboot.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -74,5 +75,14 @@ public class UserController {
     @PostMapping("/by-email")
     public UserResponseDto getUserByEmail(@RequestBody EmailDto emailDto) {
         return service.getUserByEmail(emailDto);
+    }
+
+    @GetMapping("/portrait/{userId}")
+    @Operation(summary = "Get a portrait of an IT specialist", description = "Get a portrait of an IT specialist based on the results of interviews")
+    @ApiResponse(responseCode = "200", description = "Portrait of IT specialist found successfully",
+            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserResultsByInterviewsResponseDto.class))})
+    @ApiResponse(responseCode = "400", description = "User (IT specialist) not found", content = {@Content})
+    public List<UserResultsByInterviewsResponseDto> getResultsByInterviews(@PathVariable Long userId) {
+        return service.getUserInterviewsResults(userId);
     }
 }

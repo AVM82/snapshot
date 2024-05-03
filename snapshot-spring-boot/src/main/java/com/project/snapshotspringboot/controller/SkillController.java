@@ -1,10 +1,13 @@
 package com.project.snapshotspringboot.controller;
 
+import com.project.snapshotspringboot.dtos.SkillDto;
 import com.project.snapshotspringboot.dtos.SkillTreeDto;
 import com.project.snapshotspringboot.dtos.UserSkillAddDto;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import com.project.snapshotspringboot.service.SkillService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,5 +38,14 @@ public class SkillController {
                               @RequestBody UserSkillAddDto skillDto,
                               @PathVariable Long roleId) {
         skillService.addUserSkills(authDetails, skillDto, roleId);
+    }
+
+    @GetMapping("/{userId}")
+    @Operation(summary = "Get all lower-level skills by user id for the SEARCHER role")
+    @ApiResponse(responseCode = "200", description = "Skills found successfully",
+            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SkillDto.class))})
+    @ApiResponse(responseCode = "400", description = "User not found", content = {@Content})
+    public List<SkillDto> getAllSkillsByUserId(@PathVariable Long userId) {
+        return skillService.getAllSkillsByUserId(userId);
     }
 }
