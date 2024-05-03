@@ -1,5 +1,6 @@
 package com.project.snapshotspringboot.service;
 
+import com.project.snapshotspringboot.dtos.SkillDto;
 import com.project.snapshotspringboot.dtos.SkillTreeDto;
 import com.project.snapshotspringboot.dtos.UserSkillAddDto;
 import com.project.snapshotspringboot.entity.SkillEntity;
@@ -106,5 +107,24 @@ public class SkillService {
             }
         }
         return skill.getChildren().isEmpty() ? null : skill;
+    }
+
+    public List<SkillDto> getAllSkillsByUserId(Long userId) {
+        List<SkillDto> skillDtoList = new ArrayList<>();
+        List<SkillTreeDto> skillTreeDtoList = getUserSkillsTree(userId, 1L);
+        for (SkillTreeDto skillTreeDto : skillTreeDtoList) {
+            addLastLevelSkillNames(skillTreeDto, skillDtoList);
+        }
+        return skillDtoList;
+    }
+
+    private void addLastLevelSkillNames(SkillTreeDto skillTreeDto, List<SkillDto> skillDtoList) {
+        if (skillTreeDto.getChildren().isEmpty()) {
+            skillDtoList.add(new SkillDto(skillTreeDto.getName()));
+        } else {
+            for (SkillTreeDto subSkill : skillTreeDto.getChildren()) {
+                addLastLevelSkillNames(subSkill, skillDtoList);
+            }
+        }
     }
 }
