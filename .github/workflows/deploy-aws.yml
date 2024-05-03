@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '21'
-          distribution: 'temurin'
+          distribution: 'maven:3.9.4-amazoncorretto-21'
 
 
 
