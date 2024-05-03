@@ -18,11 +18,12 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: cd to workdir
-        run: cd snapshot-spring-boot
+
 
       - name: Build with Maven
-        run: mvn clean package
+        run: |
+          cd snapshot-spring-boot
+          mvn clean package
 
       - name: Find JAR file
         id: find-jar
