@@ -5,6 +5,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import snapshotApi from '../../../api/request';
 import { IInterview } from '../../../models/profile/IInterview';
 import IInterviewPreview from '../../../models/profile/IInterviewPreview';
+import { ILowerSkills } from '../../../models/profile/ILowerSkills';
+import { IPortrait } from '../../../models/profile/IPortrait';
 import ActionType from './common';
 
 type PatchQuestion = {
@@ -59,7 +61,26 @@ const getInterviewById = createAsyncThunk(
   },
 );
 
+const getLowerSkills = createAsyncThunk(
+  ActionType.GET_LOWER_SKILLS,
+  async (id: number): Promise<ILowerSkills[]> => {
+    const response: ILowerSkills[] = await snapshotApi.get(`/skills/${id}`);
+
+    return response;
+  }
+);
+
+const getPortrait = createAsyncThunk(
+  ActionType.GET_PORTRAIT,
+  async (id: number): Promise<IPortrait[]> => {
+    const response: IPortrait[] = await snapshotApi.get(`/users/portrait/${id}`);
+
+    return response;
+  }
+);
+
 export {
-  changeFeedback, changeGrade, getInterviewById, getMyInterviews
+  changeFeedback, changeGrade, getInterviewById, getLowerSkills,
+  getMyInterviews, getPortrait
 };
 

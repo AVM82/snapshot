@@ -3,13 +3,18 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { IInterview } from '../../../models/profile/IInterview';
 import IInterviewPreview from '../../../models/profile/IInterviewPreview';
+import { ILowerSkills } from '../../../models/profile/ILowerSkills';
+import { IPortrait } from '../../../models/profile/IPortrait';
 import {
-  changeFeedback, changeGrade, getInterviewById, getMyInterviews,
+  changeFeedback, changeGrade, getInterviewById, getLowerSkills, getMyInterviews,
+  getPortrait,
 } from './actions';
 
 interface IProfile {
   interviews: IInterviewPreview[],
   interview: IInterview,
+  lowerSkills: ILowerSkills[],
+  portrait: IPortrait[],
 }
 
 const initialState: IProfile = {
@@ -44,6 +49,8 @@ const initialState: IProfile = {
     feedback: '',
     questions: [],
   },
+  lowerSkills: [],
+  portrait: [],
 };
 
 const profileSlice = createSlice({
@@ -67,6 +74,12 @@ const profileSlice = createSlice({
             question.grade = payload.grade;
           }
         });
+      })
+      .addCase(getLowerSkills.fulfilled, (state, { payload }) => {
+        state.lowerSkills = payload;
+      })
+      .addCase(getPortrait.fulfilled, (state, { payload }) => {
+        state.portrait = payload;
       });
   },
 });
