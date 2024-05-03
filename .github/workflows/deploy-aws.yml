@@ -36,3 +36,5 @@ jobs:
           existing_bucket_name: elasticbeanstalk-eu-central-1-905418382196
           region: eu-central-1
           deployment_package: ${{ env.jar_file }}
+          wait_for_deployment: true
+          wait_for_environment_recovery: true
