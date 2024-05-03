@@ -7,13 +7,13 @@ type CombinedProps = React.HTMLProps<HTMLDivElement>;
 
 function Timer(rest: CombinedProps): React.JSX.Element {
   const [time, setTime] = useState(0);
-  const { status: interviewStatus } = useAppSelector((state) => state.interview);
+  const { status: interviewStatus, startDateTime } = useAppSelector((state) => state.interview);
   useEffect(() => {
     const intervalId = setInterval(() => setTime(time + 1), 10);
 
     return () => clearInterval(intervalId);
   }, [time]);
-
+  // console.log(`status:"${interviewStatus} time:"${startDateTime}"`);
   const hours = Math.floor(time / 360000);
   const minutes = Math.floor((time % 360000) / 6000);
   const seconds = Math.floor((time % 6000) / 100);

@@ -15,5 +15,5 @@ interface IInterview {
   feedback: string
   questions: IQuestion[]
 }
-export type { IInterview, InterviewStatuses };
 
+export type { IInterview, InterviewStatuses };
