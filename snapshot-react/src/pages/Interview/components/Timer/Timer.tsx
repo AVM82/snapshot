@@ -7,7 +7,7 @@ type CombinedProps = React.HTMLProps<HTMLDivElement>;
 
 function Timer(rest: CombinedProps): React.JSX.Element {
   const [time, setTime] = useState(0);
-  const { status: interviewStatus, startDateTime } = useAppSelector((state) => state.interview);
+  const { status: interviewStatus } = useAppSelector((state) => state.interview);
   useEffect(() => {
     const intervalId = setInterval(() => setTime(time + 1), 10);
 
