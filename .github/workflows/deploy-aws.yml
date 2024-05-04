@@ -30,6 +30,9 @@ jobs:
             echo EOF
           } >> $GITHUB_ENV
 
+      - name: cheack file
+        run: ${{ env.jar_file }} ls -la
+
       # - name: Find JAR file
       #   id: find-jar
       #   run: echo "jar_file=$(find $PWD/snapshot-spring-boot -name '*.jar' -type f)" >> $GITHUB_ENV
