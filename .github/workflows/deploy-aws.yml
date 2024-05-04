@@ -24,10 +24,12 @@ jobs:
         run: |
           cd snapshot-spring-boot
           mvn clean install -DskipTests
+          JAR_PATH=$(find $PWD -name '*.jar' -type f)
+          echo "jar_file=$JAR_PATH" >> $GITHUB_ENV
 
-      - name: Find JAR file
-        id: find-jar
-        run: echo "jar_file=$(find $PWD/snapshot-spring-boot -name '*.jar' -type f)" >> $GITHUB_ENV
+      # - name: Find JAR file
+      #   id: find-jar
+      #   run: echo "jar_file=$(find $PWD/snapshot-spring-boot -name '*.jar' -type f)" >> $GITHUB_ENV
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v21
