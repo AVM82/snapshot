@@ -31,7 +31,7 @@ jobs:
           } >> $GITHUB_ENV
 
       - name: cheack file
-        run: ${{ env.jar_file }} ls -la
+        run:  ls -la /home/runner/work/test2/test2/snapshot-spring-boot/target
 
       # - name: Find JAR file
       #   id: find-jar
