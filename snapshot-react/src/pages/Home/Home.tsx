@@ -4,14 +4,15 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import snapshotApi from '../../api/request';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { deleteUser } from '../../store/reducers/user/userSlice';
 
 function Home(): JSX.Element {
   const [response, setResponse] = useState<{ [message: string]: string }>({});
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
+  const user = useAppSelector((state) => state.user.userData);
+  console.log(user);
   useEffect(() => {
     const sayHello = async (): Promise<void> => {
       const res: { message: string } = (await snapshotApi.get('/users/hello'));

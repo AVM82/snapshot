@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Portrait from '../../components/Portarit/Portrait';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { getLowerSkills, getMyInterviews, getPortrait } from '../../store/reducers/profile/actions';
 import MyInterviews from './MyInterviews';
@@ -15,8 +16,8 @@ function Profile(): JSX.Element {
   useEffect(() => {
     const fetchProfileData = async (): Promise<void> => {
       await dispatch(getMyInterviews());
-      await dispatch(getLowerSkills(id));
-      await dispatch(getPortrait(id));
+      await dispatch(getLowerSkills());
+      await dispatch(getPortrait());
     };
 
     fetchProfileData();
@@ -41,6 +42,7 @@ function Profile(): JSX.Element {
       </div>
       {activeComponent === 'settings' && <UserRoles />}
       {activeComponent === 'interview-journal' && <MyInterviews />}
+      <Portrait />
     </div>
   );
 }

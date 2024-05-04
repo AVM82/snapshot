@@ -3,7 +3,6 @@ import './App.scss';
 import { Route, Routes } from 'react-router-dom';
 
 import Layout from './components/Layout/Layout';
-import Portrait from './components/Portarit/Portrait';
 import OAuth2RedirectHandler from './pages/Auth/OAuth2RedirectHandler';
 import SignInPage from './pages/Auth/SignInPage';
 import SignUpPage from './pages/Auth/SignUpPage';
@@ -33,7 +32,6 @@ function App(): JSX.Element {
             </Route>
           </Route>
         </Route>
-        <Route path="portrait" element={<Portrait />} />
         <Route path="*" element={<p>404</p>} />
       </Route>
     </Routes>
