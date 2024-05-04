@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { Client, over } from 'stompjs';
+import SockJS from 'sockjs-client';
+
 import Skill from '../../components/Skill/Skill';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { INewInterview } from '../../models/profile/INewInterview';
@@ -29,6 +32,26 @@ export default function InterviewPage(): React.JSX.Element {
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
+  let stomp: Client = null;
+
+  const onMessageReceived = (message: any): void => {
+    console.log('Message received', message);
+  };
+  const onError = (error: any): void => {
+    console.log('Error', error);
+  };
+  const onConnect = (): void => {
+    console.log('Connected to WebSocket');
+    stomp.subscribe('/app/questions', onMessageReceived);// /interview/1/questions
+    stomp.subscribe('/interview/1/questions', onMessageReceived);// /interview/1/questions
+    stomp.send('/app/questions', {}, "");
+  };
+  const connect = (): void => {
+    const socket = new SockJS('http://localhost:8080/socket');
+    stomp = over(socket);
+    stomp.connect({}, onConnect, onError);
+  };
+
   useEffect(() => {
     const fetchData = async ():Promise<void> => {
       if (!currentProfileRole) {
@@ -51,6 +74,7 @@ export default function InterviewPage(): React.JSX.Element {
     if (interviewId && !id) {
       navigate(`/interview/${interviewId}`);
     }
+    connect();
   }, [interviewId]);
 
   const buttonText = ():string => {

@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +36,7 @@ import java.util.List;
 public class InterviewController {
 
     final InterviewService interviewService;
+    final SimpMessagingTemplate template;
 
     @GetMapping("/{interviewId}/results")
     @Operation(summary = "Get interview results", description = "Get interview results")
@@ -52,6 +54,8 @@ public class InterviewController {
     @ApiResponse(responseCode = "404", description = "Interview not found",
         content = {@Content})
     public InterviewFullDto getInterviewById(@PathVariable Long interviewId) {
+        template.convertAndSend("/questions", interviewService.getInterviewById(interviewId));
+        template.convertAndSendToUser("1", "/questions", interviewService.getInterviewById(interviewId));
         return interviewService.getInterviewById(interviewId);
     }
 
