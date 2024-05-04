@@ -47,6 +47,6 @@ jobs:
           version_label: snapshot_${{ github.sha }}
           existing_bucket_name: elasticbeanstalk-eu-central-1-905418382196
           region: eu-central-1
-          deployment_package: ${{ env.jar_file }}
+          deployment_package: /home/runner/work/test2/test2/snapshot-spring-boot/target/snapshot-spring-boot-1.0.1.jar
           wait_for_deployment: true
           wait_for_environment_recovery: true
