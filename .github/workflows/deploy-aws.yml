@@ -18,6 +18,18 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: print secrets
+        run: |
+          echo $DEV_ENV_FILE >> .env
+          cat .env
+        shell: bash
+        env:
+          DEV_ENV_FILE : ${{secrets.ENVIRONMENT}}
+
+      - name: Copy .env file
+        run: |
+          cp .env ../snapshot-react
+        shell: bash
 
 
       - name: Build with Maven
