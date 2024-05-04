@@ -25,7 +25,7 @@ export default function SignUpPage(): JSX.Element {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { confirmPassword, ...userData } = data;
 
-    const response: unknown = await snapshotApi.post('/auth/register', { ...userData });
+    const response: boolean = await snapshotApi.post('/auth/register', { ...userData });
 
     if (response === true) {
       setMessage('Вам на пошту було відправлено листа, перевірте свою пошту!');
