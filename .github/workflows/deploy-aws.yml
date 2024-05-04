@@ -24,8 +24,11 @@ jobs:
         run: |
           cd snapshot-spring-boot
           mvn clean install -DskipTests
-          JAR_PATH=$(find $PWD -name '*.jar' -type f)
-          echo "jar_file=$JAR_PATH" >> $GITHUB_ENV
+          {
+            echo 'jar_file<<EOF'
+            find $PWD -name '*.jar' -type f
+            echo EOF
+          } >> $GITHUB_ENV
 
       # - name: Find JAR file
       #   id: find-jar
