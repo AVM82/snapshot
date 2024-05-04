@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { IInterview } from '../../../models/profile/IInterview';
 import IInterviewPreview from '../../../models/profile/IInterviewPreview';
+import buildInterviewPreview from '../../../utils/interview/buildInterviewPreview';
+import { addInterview } from '../interwiew/actions';
 import {
   changeFeedback, changeGrade, getInterviewById, getMyInterviews,
 } from './actions';
@@ -67,6 +69,10 @@ const profileSlice = createSlice({
             question.grade = payload.grade;
           }
         });
+      })
+      .addCase(addInterview.fulfilled, (state, { payload }) => {
+        const preview :IInterviewPreview = buildInterviewPreview(payload);
+        state.interviews.push(preview);
       });
   },
 });
