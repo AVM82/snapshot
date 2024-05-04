@@ -41,6 +41,9 @@ jobs:
             find $PWD -name '*.jar' -type f
             echo EOF
           } >> $GITHUB_ENV
+        env:
+          VITE_API_URL: ${{secrets.VITE_API_URL}}
+          BACK_URI: ${{secrets.BACK_URI}}
 
       - name: cheack file
         run:  ls -la /home/runner/work/test2/test2/snapshot-spring-boot/target
