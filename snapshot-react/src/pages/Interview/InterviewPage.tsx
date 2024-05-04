@@ -10,6 +10,7 @@ import {
 } from '../../store/reducers/interwiew/actions';
 import { setTitle } from '../../store/reducers/interwiew/interviewSlice';
 import { getInterviewById } from '../../store/reducers/profile/actions';
+import getUser from '../../store/reducers/user/actions';
 import Question from './components/Question/Question';
 import Timer from './components/Timer/Timer';
 import styles from './InterviewPage.module.scss';
@@ -22,18 +23,29 @@ export default function InterviewPage(): React.JSX.Element {
   const navigate = useNavigate();
   const {
     searcher, id: interviewId, sharedSkills, status: interviewStatus, isLoading, questions, title,
+    currentProfileRole,
   } = useAppSelector((state) => state.interview);
 
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getAllSkills());
+    const fetchData = async ():Promise<void> => {
+      if (!currentProfileRole) {
+        dispatch(getUser());
+      }
 
-    if (id) {
-      dispatch(getInterviewById(+id));
-    }
-  }, [dispatch, id]);
+      if (currentProfileRole === 'INTERVIEWER') {
+        await dispatch(getAllSkills());
+
+        if (id) {
+          dispatch(getInterviewById(+id));
+        }
+      }
+    };
+
+    fetchData();
+  }, [dispatch, id, currentProfileRole]);
 
   useEffect(() => {
     if (interviewId && !id) {

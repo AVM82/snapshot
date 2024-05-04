@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import IQuestion from '../../../models/feedback/IQuestion';
 import { IInterview } from '../../../models/profile/IInterview';
 import { ISkills } from '../../../models/profile/ISkills';
-import { IRoles } from '../../../models/user/IRoles';
+import { IRoles, RolesTypes } from '../../../models/user/IRoles';
 import { IUser } from '../../../models/user/IUser';
 import {
   calculateAndSortSharedSkills,
@@ -24,13 +24,14 @@ const defaultUser:IUser = {
   avatarImgUrl: '',
   description: '',
   roles: [{
-    id: NaN,
+    id: 0,
     name: '',
     skills: [],
   }],
 };
 
 interface IInitialState extends IInterview {
+  currentProfileRole: RolesTypes
   allSkills:ISkills[]
   sharedSkills:ISkills[]
   isLoading:boolean
@@ -41,6 +42,7 @@ interface IInitialState extends IInterview {
 
 const initialState:IInitialState = {
   id: 0,
+  currentProfileRole: '',
   title: '',
   status: '',
   interviewer: { ...defaultUser },
@@ -61,6 +63,7 @@ const interviewSlice = createSlice({
   name: 'interview',
   initialState,
   reducers: {
+    resetInterviewState: () => initialState,
     setTitle: (state, action:PayloadAction<string>) => ({
       ...state,
       title: action.payload,
@@ -72,13 +75,24 @@ const interviewSlice = createSlice({
       id: action.payload,
     }));
     builder.addCase(getUser.fulfilled, (state, action) => {
-      const interviewSkills:ISkills[] = action.payload.roles.filter((roles:IRoles) => roles.id === 2)[0].skills;
+      const { roles } = action.payload;
+
+      if (roles.find((role) => role.id === 2)) {
+        const interviewSkills:ISkills[] = action.payload.roles.filter((role:IRoles) => role.id === 2)[0].skills;
+
+        return {
+          ...state,
+          currentProfileRole: 'INTERVIEWER',
+          interviewer: action.payload,
+          sharedSkills:
+            calculateAndSortSharedSkills(state.lowLvlSkills, state.allSkills, interviewSkills),
+        };
+      }
 
       return {
         ...state,
-        interviewer: action.payload,
-        sharedSkills:
-        calculateAndSortSharedSkills(state.lowLvlSkills, state.allSkills, interviewSkills),
+        currentProfileRole: roles[0].name,
+        sharedSkills: flattenSkillsHierarchy(roles[0].skills),
       };
     });
     builder.addCase(getUserByEmail.fulfilled, (state, action) => {
@@ -124,20 +138,22 @@ const interviewSlice = createSlice({
     builder.addCase(getInterviewById.fulfilled, (state, action) => {
       const searcherSkills = action.payload.searcher.roles.filter((roles:IRoles) => roles.id === 1)[0].skills;
       const interviewSkills = action.payload.interviewer.roles.filter((roles:IRoles) => roles.id === 2)[0].skills;
+      const lowLvlSkills = flattenSkillsHierarchy(state.allSkills);
+
+      const sharedSkills = calculateAndSortSharedSkills(
+        lowLvlSkills,
+        searcherSkills,
+        interviewSkills,
+      );
 
       return {
         ...state,
         ...action.payload,
-        sharedSkills:
-          calculateAndSortSharedSkills(
-            state.lowLvlSkills,
-            searcherSkills,
-            interviewSkills,
-          ),
+        sharedSkills,
       };
     });
   },
 });
-export const { setTitle } = interviewSlice.actions;
+export const { setTitle, resetInterviewState } = interviewSlice.actions;
 
 export default interviewSlice.reducer;
