@@ -1,19 +1,27 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useAppDispatch } from '../../hooks/redux';
-import { getMyInterviews } from '../../store/reducers/profile/actions';
+import Portrait from '../../components/Portarit/Portrait';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { getLowerSkills, getMyInterviews, getPortrait } from '../../store/reducers/profile/actions';
 import MyInterviews from './MyInterviews';
 import UserRoles from './UserRoles';
 
 function Profile(): JSX.Element {
   const dispatch = useAppDispatch();
+  const { id } = useAppSelector((state) => state.user.userData);
   const [activeComponent, setActiveComponent] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getMyInterviews());
-  }, [dispatch]);
+    const fetchProfileData = async (): Promise<void> => {
+      await dispatch(getMyInterviews());
+      await dispatch(getLowerSkills());
+      await dispatch(getPortrait());
+    };
+
+    fetchProfileData();
+  }, [dispatch, id]);
 
   return (
     <div style={{
@@ -34,6 +42,7 @@ function Profile(): JSX.Element {
       </div>
       {activeComponent === 'settings' && <UserRoles />}
       {activeComponent === 'interview-journal' && <MyInterviews />}
+      <Portrait />
     </div>
   );
 }
