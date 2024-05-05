@@ -20,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -36,7 +37,7 @@ public class AuthenticationService {
     @Value("${user.create.redirect}")
     private String submitRedirectUri;
 
-    public String register(RegisterRequest request) {
+    public boolean register(RegisterRequest request) {
         tempUserRepository.deleteByEmail(request.getEmail());
 
         if (userService.existsByEmail(request.getEmail())) {
@@ -47,7 +48,7 @@ public class AuthenticationService {
         mailService.sendEmailSubmitLetter(
                 tempUserEntity.getEmail(),
                 jwtService.generateTempUserToken(tempUserEntity.getId()));
-        return "Email send successfully!";
+        return true;
     }
 
     public AuthenticationResponseWithRefreshToken authenticate(AuthenticationRequest request) {
@@ -90,24 +91,24 @@ public class AuthenticationService {
         long tempUserId = jwtService.getTempUserIdFromToken(token);
         tempUserRepository.deleteAllByExpireAtBefore(LocalDateTime.now());
 
-        TempUserEntity tempUserEntity = tempUserRepository
-                .findById(tempUserId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email submit link expired!"));
+        Optional<TempUserEntity> tempUserEntity = tempUserRepository.findById(tempUserId);
+        UriComponentsBuilder redirectUriComponentBuilder = UriComponentsBuilder.fromUriString(submitRedirectUri);
 
-        UserEntity user = userService.saveNewUserWithDefaultRole(userMapper.tempUserToUser(tempUserEntity));
-
-        tempUserRepository.deleteById(tempUserId);
-
-        String jwt = jwtService.generateUserToken(user.getId());
-        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
-
-        String redirectUrl = UriComponentsBuilder.fromUriString(submitRedirectUri)
-                .queryParam("token", jwt)
-                .queryParam("refresh", refreshToken.getToken())
-                .build().toUriString();
+        if (tempUserEntity.isPresent()) {
+            UserEntity user = userService.saveNewUserWithDefaultRole(userMapper.tempUserToUser(tempUserEntity.get()));
+            tempUserRepository.deleteById(tempUserId);
+            String jwt = jwtService.generateUserToken(user.getId());
+            RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
+            redirectUriComponentBuilder
+                    .queryParam("token", jwt)
+                    .queryParam("refresh", refreshToken.getToken());
+        } else {
+            redirectUriComponentBuilder
+                    .queryParam("error", "Invalid link!");
+        }
 
         try {
-            response.sendRedirect(redirectUrl);
+            response.sendRedirect(redirectUriComponentBuilder.build().toUriString());
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Redirect failed!");
         }

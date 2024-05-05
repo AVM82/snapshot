@@ -32,7 +32,7 @@ public class AuthController {
     @ApiResponse(responseCode = "400",
             content = {@Content(schema = @Schema(implementation = ResponseExceptionDto.class), mediaType = "application/json")})
     @PostMapping("/register")
-    public String register(@RequestBody RegisterRequest request) {
+    public boolean register(@RequestBody RegisterRequest request) {
         return service.register(request);
     }
 

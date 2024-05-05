@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@ls-lint/ls-lint": "^2.2.3",
+    "@types/d3": "^7.4.3",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",

@@ -1,16 +1,15 @@
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 
 import snapshotApi from '../../api/request';
 import EmailRegexp from '../../common/emailRegexp';
 import PasswordRegex from '../../common/passwordRegexp';
-import { useAppDispatch } from '../../hooks/redux';
 import { ISignUp } from '../../models/auth/ISignUp';
-import getUser from '../../store/reducers/user/actions';
 import styles from './AuthPage.module.scss';
 import OAuth2 from './OAuth2';
 
 export default function SignUpPage(): JSX.Element {
+  const [message, setMessage] = useState('');
   const {
     register,
     handleSubmit,
@@ -20,27 +19,20 @@ export default function SignUpPage(): JSX.Element {
   } = useForm<ISignUp>({
     mode: 'onChange',
   });
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+
   const onSubmit: SubmitHandler<ISignUp> = async (data): Promise<void> => {
+    setMessage('Обробка...');
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { confirmPassword, ...userData } = data;
 
-    await snapshotApi.post('http://localhost:8080/auth/register', { ...userData });
+    const response: boolean = await snapshotApi.post('/auth/register', { ...userData });
 
-    const token: { access_token: string } = await snapshotApi.post('http://localhost:8080/auth/authenticate', {
-      email: data.email,
-      password: data.password,
-    });
-
-    if (token) {
-      localStorage.setItem('token', token.access_token);
-      dispatch(getUser());
-      // const user: IUser = await snapshotApi.get('/users/me');
-      // localStorage.setItem('user', JSON.stringify(user));
-      navigate('/');
+    if (response === true) {
+      setMessage('Вам на пошту було відправлено листа, перевірте свою пошту!');
+      reset();
+    } else {
+      setMessage('Помилка при відправці, спробуйте ще раз!');
     }
-    reset();
   };
 
   return (
@@ -66,23 +58,7 @@ export default function SignUpPage(): JSX.Element {
             placeholder="Введіть прізвище"
             required
           />
-          <label htmlFor="user-name">Ім&apos;я користувача *</label>
-          <input
-            type="text"
-            id="user-name"
-            className={`${styles['auth-form-input']}`}
-            {...register('username', {
-              minLength: {
-                value: 3,
-                message: 'Ім\'я користувача має бути не менше 3-ох символів',
-              },
-            })}
-            placeholder="Введіть ім'я користувача"
-            required
-          />
-          {!!errors && (
-            <p className={styles['auth-form-error']}>{errors.username?.message}</p>
-          )}
+
           <label htmlFor="login">Логін *</label>
           <input
             type="text"
@@ -140,13 +116,16 @@ export default function SignUpPage(): JSX.Element {
               {errors.confirmPassword?.message}
             </p>
           )}
+
+          {!!message && (
+            <p>{message}</p>
+          )}
           <button type="submit" className={styles['auth-form-btn']}>
             Зареєструватись
           </button>
         </form>
         <div
           className={styles['to-sign-in']}
-          onClick={() => navigate('/sign-in')}
           role="button"
           tabIndex={0}
         >

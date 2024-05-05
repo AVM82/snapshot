@@ -45,7 +45,7 @@ export default function Skills(props:IRoles):React.JSX.Element {
       skillIds: selectedSkillsId,
     };
 
-    await snapshotApi.post(`http://localhost:8080/skills/user/${roleId}`, data);
+    await snapshotApi.post(`/skills/user/${roleId}`, data);
   };
 
   if (!isLoading) return <>loading...</>;
