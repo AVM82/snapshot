@@ -1,47 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Skill from '../../components/Skill/Skill';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { INewInterview } from '../../models/profile/INewInterview';
 import {
-  addInterview,
-  addQuestion, getAllSkills, getUserByEmail,
+  getAllSkills, getInterviewId, getUserByEmail,
   updateInterviewStatus,
 } from '../../store/reducers/interwiew/actions';
-import { resetInterviewState, setTitle } from '../../store/reducers/interwiew/interviewSlice';
+import { setTitle } from '../../store/reducers/interwiew/interviewSlice';
 import { getInterviewById } from '../../store/reducers/profile/actions';
 import getUser from '../../store/reducers/user/actions';
+import Question from './components/Question/Question';
 import Timer from './components/Timer/Timer';
 import styles from './InterviewPage.module.scss';
 
 export default function InterviewPage(): React.JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showQuestionTextField, setShowQuestionTextField] = useState(false);
-  const [question, setQuestion] = useState('');
   const [currentSkillId, setCurrentSkillId] = useState(0);
   const [titleText, setTitleText] = useState('');
+  const navigate = useNavigate();
   const {
-    searcher, interviewer, id: interviewId, sharedSkills, status: interviewStatus, isLoading, questions, title,
+    searcher, id: interviewId, sharedSkills, status: interviewStatus, isLoading, questions, title,
+    currentProfileRole,
   } = useAppSelector((state) => state.interview);
-
-  const handleQuestionChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    setQuestion(e.target.value);
-  };
 
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(resetInterviewState());
-    dispatch(getAllSkills());
+    const fetchData = async ():Promise<void> => {
+      if (!currentProfileRole) {
+        dispatch(getUser());
+      }
 
-    if (!id) {
-      dispatch(getUser());
-    } else {
-      dispatch(getInterviewById(+id));
+      if (currentProfileRole === 'INTERVIEWER') {
+        await dispatch(getAllSkills());
+
+        if (id) {
+          dispatch(getInterviewById(+id));
+        }
+      }
+    };
+
+    fetchData();
+  }, [dispatch, id, currentProfileRole]);
+
+  useEffect(() => {
+    if (interviewId && !id) {
+      navigate(`/interview/${interviewId}`);
     }
-  }, [dispatch, id]);
+  }, [interviewId]);
 
   const buttonText = ():string => {
     if (interviewStatus === 'PLANNED') { return 'Почати'; }
@@ -51,51 +61,43 @@ export default function InterviewPage(): React.JSX.Element {
     return 'Затвердити дані';
   };
 
-  const interviewLogic = () :void => {
-    if (interviewStatus === '') {
-      const addInterviewData:INewInterview = {
-        status: 'PLANNED',
-        searcherId: searcher.id,
-        title,
-      };
-      dispatch(addInterview(addInterviewData));
-    }
+  const interviewLogic = ():void => {
+    if (title && searcher.id) {
+      if (!interviewId) {
+        const addInterviewData:INewInterview = {
+          status: 'PLANNED',
+          searcherId: searcher.id,
+          title,
+        };
+        dispatch(getInterviewId(addInterviewData));
+      }
 
-    if (interviewStatus === 'PLANNED') {
-      dispatch(updateInterviewStatus({ id: interviewId, status: 'ACTIVE' }));
-    }
+      if (interviewStatus === 'PLANNED') {
+        dispatch(updateInterviewStatus({ id: interviewId, status: 'ACTIVE' }));
+      }
 
-    if (interviewStatus === 'ACTIVE') {
-      dispatch(updateInterviewStatus({ id: interviewId, status: 'FINISHED' }));
+      if (interviewStatus === 'ACTIVE') {
+        dispatch(updateInterviewStatus({ id: interviewId, status: 'FINISHED' }));
+      }
     }
   };
+
   const getSearcher = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
     dispatch(getUserByEmail(event.currentTarget.userEmail.value));
   };
+
   const handleSetInterviewTitle = (event: React.ChangeEvent<HTMLInputElement>):void => {
     setTitleText(event.target.value);
   };
+
   const submitTitle = ():void => {
     dispatch(setTitle(titleText));
   };
-  const handleAddNewQuestion = (e:React.FormEvent<HTMLFormElement>):void => {
-    e.preventDefault();
 
-    if (id) {
-      const questionData = {
-        interviewId: +id,
-        interviewerId: interviewer.id,
-        skillId: currentSkillId,
-        question,
-      };
-      dispatch(addQuestion(questionData));
-    }
-    setShowQuestionTextField(false);
-  };
   const handleSkillOnClick = (skillId:number):void => {
     setCurrentSkillId(skillId);
-    setShowQuestionTextField(!showQuestionTextField);
+    setShowQuestionTextField(true);
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -178,25 +180,8 @@ export default function InterviewPage(): React.JSX.Element {
               title={skill.name}
             />
           ))}
-          {showQuestionTextField && (
-            <div>
-              <form
-                name="addSkillQuestion"
-                className={styles.skillTextArea}
-                onSubmit={handleAddNewQuestion}
-              >
-                <textarea
-                  id="addSkillQuestion"
-                  name="questionName"
-                  cols={50}
-                  rows={5}
-                  value={question}
-                  onChange={handleQuestionChange}
-                />
-                <button type="submit">Додати</button>
-              </form>
-            </div>
-          )}
+          {showQuestionTextField
+            && <Question skillId={currentSkillId} onSubmit={() => setShowQuestionTextField(false)} />}
         </div>
         <div className={styles.questionList}>
           {questions && questions.map((q) => (
@@ -208,7 +193,6 @@ export default function InterviewPage(): React.JSX.Element {
           ))}
         </div>
       </div>
-
     </div>
   );
 }

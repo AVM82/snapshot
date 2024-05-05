@@ -6,6 +6,6 @@ import ActionType from './common';
 
 const getRoleSkills = createAsyncThunk(
   ActionType.GET_ROLE_SKILLS,
-  async (id:number):Promise<ISkills[]> => snapshotApi.get(`/skills/role/${id}`),
+  async (id:number):Promise<ISkills[]> => snapshotApi.get(`skills/role/${id}`),
 );
 export default getRoleSkills;

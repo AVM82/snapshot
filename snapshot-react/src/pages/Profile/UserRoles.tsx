@@ -14,7 +14,7 @@ export default function UserRoles():React.JSX.Element {
 
   useEffect(() => {
     (async ():Promise<void> => {
-      const response:IRoles[] = await snapshotApi.get('http://localhost:8080/users/all-roles');
+      const response:IRoles[] = await snapshotApi.get('users/all-roles');
       setUserRoles(response);
     })();
   }, []);

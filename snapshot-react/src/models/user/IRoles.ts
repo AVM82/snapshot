@@ -1,7 +1,10 @@
 import { ISkills } from '../profile/ISkills';
 
-export interface IRoles {
+type RolesTypes = 'SEARCHER' | 'INTERVIEWER' | 'HR' | 'ADMIN' | '';
+
+interface IRoles {
   id:number
-  name:string
+  name:RolesTypes
   skills:ISkills[]
 }
+export type { IRoles, RolesTypes };

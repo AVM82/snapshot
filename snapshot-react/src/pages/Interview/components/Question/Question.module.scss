@@ -1,0 +1,30 @@
+.container {
+  position: absolute;
+  top: -60%;
+  left: 50%;
+  display: flex;
+  flex-direction: row;
+  transform: translateX(0) translateY(-100%);
+}
+
+.questionsList {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  max-height: calc(55px * 5);
+  overflow-y: scroll;
+  border: 1px solid #00ffff;
+  border-radius: 5px;
+
+  div {
+    min-height: 55px;
+    padding: 3px;
+    overflow-y: scroll;
+    border-bottom: 1px solid #00ffff;
+    cursor: pointer;
+
+    &:hover {
+      background: #60ececae;
+    }
+  }
+}

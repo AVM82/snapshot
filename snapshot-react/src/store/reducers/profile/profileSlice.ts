@@ -5,6 +5,8 @@ import { IInterview } from '../../../models/profile/IInterview';
 import IInterviewPreview from '../../../models/profile/IInterviewPreview';
 import { ILowerSkills } from '../../../models/profile/ILowerSkills';
 import { IPortrait } from '../../../models/profile/IPortrait';
+import buildInterviewPreview from '../../../utils/interview/buildInterviewPreview';
+import { addInterview } from '../interwiew/actions';
 import {
   changeFeedback, changeGrade, getInterviewById, getLowerSkills, getMyInterviews,
   getPortrait,
@@ -80,6 +82,10 @@ const profileSlice = createSlice({
       })
       .addCase(getPortrait.fulfilled, (state, { payload }) => {
         state.portrait = payload;
+      })
+      .addCase(addInterview.fulfilled, (state, { payload }) => {
+        const preview :IInterviewPreview = buildInterviewPreview(payload);
+        state.interviews.push(preview);
       });
   },
 });
