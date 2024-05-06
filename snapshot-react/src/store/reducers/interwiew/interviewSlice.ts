@@ -64,6 +64,14 @@ const interviewSlice = createSlice({
   initialState,
   reducers: {
     resetInterviewState: () => initialState,
+    redefineQuestions: (state, action) => ({
+      ...state,
+      questions: action.payload,
+    }),
+    redefineStatus: (state, action) => ({
+      ...state,
+      status: action.payload,
+    }),
     setTitle: (state, action:PayloadAction<string>) => ({
       ...state,
       title: action.payload,
@@ -154,6 +162,8 @@ const interviewSlice = createSlice({
     });
   },
 });
-export const { setTitle, resetInterviewState } = interviewSlice.actions;
+export const {
+  setTitle, resetInterviewState, redefineQuestions, redefineStatus,
+} = interviewSlice.actions;
 
 export default interviewSlice.reducer;
