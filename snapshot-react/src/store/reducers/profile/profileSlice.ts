@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { IInterview } from '../../../models/profile/IInterview';
 import IInterviewPreview from '../../../models/profile/IInterviewPreview';
-import { ILowerSkills } from '../../../models/profile/ILowerSkills';
 import { IPortrait } from '../../../models/profile/IPortrait';
 import buildInterviewPreview from '../../../utils/interview/buildInterviewPreview';
 import { addInterview } from '../interwiew/actions';
@@ -15,7 +14,7 @@ import {
 interface IProfile {
   interviews: IInterviewPreview[],
   interview: IInterview,
-  lowerSkills: ILowerSkills[],
+  lowerSkills: string[],
   portrait: IPortrait[],
 }
 

@@ -91,7 +91,7 @@ function Portrait(): JSX.Element {
 
     for (let i = 0; i < lowerSkills.length; i++) {
       const slice = Math.PI / 2 + (2 * Math.PI * i) / lowerSkills.length;
-      const key = lowerSkills[i].name;
+      const key = lowerSkills[i];
 
       // axis values
       const { x, y } = cordForAngle(slice, radius);
