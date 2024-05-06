@@ -45,7 +45,7 @@ public class SkillController {
     @ApiResponse(responseCode = "200", description = "Skills found successfully",
             content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SkillDto.class))})
     @ApiResponse(responseCode = "400", description = "User not found", content = {@Content})
-    public List<SkillDto> getAllSkillsByUserId(@PathVariable Long userId) {
+    public List<String> getAllSkillsByUserId(@PathVariable Long userId) {
         return skillService.getAllSkillsByUserId(userId);
     }
 }

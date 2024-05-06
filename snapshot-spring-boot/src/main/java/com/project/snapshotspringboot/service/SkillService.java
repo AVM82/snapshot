@@ -109,8 +109,8 @@ public class SkillService {
         return skill.getChildren().isEmpty() ? null : skill;
     }
 
-    public List<SkillDto> getAllSkillsByUserId(Long userId) {
-        List<SkillDto> skillDtoList = new ArrayList<>();
+    public List<String> getAllSkillsByUserId(Long userId) {
+        List<String> skillDtoList = new ArrayList<>();
         List<SkillTreeDto> skillTreeDtoList = getUserSkillsTree(userId, 1L);
         for (SkillTreeDto skillTreeDto : skillTreeDtoList) {
             addLastLevelSkillNames(skillTreeDto, skillDtoList);
@@ -118,9 +118,9 @@ public class SkillService {
         return skillDtoList;
     }
 
-    private void addLastLevelSkillNames(SkillTreeDto skillTreeDto, List<SkillDto> skillDtoList) {
+    private void addLastLevelSkillNames(SkillTreeDto skillTreeDto, List<String> skillDtoList) {
         if (skillTreeDto.getChildren().isEmpty()) {
-            skillDtoList.add(new SkillDto(skillTreeDto.getName()));
+            skillDtoList.add(skillTreeDto.getName());
         } else {
             for (SkillTreeDto subSkill : skillTreeDto.getChildren()) {
                 addLastLevelSkillNames(subSkill, skillDtoList);
