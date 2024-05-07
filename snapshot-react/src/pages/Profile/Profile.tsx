@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Portrait from '../../components/Portarit/Portrait';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { getLowerSkills, getMyInterviews, getPortrait } from '../../store/reducers/profile/actions';
+import Portrait from './components/Portarit/Portrait';
 import MyInterviews from './MyInterviews';
 import UserRoles from './UserRoles';
 
