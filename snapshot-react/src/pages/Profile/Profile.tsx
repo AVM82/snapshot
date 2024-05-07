@@ -16,8 +16,8 @@ function Profile(): JSX.Element {
   useEffect(() => {
     const fetchProfileData = async (): Promise<void> => {
       await dispatch(getMyInterviews());
-      await dispatch(getLowerSkills());
-      await dispatch(getPortrait());
+      await dispatch(getLowerSkills(id));
+      await dispatch(getPortrait(id));
     };
 
     fetchProfileData();
