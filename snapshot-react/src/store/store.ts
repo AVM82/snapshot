@@ -1,6 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import feedbackSlice from './reducers/feedback/feedbackSlice';
 import interviewSlice from './reducers/interwiew/interviewSlice';
 import profileSlice from './reducers/profile/profileSlice';
 import userSkillsSlice from './reducers/skills/userSkillsSlice';
@@ -11,7 +10,6 @@ export const store = configureStore({
     user: userSlice,
     userSkills: userSkillsSlice,
     interview: interviewSlice,
-    feedback: feedbackSlice,
     profile: profileSlice,
   },
 });

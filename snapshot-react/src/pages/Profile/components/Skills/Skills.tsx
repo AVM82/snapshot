@@ -2,13 +2,13 @@ import { TreeItem } from '@mui/x-tree-view';
 import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import React, { useEffect, useState } from 'react';
 
-import snapshotApi from '../../api/request';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { IRoles } from '../../models/profile/IRoles';
-import { ISkills } from '../../models/profile/ISkills';
-import getRoleSkills from '../../store/reducers/skills/actions';
-import { getFilterSkillsByInput } from '../../store/reducers/skills/userSkillsSlice';
-import { RootState } from '../../store/store';
+import snapshotApi from '../../../../api/request';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
+import { IRoles } from '../../../../models/profile/IRoles';
+import { ISkills } from '../../../../models/profile/ISkills';
+import getRoleSkills from '../../../../store/reducers/skills/actions';
+import { getFilterSkillsByInput } from '../../../../store/reducers/skills/userSkillsSlice';
+import { RootState } from '../../../../store/store';
 import styles from './Skills.module.scss';
 
 export default function Skills(props:IRoles):React.JSX.Element {

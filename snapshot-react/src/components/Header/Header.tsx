@@ -27,10 +27,7 @@ function Header(): JSX.Element {
           <br />
           ТИП
         </Link>
-        <Link to="/feedback">
-          Feedback
-        </Link>
-        <Link to="/profile">
+        <Link to={`/profile/${user.id}`}>
           {user.firstname}
           {' '}
           {user.lastname}

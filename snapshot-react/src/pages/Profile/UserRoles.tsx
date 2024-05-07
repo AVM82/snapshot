@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import snapshotApi from '../../api/request';
 import { IRoles } from '../../models/profile/IRoles';
-import Skills from './Skills';
+import Skills from './components/Skills/Skills';
 import styles from './UserRoles.module.scss';
 
 export default function UserRoles():React.JSX.Element {

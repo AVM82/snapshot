@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import snapshotApi from '../../../api/request';
-import IQuestion from '../../../models/feedback/IQuestion';
 import { IInterview, InterviewStatuses } from '../../../models/profile/IInterview';
 import { INewInterview } from '../../../models/profile/INewInterview';
+import IQuestion from '../../../models/profile/IQuestion';
 import { ISkills } from '../../../models/profile/ISkills';
 import { IUser } from '../../../models/user/IUser';
 import ActionType from './common';
@@ -50,9 +50,9 @@ const getSkillQuestions = createAsyncThunk(
 );
 
 export {
-  addInterview, addQuestion, getAllSkills, getInterviewId,
-  getSkillQuestions,
-  getUserByEmail,
-  updateInterviewStatus,
+    addInterview, addQuestion, getAllSkills, getInterviewId,
+    getSkillQuestions,
+    getUserByEmail,
+    updateInterviewStatus
 };
 

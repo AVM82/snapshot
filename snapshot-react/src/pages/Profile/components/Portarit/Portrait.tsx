@@ -10,8 +10,8 @@ import {
 } from 'd3';
 import { useEffect, useRef, useState } from 'react';
 
-import { useAppSelector } from '../../hooks/redux';
-import { IPortrait } from '../../models/profile/IPortrait';
+import { useAppSelector } from '../../../../hooks/redux';
+import { IPortrait } from '../../../../models/profile/IPortrait';
 import styles from './Portrait.module.scss';
 
 interface Datum {

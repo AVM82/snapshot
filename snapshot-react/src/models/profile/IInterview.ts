@@ -1,5 +1,5 @@
-import IQuestion from '../feedback/IQuestion';
 import { IUser } from '../user/IUser';
+import IQuestion from './IQuestion';
 
 type InterviewStatuses = 'PLANNED' | 'ACTIVE' | 'FINISHED' | 'COMPLETED' | 'CANCELLED' | '';
 
@@ -17,3 +17,4 @@ interface IInterview {
 }
 
 export type { IInterview, InterviewStatuses };
+
