@@ -18,6 +18,8 @@ import Skill from '../Profile/components/Skills/Skill';
 import Question from './components/Question/Question';
 import Timer from './components/Timer/Timer';
 import styles from './InterviewPage.module.scss';
+import IQuestion from "../../models/profile/IQuestion.ts";
+import formatQuestionsWithLocalDate from "../../utils/interview/formatQuestionsWithLocalDate.ts";
 
 type Headers = {
   login: string,
@@ -74,7 +76,6 @@ export default function InterviewPage(): React.JSX.Element {
     stomp = over(socket);
     stomp.connect(headers, onConnect, onError);
   };
-
   useEffect(() => {
     const fetchData = async ():Promise<void> => {
       if (!currentProfileRole) {
@@ -232,11 +233,12 @@ export default function InterviewPage(): React.JSX.Element {
         </div>
         {interviewStatus === 'COMPLETED' ? <Feedback /> : (
           <div className={styles.questionList}>
-            {questions && questions.map((q) => (
+            {questions && formatQuestionsWithLocalDate(questions).map((q:IQuestion) => (
               <div key={q.id}>
                 <p>{q.skillName}</p>
                 <p>{q.question}</p>
                 <p>{q.grade}</p>
+                <p>{q.createdAt}</p>
               </div>
             ))}
           </div>

@@ -66,8 +66,9 @@ const interviewSlice = createSlice({
     resetInterviewState: () => initialState,
     redefineQuestions: (state, action) => ({
       ...state,
-      questions: action.payload,
-    }),
+      questions: action.payload
+    })
+    ,
     redefineStatus: (state, action) => ({
       ...state,
       status: action.payload,
