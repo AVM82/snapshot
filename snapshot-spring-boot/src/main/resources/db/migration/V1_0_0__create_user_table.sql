@@ -73,7 +73,8 @@ create table interviewer_questions
     id             bigint primary key auto_increment,
     skill_id       bigint references skills (id),
     interviewer_id bigint references users (id),
-    question       varchar(500)
+    question       varchar(500),
+    updated_at     timestamp
 );
 
 -- insert skills level 1
@@ -667,16 +668,23 @@ VALUES (1, 29, 'What is the difference between == and .equals() when comparing o
        (6, 96, 'What information should be included in a cybersecurity report?', 75, '2024-04-30 09:05:00.000001'),
        (6, 96, 'How can documentation help in cybersecurity incident response?', 77, '2024-04-30 09:05:00.000001');
 
-INSERT INTO interviewer_questions (interviewer_id, skill_id, question)
-VALUES (1, 29, 'What is the difference between == and .equals() when comparing objects in Java?'),
-       (1, 29, 'Explain the concept of inheritance in Java and provide an example.'),
+INSERT INTO interviewer_questions (interviewer_id, skill_id, question, updated_at)
+VALUES (1, 29, 'What is the difference between == and .equals() when comparing objects in Java?',
+        '2024-04-26 12:30:00'),
+       (1, 29, 'Explain the concept of inheritance in Java and provide an example.', '2024-04-25 13:30:00'),
        (1, 29,
-        'What are the different access modifiers in Java, and how do they affect the visibility of variables and methods?'),
-       (1, 29, 'Describe the purpose and usage of the static keyword in Java.'),
-       (1, 29, 'How does exception handling work in Java? Discuss the try-catch-finally blocks.'),
-       (1, 47, 'What is MongoDB, and how does it differ from traditional relational databases?'),
-       (1, 47, 'Explain the concept of document-oriented databases and how it applies to MongoDB.'),
-       (1, 47, 'What is a MongoDB replica set, and what are its benefits in a distributed database environment?'),
-       (1, 47, 'Describe the aggregation framework in MongoDB and provide an example of its usage.'),
-       (1, 47, 'What are the advantages of using sharding in MongoDB, and how does it help with scalability?');
+        'What are the different access modifiers in Java, and how do they affect the visibility of variables and methods?',
+        '2024-04-27 11:30:00'),
+       (1, 29, 'Describe the purpose and usage of the static keyword in Java.', '2024-04-24 18:30:00'),
+       (1, 29, 'How does exception handling work in Java? Discuss the try-catch-finally blocks.',
+        '2024-04-28 18:30:00'),
+       (1, 47, 'What is MongoDB, and how does it differ from traditional relational databases?', '2024-04-23 18:30:00'),
+       (1, 47, 'Explain the concept of document-oriented databases and how it applies to MongoDB.',
+        '2024-04-29 18:30:00'),
+       (1, 47, 'What is a MongoDB replica set, and what are its benefits in a distributed database environment?',
+        '2024-04-22 18:30:00'),
+       (1, 47, 'Describe the aggregation framework in MongoDB and provide an example of its usage.',
+        '2024-04-30 18:30:00'),
+       (1, 47, 'What are the advantages of using sharding in MongoDB, and how does it help with scalability?',
+        '2024-04-21 18:30:00');
 ---------for test, delete later---------
