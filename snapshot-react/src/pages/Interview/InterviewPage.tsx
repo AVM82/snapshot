@@ -6,6 +6,7 @@ import { Client, Frame, over } from 'stompjs';
 import api from '../../common/api';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { INewInterview } from '../../models/profile/INewInterview';
+import IQuestion from '../../models/profile/IQuestion';
 import {
   getAllSkills, getInterviewId, getUserByEmail,
   updateInterviewStatus,
@@ -13,6 +14,7 @@ import {
 import { redefineQuestions, redefineStatus, setTitle } from '../../store/reducers/interwiew/interviewSlice';
 import { getInterviewById } from '../../store/reducers/profile/actions';
 import getUser from '../../store/reducers/user/actions';
+import formatQuestionsWithLocalDate from '../../utils/interview/formatQuestionsWithLocalDate';
 import Feedback from '../Profile/components/Feedback/Feedback';
 import Skill from '../Profile/components/Skills/Skill';
 import Question from './components/Question/Question';
@@ -74,7 +76,6 @@ export default function InterviewPage(): React.JSX.Element {
     stomp = over(socket);
     stomp.connect(headers, onConnect, onError);
   };
-
   useEffect(() => {
     const fetchData = async ():Promise<void> => {
       if (!currentProfileRole) {
@@ -232,11 +233,12 @@ export default function InterviewPage(): React.JSX.Element {
         </div>
         {interviewStatus === 'COMPLETED' ? <Feedback /> : (
           <div className={styles.questionList}>
-            {questions && questions.map((q) => (
+            {questions && formatQuestionsWithLocalDate(questions).map((q:IQuestion) => (
               <div key={q.id}>
                 <p>{q.skillName}</p>
                 <p>{q.question}</p>
                 <p>{q.grade}</p>
+                <p>{q.createdAt}</p>
               </div>
             ))}
           </div>
