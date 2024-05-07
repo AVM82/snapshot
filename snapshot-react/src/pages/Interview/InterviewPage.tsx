@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import SockJS from 'sockjs-client';
+import { Client, over } from 'stompjs';
 
+import api from '../../common/api';
 import Skill from '../../components/Skill/Skill';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { INewInterview } from '../../models/profile/INewInterview';
@@ -8,7 +11,7 @@ import {
   getAllSkills, getInterviewId, getUserByEmail,
   updateInterviewStatus,
 } from '../../store/reducers/interwiew/actions';
-import { setTitle } from '../../store/reducers/interwiew/interviewSlice';
+import { redefineQuestions, redefineStatus, setTitle } from '../../store/reducers/interwiew/interviewSlice';
 import { getInterviewById } from '../../store/reducers/profile/actions';
 import getUser from '../../store/reducers/user/actions';
 import Question from './components/Question/Question';
@@ -29,6 +32,37 @@ export default function InterviewPage(): React.JSX.Element {
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
+  let stomp: Client;
+
+  interface IMessage {
+    body?: string
+  }
+
+  const onMessageReceived = (message: IMessage): void => {
+    if (!message.body) { return; }
+
+    const receivedMessage = JSON.parse(message.body);
+    console.log('Message received', receivedMessage);
+
+    if (!receivedMessage.status) {
+      dispatch(redefineQuestions(receivedMessage || []));
+    } else {
+      dispatch(redefineStatus(receivedMessage.status));
+    }
+  };
+  const onError = (error: object): void => {
+    console.log('Error', error);
+  };
+  const onConnect = (): void => {
+    console.log('Connected to WebSocket');
+    stomp.subscribe(`/interview/${interviewId}/questions`, onMessageReceived);// /interview/1/questions
+  };
+  const connect = (): void => {
+    const socket = new SockJS(`${api.baseURL.slice(0, -5)}/socket`);
+    stomp = over(socket);
+    stomp.connect({}, onConnect, onError);
+  };
+
   useEffect(() => {
     const fetchData = async ():Promise<void> => {
       if (!currentProfileRole) {
@@ -37,10 +71,10 @@ export default function InterviewPage(): React.JSX.Element {
 
       if (currentProfileRole === 'INTERVIEWER') {
         await dispatch(getAllSkills());
+      }
 
-        if (id) {
-          dispatch(getInterviewById(+id));
-        }
+      if (id) {
+        dispatch(getInterviewById(+id));
       }
     };
 
@@ -51,6 +85,7 @@ export default function InterviewPage(): React.JSX.Element {
     if (interviewId && !id) {
       navigate(`/interview/${interviewId}`);
     }
+    connect();
   }, [interviewId]);
 
   const buttonText = ():string => {

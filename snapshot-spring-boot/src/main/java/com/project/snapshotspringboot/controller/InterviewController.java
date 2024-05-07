@@ -1,8 +1,10 @@
 package com.project.snapshotspringboot.controller;
 
 import com.project.snapshotspringboot.dtos.InterviewResultsDto;
+import com.project.snapshotspringboot.dtos.QuestionScoreDto;
 import com.project.snapshotspringboot.dtos.interview.*;
 import com.project.snapshotspringboot.dtos.question.*;
+import com.project.snapshotspringboot.dtos.status.StatusDto;
 import com.project.snapshotspringboot.enumeration.InterviewStatus;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import com.project.snapshotspringboot.service.InterviewService;
@@ -19,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +38,7 @@ import java.util.List;
 public class InterviewController {
 
     final InterviewService interviewService;
+    final SimpMessagingTemplate template;
 
     @GetMapping("/{interviewId}/results")
     @Operation(summary = "Get interview results", description = "Get interview results")
@@ -82,7 +86,9 @@ public class InterviewController {
     @ApiResponse(responseCode = "400", description = "Invalid interview status", content = {@Content})
     public InterviewDto updateInterviewStatus(@RequestParam(name = "status") InterviewStatus status,
                                               @PathVariable Long interviewId) {
-        return interviewService.updateInterviewStatus(interviewId, status);
+        InterviewDto interviewDto = interviewService.updateInterviewStatus(interviewId, status);
+        template.convertAndSendToUser(String.valueOf(interviewId), "/questions", new StatusDto(status));
+        return interviewDto;
     }
 
 
@@ -104,7 +110,11 @@ public class InterviewController {
     @ApiResponse(responseCode = "400", description = "Invalid question data", content = {@Content})
     public InterviewQuestionResponseDto saveQuestion(@AuthenticationPrincipal AuthDetails authDetails,
                                                      @RequestBody @Valid InterviewQuestionRequestDto questionRequestDto) {
-        return interviewService.saveQuestion(authDetails, questionRequestDto);
+        Long interviewId = questionRequestDto.getInterviewId();
+        InterviewQuestionResponseDto savedQuestion = interviewService.saveQuestion(authDetails, questionRequestDto);
+        List<QuestionScoreDto> allQuestions = interviewService.getInterviewById(interviewId).getQuestions();
+        template.convertAndSendToUser(String.valueOf(interviewId), "/questions", allQuestions);
+        return savedQuestion;
     }
 
     @PatchMapping("/question/grade")
