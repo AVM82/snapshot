@@ -62,8 +62,8 @@ const getInterviewById = createAsyncThunk(
 
 const getLowerSkills = createAsyncThunk(
   ActionType.GET_LOWER_SKILLS,
-  async (): Promise<string[]> => {
-    const response: string[] = await snapshotApi.get('/skills/3');
+  async (id: number): Promise<string[]> => {
+    const response: string[] = await snapshotApi.get(`/skills/${id}`);
 
     return response;
   }
@@ -71,8 +71,8 @@ const getLowerSkills = createAsyncThunk(
 
 const getPortrait = createAsyncThunk(
   ActionType.GET_PORTRAIT,
-  async (): Promise<IPortrait[]> => {
-    const response: IPortrait[] = await snapshotApi.get('/users/portrait/3');
+  async (id: number): Promise<IPortrait[]> => {
+    const response: IPortrait[] = await snapshotApi.get(`/users/portrait/${id}`);
 
     return response;
   }

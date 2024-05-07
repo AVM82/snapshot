@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import SockJS from 'sockjs-client';
-import { Client, over } from 'stompjs';
+import { Client, Frame, over } from 'stompjs';
 
 import api from '../../common/api';
-import Skill from '../../components/Skill/Skill';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { INewInterview } from '../../models/profile/INewInterview';
 import {
@@ -14,9 +13,22 @@ import {
 import { redefineQuestions, redefineStatus, setTitle } from '../../store/reducers/interwiew/interviewSlice';
 import { getInterviewById } from '../../store/reducers/profile/actions';
 import getUser from '../../store/reducers/user/actions';
+import Feedback from '../Profile/components/Feedback/Feedback';
+import Skill from '../Profile/components/Skills/Skill';
 import Question from './components/Question/Question';
 import Timer from './components/Timer/Timer';
 import styles from './InterviewPage.module.scss';
+
+type Headers = {
+  login: string,
+  passcode: string,
+  host?: string | undefined
+};
+
+const headers: Headers = {
+  login: '',
+  passcode: '',
+};
 
 export default function InterviewPage(): React.JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -50,7 +62,7 @@ export default function InterviewPage(): React.JSX.Element {
       dispatch(redefineStatus(receivedMessage.status));
     }
   };
-  const onError = (error: object): void => {
+  const onError = (error: string | Frame): void => {
     console.log('Error', error);
   };
   const onConnect = (): void => {
@@ -60,7 +72,7 @@ export default function InterviewPage(): React.JSX.Element {
   const connect = (): void => {
     const socket = new SockJS(`${api.baseURL.slice(0, -5)}/socket`);
     stomp = over(socket);
-    stomp.connect({}, onConnect, onError);
+    stomp.connect(headers, onConnect, onError);
   };
 
   useEffect(() => {
@@ -140,7 +152,7 @@ export default function InterviewPage(): React.JSX.Element {
   return (
     <div className={styles.pageContainer}>
       <div className={styles.header}>
-        <Timer />
+        {interviewStatus !== 'COMPLETED' && <Timer />}
         <div className={styles.status}>
           <div />
           <p>{interviewStatus}</p>
@@ -150,7 +162,7 @@ export default function InterviewPage(): React.JSX.Element {
             : (
               <div>
                 <label htmlFor="title" />
-                <input type="text" id="titlt" value={titleText} onChange={handleSetInterviewTitle} />
+                <input type="text" id="title" value={titleText} onChange={handleSetInterviewTitle} />
                 <button type="submit" onClick={submitTitle}>+</button>
               </div>
             )}
@@ -218,15 +230,17 @@ export default function InterviewPage(): React.JSX.Element {
           {showQuestionTextField
             && <Question skillId={currentSkillId} onSubmit={() => setShowQuestionTextField(false)} />}
         </div>
-        <div className={styles.questionList}>
-          {questions && questions.map((q) => (
-            <div key={q.id}>
-              <p>{q.skillName}</p>
-              <p>{q.question}</p>
-              <p>{q.grade}</p>
-            </div>
-          ))}
-        </div>
+        {interviewStatus === 'COMPLETED' ? <Feedback /> : (
+          <div className={styles.questionList}>
+            {questions && questions.map((q) => (
+              <div key={q.id}>
+                <p>{q.skillName}</p>
+                <p>{q.question}</p>
+                <p>{q.grade}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

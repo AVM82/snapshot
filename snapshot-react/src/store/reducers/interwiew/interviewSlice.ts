@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import IQuestion from '../../../models/feedback/IQuestion';
 import { IInterview } from '../../../models/profile/IInterview';
+import IQuestion from '../../../models/profile/IQuestion';
 import { ISkills } from '../../../models/profile/ISkills';
 import { IRoles, RolesTypes } from '../../../models/user/IRoles';
 import { IUser } from '../../../models/user/IUser';
@@ -12,7 +12,7 @@ import {
 import { getInterviewById } from '../profile/actions';
 import getUser from '../user/actions';
 import {
-  addQuestion, getAllSkills, getInterviewId, getSkillQuestions, getUserByEmail, updateInterviewStatus,
+  getAllSkills, getInterviewId, getSkillQuestions, getUserByEmail, updateInterviewStatus,
 } from './actions';
 
 const defaultUser:IUser = {
@@ -131,10 +131,10 @@ const interviewSlice = createSlice({
           calculateAndSortSharedSkills(lowLvlSkills, action.payload, interviewSkills),
       };
     });
-    builder.addCase(addQuestion.fulfilled, (state, action) => ({
-      ...state,
-      questions: [...state.questions, action.payload],
-    }));
+    // builder.addCase(addQuestion.fulfilled, (state, action) => ({
+    //   ...state,
+    //   questions: [...state.questions, action.payload],
+    // }));
     builder.addCase(updateInterviewStatus.fulfilled, (state, action) => ({
       ...state,
       ...action.payload,
