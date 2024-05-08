@@ -22,6 +22,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,6 +32,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -132,27 +134,37 @@ public class InterviewService {
         interviewQuestionEntity.setCreateAt(LocalDateTime.now(ZoneId.of("UTC")));
         interviewQuestionEntity.setSkill(skillEntity);
 
-        InterviewerQuestionEntity interviewerQuestionEntity = interviewerQuestionMapper.toEntity(questionDto);
-        interviewerQuestionEntity.setSkill(skillEntity);
+        InterviewerQuestionEntity interviewerQuestionEntity =
+                interviewerQuestionRepository.findByInterviewerIdAndSkillIdAndQuestion(
+                                questionDto.getInterviewerId(),
+                                skillId,
+                                questionText)
+                        .orElseGet(() -> {
+                            InterviewerQuestionEntity entity =
+                                    interviewerQuestionMapper.toEntity(questionDto);
+                            interviewQuestionEntity.setSkill(skillEntity);
+                            return entity;
+                        });
+        interviewerQuestionEntity.setUpdatedAt(LocalDateTime.now(ZoneOffset.UTC));
+        interviewerQuestionEntity = interviewerQuestionRepository.save(interviewerQuestionEntity);
+        log.info("""
+                        The question has been successfully saved in the interviewer's question database.
+                        Id: {}
+                        Skill: {}
+                        Question: {}
+                        """,
+                interviewerQuestionEntity.getId(),
+                interviewerQuestionEntity.getSkill().getName(),
+                interviewerQuestionEntity.getQuestion());
 
-        InterviewerQuestionEntity savedInterviewerQuestion;
         InterviewQuestionEntity savedInterviewQuestion;
-        if (interviewerQuestionRepository.existsBySkillIdAndQuestion(skillId, questionText) &&
-                !interviewQuestionRepository.existsByInterviewIdAndSkillIdAndQuestion(interviewId, skillId, questionText)) {
+        if (interviewQuestionRepository.existsByInterviewIdAndSkillIdAndQuestion(interviewId, skillId, questionText)) {
             log.info("Question already exists.");
-            log.warn("Such a question is already in the interviewer's list of questions, " +
-                    "the question will be added only to the current interview");
-            savedInterviewerQuestion = getInterviewerQuestionEntity(skillId, questionText);
-            savedInterviewQuestion = interviewQuestionRepository.save(interviewQuestionEntity);
-        } else if (interviewQuestionRepository.existsByInterviewIdAndSkillIdAndQuestion(interviewId, skillId, questionText)) {
-            log.info("Question already exists.");
-            savedInterviewerQuestion = getInterviewerQuestionEntity(skillId, questionText);
             savedInterviewQuestion = getInterviewQuestionEntity(interviewId, skillId, questionText);
         } else {
-            savedInterviewerQuestion = interviewerQuestionRepository.save(interviewerQuestionEntity);
             savedInterviewQuestion = interviewQuestionRepository.save(interviewQuestionEntity);
         }
-        log.info("The question has been successfully saved (or it already exists) in the interviewer's question database. Id: {}, Skill: {}", savedInterviewerQuestion.getId(), skillEntity.getName());
+
         log.info("The question has been successfully saved (or it already exists) in the database of interview questions. Id: {}, Skill: {}", savedInterviewQuestion.getId(), skillEntity.getName());
         return InterviewQuestionResponseDto.builder()
                 .id(savedInterviewQuestion.getId())
@@ -227,8 +239,9 @@ public class InterviewService {
 
     public List<InterviewQuestionResponseDto> getMyQuestionsBySkillId(AuthDetails authDetails,
                                                                       long id) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "updatedAt");
         return interviewerQuestionRepository
-                .findAllByInterviewerIdAndSkillId(authDetails.getUserEntity().getId(), id)
+                .findAllByInterviewerIdAndSkillId(authDetails.getUserEntity().getId(), id, sort)
                 .stream()
                 .map(interviewerQuestionMapper::toResponseDto)
                 .toList();

@@ -135,7 +135,7 @@ public class InterviewController {
                     mediaType = "application/json")})
     public List<InterviewQuestionResponseDto> getMyQuestionsBySkillId(
             @AuthenticationPrincipal AuthDetails authDetails,
-            @RequestParam(name = "id") long id) {
+            @PathVariable(name = "id") long id) {
         return interviewService.getMyQuestionsBySkillId(authDetails, id);
     }
 
