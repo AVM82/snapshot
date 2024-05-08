@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Markdown from 'react-markdown';
-import { useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
 import { changeFeedback } from '../../../../store/reducers/profile/actions';
@@ -8,7 +7,7 @@ import Questions from '../Questions/Questions';
 
 function Feedback(): JSX.Element {
   const dispatch = useAppDispatch();
-  const { userId } = useParams();
+  const { id } = useAppSelector((state) => state.user.userData);
   const interview = useAppSelector((state) => state.profile.interview);
   const [feedbackClicked, setFeedbackClicked] = useState(false);
   const [newFeedback, setNewFeedback] = useState(interview.feedback);
@@ -20,7 +19,7 @@ function Feedback(): JSX.Element {
   return (
     <div>
       <Questions {...interview} />
-      {feedbackClicked && Number(userId) !== interview.searcher.id ? (
+      {feedbackClicked && id !== interview.searcher.id ? (
         <div
           style={{ display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
         >

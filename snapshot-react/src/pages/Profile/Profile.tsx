@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { useAppDispatch } from '../../hooks/redux';
 import { getLowerSkills, getMyInterviews, getPortrait } from '../../store/reducers/profile/actions';
 import Portrait from './components/Portarit/Portrait';
 import MyInterviews from './MyInterviews';
@@ -9,19 +9,20 @@ import UserRoles from './UserRoles';
 
 function Profile(): JSX.Element {
   const dispatch = useAppDispatch();
-  const { id } = useAppSelector((state) => state.user.userData);
+  // const { id } = useAppSelector((state) => state.user.userData);
+  const { userId } = useParams();
   const [activeComponent, setActiveComponent] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfileData = async (): Promise<void> => {
       await dispatch(getMyInterviews());
-      await dispatch(getLowerSkills(id));
-      await dispatch(getPortrait(id));
+      await dispatch(getLowerSkills(Number(userId)));
+      await dispatch(getPortrait(Number(userId)));
     };
 
     fetchProfileData();
-  }, [dispatch, id]);
+  }, [dispatch, userId]);
 
   return (
     <div style={{
@@ -29,7 +30,15 @@ function Profile(): JSX.Element {
     }}
     >
       <div style={{ alignSelf: 'start' }}>
-        <button type="button" onClick={() => setActiveComponent('settings')}>Налаштувати профіль</button>
+        <button
+          type="button"
+          onClick={() => {
+            setActiveComponent('settings');
+            navigate('settings');
+          }}
+        >
+          Налаштувати профіль
+        </button>
         <button
           type="button"
           onClick={() => {

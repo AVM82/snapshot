@@ -9,8 +9,7 @@ function useForce(): void {
 
   useEffect(() => {
     if (token) dispatch(getUser());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch, token]);
 }
 
 export default useForce;
