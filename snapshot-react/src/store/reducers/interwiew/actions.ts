@@ -67,6 +67,6 @@ export {
   getInterviewId,
   getSkillQuestions,
   getUserByEmail,
-  updateInterviewStatus
+  updateInterviewStatus,
 };
 
