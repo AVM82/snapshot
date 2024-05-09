@@ -6,24 +6,24 @@ import IQuestion from '../../../../models/profile/IQuestion';
 import { changeGrade } from '../../../../store/reducers/profile/actions';
 
 function Question({
-  question, skillName, grade, id, searcherId,
+  question, skillName, grade, id, searcherId, createdAt,
 }: IQuestion): JSX.Element {
-  const [newGrade, setNewGrade] = useState(grade);
+  const [newGrade, setNewGrade] = useState(grade === 'null%' ? '' : grade);
   const [changeGradeClicked, setChangeGradeClicked] = useState(false);
   const userId = useAppSelector((state) => state.user.userData.id);
-  const { interviewId } = useParams();
+  const { id: interviewId } = useParams();
   const dispatch = useAppDispatch();
   const handleChangeGrade = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
-      dispatch(changeGrade({ id, interviewId: Number(interviewId), grade: newGrade }));
+      dispatch(changeGrade({ id, interviewId: Number(interviewId), grade: newGrade.endsWith('%') ? newGrade : `${newGrade}%` }));
     }
   };
 
   return (
     <div
       style={{
-        display: 'flex',
-        justifyContent: 'space-between',
+        display: 'grid',
+        gridTemplateColumns: '15% 50% 20% 15%',
         alignItems: 'center',
         backgroundColor: 'white',
       }}
@@ -32,6 +32,7 @@ function Question({
       <p style={{ color: 'black', flexShrink: 0 }}>{ skillName }</p>
       <p style={{ color: 'black', flexShrink: 0 }}>{ question }</p>
       <div style={{ width: '10%', display: 'flex', flexDirection: 'column' }}>
+        <p style={{ color: 'black' }}>{ createdAt }</p>
         {changeGradeClicked && (searcherId !== userId) ? (
           <>
             <input

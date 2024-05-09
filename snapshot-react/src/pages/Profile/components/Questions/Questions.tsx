@@ -1,4 +1,5 @@
 import { IInterview } from '../../../../models/profile/IInterview';
+import formatQuestionsWithLocalDate from '../../../../utils/interview/formatQuestionsWithLocalDate';
 import Question from './Question';
 
 function Questions({ questions, searcher }: IInterview): JSX.Element {
@@ -7,7 +8,7 @@ function Questions({ questions, searcher }: IInterview): JSX.Element {
       display: 'flex', flexDirection: 'column', gap: '10px', overflow: 'auto',
     }}
     >
-      {questions.map((question) => (
+      {formatQuestionsWithLocalDate(questions).map((question) => (
         <Question {...question} key={question.id} searcherId={searcher.id} />
       ))}
     </div>
