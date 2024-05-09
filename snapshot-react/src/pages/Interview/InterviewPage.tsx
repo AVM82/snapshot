@@ -6,7 +6,6 @@ import { Client, Frame, over } from 'stompjs';
 import api from '../../common/api';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { INewInterview } from '../../models/profile/INewInterview';
-import IQuestion from '../../models/profile/IQuestion';
 import {
   getAllSkills, getInterviewId, getUserByEmail,
   updateInterviewStatus,
@@ -14,8 +13,8 @@ import {
 import { redefineQuestions, redefineStatus, setTitle } from '../../store/reducers/interwiew/interviewSlice';
 import { getInterviewById } from '../../store/reducers/profile/actions';
 import getUser from '../../store/reducers/user/actions';
-import formatQuestionsWithLocalDate from '../../utils/interview/formatQuestionsWithLocalDate';
 import Feedback from '../Profile/components/Feedback/Feedback';
+import Questions from '../Profile/components/Questions/Questions';
 import Skill from '../Profile/components/Skills/Skill';
 import Question from './components/Question/Question';
 import Timer from './components/Timer/Timer';
@@ -39,9 +38,10 @@ export default function InterviewPage(): React.JSX.Element {
   const [titleText, setTitleText] = useState('');
   const navigate = useNavigate();
   const {
-    searcher, id: interviewId, sharedSkills, status: interviewStatus, isLoading, questions, title,
+    searcher, id: interviewId, sharedSkills, status: interviewStatus, isLoading, title,
     currentProfileRole,
   } = useAppSelector((state) => state.interview);
+  const interview = useAppSelector((state) => state.interview);
 
   const { id } = useParams();
   const dispatch = useAppDispatch();
@@ -233,14 +233,7 @@ export default function InterviewPage(): React.JSX.Element {
         </div>
         {interviewStatus === 'COMPLETED' ? <Feedback /> : (
           <div className={styles.questionList}>
-            {questions && formatQuestionsWithLocalDate(questions).map((q:IQuestion) => (
-              <div key={q.id}>
-                <p>{q.skillName}</p>
-                <p>{q.question}</p>
-                <p>{q.grade}</p>
-                <p>{q.createdAt}</p>
-              </div>
-            ))}
+            <Questions {...interview} />
           </div>
         )}
       </div>
