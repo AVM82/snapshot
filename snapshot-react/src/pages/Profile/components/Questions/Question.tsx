@@ -23,7 +23,7 @@ function Question({
     <div
       style={{
         display: 'grid',
-        gridTemplateColumns: '15% 50% 20% 15%',
+        gridTemplateColumns: '15% 50% 35%',
         alignItems: 'center',
         backgroundColor: 'white',
       }}
@@ -31,7 +31,7 @@ function Question({
     >
       <p style={{ color: 'black', flexShrink: 0 }}>{ skillName }</p>
       <p style={{ color: 'black', flexShrink: 0 }}>{ question }</p>
-      <div style={{ width: '10%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
         <p style={{ color: 'black' }}>{ createdAt }</p>
         {changeGradeClicked && (searcherId !== userId) ? (
           <>

@@ -1,12 +1,12 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { useAppSelector } from '../../hooks/redux';
 import useForce from '../../utils/useForce';
 
 function Header(): JSX.Element {
   const user = useAppSelector((state) => state.user.userData);
-
-  useForce();
+  const location = useLocation();
+  useForce(location);
 
   return (
     <header style={{

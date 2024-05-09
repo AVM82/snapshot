@@ -1,5 +1,7 @@
 /* eslint-disable no-param-reassign */
 import axios from 'axios';
+import dayjs from 'dayjs';
+import { jwtDecode } from 'jwt-decode';
 import { toast } from 'react-toastify';
 
 import api from '../common/api';
@@ -11,59 +13,53 @@ const snapshotApi = axios.create({
   },
 });
 
-const refreshToken = async (): Promise<void | null> => {
-  if (!refreshToken.isRefreshing) {
-    refreshToken.isRefreshing = true;
-
-    try {
-      const response: { access_token: string, refresh_token: string } = await snapshotApi.post('/auth/refresh-token', {
-        refresh_token: localStorage.getItem('refresh_token'),
-      });
-      localStorage.setItem('token', response.access_token);
-      localStorage.setItem('refresh_token', response.refresh_token);
-      snapshotApi.defaults.headers.Authorization = `Bearer ${response.access_token}`;
-
-      return await Promise.resolve();
-    } catch (error) {
-      return await Promise.reject(error);
-    } finally {
-      refreshToken.isRefreshing = false;
-    }
-  }
-
-  return null;
-};
-
-refreshToken.isRefreshing = false;
-
 snapshotApi.interceptors.response.use(
   (res) => res.data,
-  async (error) => {
-    const originalRequest = error.config;
-
-    if (error.response.status === 401) {
-      try {
-        await refreshToken();
-
-        return await snapshotApi(originalRequest);
-      } catch (err: unknown) {
-        if (err instanceof Error) toast.error(err.message || 'Помилка входу, перелогінтесь');
-        window.location.href = 'sign-in';
+  (error) => {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        toast.error(error.response?.data.message);
       }
-    } else {
-      toast.error(error.message);
     }
-
-    return Promise.reject(error);
   },
 );
 
 snapshotApi.interceptors.request.use(
   async (config) => {
     const token = localStorage.getItem('token');
+    let decodedToken: {
+      sub: string,
+      key: string,
+      iat: number,
+      exp: number
+    } = {
+      sub: '',
+      key: '',
+      iat: 0,
+      exp: 0,
+    };
+
+    let isExpired = false;
 
     if (token) {
+      decodedToken = jwtDecode(token);
+      isExpired = dayjs.unix(decodedToken.exp as number).diff(dayjs()) < 1;
       config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    if (isExpired) {
+      await axios.post(`${api.baseURL}/auth/refresh-token`, {
+        refresh_token: localStorage.getItem('refresh_token'),
+      }).then((response) => {
+        localStorage.setItem('token', response.data.access_token);
+        localStorage.setItem('refresh_token', response.data.refresh_token);
+        config.headers.Authorization = `Bearer ${response.data.access_token}`;
+      })
+        .catch(() => {
+          localStorage.removeItem('token');
+          localStorage.removeItem('refresh_token');
+          toast.error('Перелогінтесь');
+        });
     }
 
     return config;
