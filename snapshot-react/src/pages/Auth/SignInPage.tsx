@@ -15,13 +15,12 @@ export default function SignInPage(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const onSubmit: SubmitHandler<ISignIn> = async (data): Promise<void> => {
-    const token: { access_token: string } = await snapshotApi.post('/auth/authenticate', data);
+    const token: { access_token: string, refresh_token: string } = await snapshotApi.post('/auth/authenticate', data);
 
     if (token) {
       localStorage.setItem('token', token.access_token);
+      localStorage.setItem('refresh_token', token.refresh_token);
       dispatch(getUser());
-      // const user: IUser = await snapshotApi.get('/users/me');
-      // localStorage.setItem('user', JSON.stringify(user));
       navigate('/');
     }
 

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @ToString
@@ -22,4 +24,6 @@ public class InterviewerQuestionEntity {
     private UserEntity interviewer;
     @Column(name = "question")
     private String question;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

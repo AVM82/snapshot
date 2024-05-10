@@ -1,6 +1,7 @@
 package com.project.snapshotspringboot.repository;
 
 import com.project.snapshotspringboot.entity.InterviewerQuestionEntity;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -11,6 +12,11 @@ public interface InterviewerQuestionRepository extends JpaRepository<Interviewer
     boolean existsBySkillIdAndQuestion(Long skillId, String questionText);
 
     Set<InterviewerQuestionEntity> findAllByInterviewerIdAndSkillId(long interviewerId,
-                                                                    long skillId);
+                                                                    long skillId,
+                                                                    Sort sort);
     Optional<InterviewerQuestionEntity> findBySkillIdAndQuestion(Long skillId, String questionText);
+
+    Optional<InterviewerQuestionEntity> findByInterviewerIdAndSkillIdAndQuestion(long interviewerId,
+                                                                                 long skillId,
+                                                                                 String question);
 }
