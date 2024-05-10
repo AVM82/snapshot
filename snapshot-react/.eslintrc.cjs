@@ -67,7 +67,6 @@ module.exports = {
     'jsx-quotes': ['error', 'prefer-double'],
     semi: ['error', 'always'],
     'max-params': ['error', 5],
-    'comma-dangle': ['error', 'always-multiline'],
     'lines-between-class-members': ['error', 'always'],
     '@typescript-eslint/explicit-function-return-type': [
       'error',

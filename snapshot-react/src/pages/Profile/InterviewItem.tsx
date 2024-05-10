@@ -2,7 +2,9 @@ import { Link } from 'react-router-dom';
 
 import IInterviewPreview from '../../models/profile/IInterviewPreview';
 
-function InterviewItem({ id, title, status }: Partial<IInterviewPreview>): JSX.Element {
+function InterviewItem({
+  id, title, status, interviewerFullName, searcherFullName,
+}: Partial<IInterviewPreview>): JSX.Element {
   return (
     <div
       id={String(id)}
@@ -15,7 +17,15 @@ function InterviewItem({ id, title, status }: Partial<IInterviewPreview>): JSX.E
       </button>
       <p>{title}</p>
       <p>{status}</p>
-      <p>with: user228</p>
+      <p>
+        from:
+        {' '}
+        {interviewerFullName}
+        <br />
+        to:
+        {' '}
+        {searcherFullName}
+      </p>
     </div>
   );
 }

@@ -28,15 +28,15 @@ function Home(): JSX.Element {
         type="button"
         onClick={() => {
           localStorage.removeItem('token');
+          localStorage.removeItem('refresh_token');
           dispatch(deleteUser());
-          // localStorage.removeItem('user');
           navigate('/sign-in');
         }}
       >
         Вийти
       </button>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        {response.message
+        {response?.message
       && response.message.split('').map((item, index) => <p key={String(index)} className={item}>{item}</p>)}
       </div>
     </div>
