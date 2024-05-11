@@ -687,4 +687,32 @@ VALUES (1, 29, 'What is the difference between == and .equals() when comparing o
         '2024-04-30 18:30:00'),
        (1, 47, 'What are the advantages of using sharding in MongoDB, and how does it help with scalability?',
         '2024-04-21 18:30:00');
+
+insert into users (password, email, first_name, last_name, avatar_img_url, description)
+values ('$2a$12$TZsCJ3Yn4.Dy0gTs9TDKUuBl7e/OoCiZIPH6ytZGJ82uW5wi1wdnW', 'username5', 'name5', 'surname5', 'i5', 'd5'),
+       ('$2a$12$wsiqPAq4WLGBVkx2C2MFkuCxz4Ct8OzhnfM5VcROjx7qrSMQSq.xK', 'username6', 'name6', 'surname6', 'i6', 'd6'),
+       ('$2a$12$U3KJxDkxEcbJJbVrHRgv3Owc/H9j1tq1qX/OMQXYq2yTsrCd2Zgjq', 'username7', 'name7', 'surname7', 'i7', 'd7'),
+       ('$2a$12$6GEH2.NJzNBmhyHjywfq6.tUA765NdIuKu1rXXLvUAOownmQea1xK', 'username8', 'name8', 'surname8', 'i8', 'd8');
+
+
+INSERT INTO interviews (title, status, interviewer_id, searcher_id, planned_date_time, start_date_time, end_date_time,
+                        feedback)
+VALUES ('myTestInterview1', 'COMPLETED', 5, 6, '2024-04-26 18:30:00', '2024-04-26 18:27:34', '2024-04-26 20:03:12',
+        'Needs improvement'),
+       ('myTestInterview2', 'COMPLETED', 5, 7, '2024-04-26 18:30:00', '2024-04-26 18:27:34', '2024-04-26 20:03:12',
+        'Needs improvement'),
+       ('myTestInterview2', 'COMPLETED', 5, 8, '2024-04-26 18:30:00', '2024-04-26 18:27:34', '2024-04-26 20:03:12',
+        'Needs improvement');
+
+INSERT INTO interview_questions (interview_id, skill_id, question, grade, create_at)
+VALUES (57, 94, 'test?', 100, '2024-04-30 09:03:00.000001'),
+       (57, 95, 'test?', 100, '2024-04-30 09:04:00.000001'),
+       (57, 96, 'test?', 100, '2024-04-30 09:04:00.000001'),
+       (58, 94, 'test?', 50, '2024-04-30 09:04:00.000001'),
+       (58, 95, 'test?', 50, '2024-04-30 09:04:00.000001'),
+       (58, 96, 'test?', 50, '2024-04-30 09:04:00.000001'),
+       (59, 94, 'test?', 5, '2024-04-30 09:05:00.000001'),
+       (59, 95, 'test?', 5, '2024-04-30 09:05:00.000001'),
+       (59, 96, 'test?', 5, '2024-04-30 09:05:00.000001');
+
 ---------for test, delete later---------

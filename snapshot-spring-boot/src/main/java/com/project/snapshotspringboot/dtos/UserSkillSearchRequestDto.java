@@ -11,6 +11,6 @@ import lombok.experimental.FieldDefaults;
 public class UserSkillSearchRequestDto {
 
     String skillName;
-    Integer skillGrade;
+    String skillGrade;
 
 }

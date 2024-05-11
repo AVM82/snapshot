@@ -1,6 +1,9 @@
 package com.project.snapshotspringboot.service;
 
-import com.project.snapshotspringboot.dtos.*;
+import com.project.snapshotspringboot.dtos.EmailDto;
+import com.project.snapshotspringboot.dtos.RoleDto;
+import com.project.snapshotspringboot.dtos.RoleWithSkillsDto;
+import com.project.snapshotspringboot.dtos.UserResponseDto;
 import com.project.snapshotspringboot.dtos.result.SkillResultDto;
 import com.project.snapshotspringboot.dtos.result.UserResultsByInterviewsResponseDto;
 import com.project.snapshotspringboot.entity.*;
@@ -189,24 +192,24 @@ public class UserService implements UserDetailsService {
         return userInterviewResults;
     }
 
-    public List<UserResponseDto> findSearcherIdBySkillsAndGrades(List<UserSkillSearchRequestDto> skillGrades) {
-
-        HashMap<Long, Integer> searcherIds = new HashMap<>();
-        for (UserSkillSearchRequestDto skillGrade : skillGrades) {
-            List<Long> searcherId = repository.findSearcherIdsBySkillNameAndSkillGrade(skillGrade.getSkillName(), skillGrade.getSkillGrade());
-            for (Long Id : searcherId) {
-                searcherIds.put(Id, searcherIds.getOrDefault(Id, 0) + 1);
+    public List<UserResponseDto> findSearcherIdBySkillsAndGrades(Map<String, String> skillGrades) {
+        Map<Long, Integer> searcherIds = new HashMap<>();
+        for (Map.Entry<String, String> entry : skillGrades.entrySet()) {
+            List<Long> searcherId = repository.findSearcherIdsBySkillNameAndSkillGrade(entry.getKey(), entry.getValue());
+            for (Long id : searcherId) {
+                searcherIds.put(id, searcherIds.getOrDefault(id, 0) + 1);
             }
         }
 
         List<UserEntity> users = new ArrayList<>();
         for (Map.Entry<Long, Integer> id : searcherIds.entrySet()) {
             if (id.getValue() == skillGrades.size()) {
-                Optional<UserEntity> userEntity = repository.findById(id.getKey());
-                userEntity.ifPresent(users::add);
+                repository.findById(id.getKey()).ifPresent(users::add);
             }
         }
         return users.stream()
-                .map(userMapper::toDto).toList();
+                .map(userMapper::toDto)
+                .toList();
     }
+
 }

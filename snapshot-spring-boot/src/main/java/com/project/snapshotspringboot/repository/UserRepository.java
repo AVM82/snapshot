@@ -26,5 +26,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             JOIN skills s ON iq.skill_id = s.id
             WHERE s.name = ? AND iq.grade >= ?;
             """, nativeQuery = true)
-    List<Long> findSearcherIdsBySkillNameAndSkillGrade(String skillName, Integer skillGrade);
+    List<Long> findSearcherIdsBySkillNameAndSkillGrade(String skillName, String skillGrade);
 }
