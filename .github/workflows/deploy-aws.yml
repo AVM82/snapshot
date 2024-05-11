@@ -24,21 +24,9 @@ jobs:
         run: |
           cd snapshot-spring-boot
           mvn clean install -DskipTests
-          {
-            echo 'jar_file<<EOF'
-            find $PWD -name '*.jar' -type f
-            echo EOF
-          } >> $GITHUB_ENV
         env:
           VITE_API_URL: ${{secrets.VITE_API_URL}}
           BACK_URI: ${{secrets.BACK_URI}}
-
-      - name: cheack file
-        run:  ls -la /home/runner/work/test2/test2/snapshot-spring-boot/target
-
-      # - name: Find JAR file
-      #   id: find-jar
-      #   run: echo "jar_file=$(find $PWD/snapshot-spring-boot -name '*.jar' -type f)" >> $GITHUB_ENV
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v21
