@@ -3,6 +3,7 @@ package com.project.snapshotspringboot.controller;
 import com.project.snapshotspringboot.dtos.EmailDto;
 import com.project.snapshotspringboot.dtos.RoleDto;
 import com.project.snapshotspringboot.dtos.UserResponseDto;
+import com.project.snapshotspringboot.dtos.UserSkillSearchRequestDto;
 import com.project.snapshotspringboot.dtos.result.UserResultsByInterviewsResponseDto;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import com.project.snapshotspringboot.service.UserService;
@@ -16,6 +17,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -84,5 +87,16 @@ public class UserController {
     @ApiResponse(responseCode = "400", description = "User (IT specialist) not found", content = {@Content})
     public List<UserResultsByInterviewsResponseDto> getResultsByInterviews(@PathVariable Long userId) {
         return service.getUserInterviewsResults(userId);
+    }
+    
+    @Operation(summary = "Get all users by skills and grade", description = "Get all users by skills and grade based on the results of interviews")
+    @ApiResponse(responseCode = "200", description = "Users (IT specialist) found successfully",
+            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDto.class))})
+    @ApiResponse(responseCode = "400", description = "User (IT specialist) not found", content = {@Content})
+    @PostMapping("/by-skills")
+    public ResponseEntity<List<UserResponseDto>> findUsersBySkillsAndGrades(@RequestBody List<UserSkillSearchRequestDto> skillGrades) {
+
+        List<UserResponseDto> responseDto = service.findSearcherIdBySkillsAndGrades(skillGrades);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 }

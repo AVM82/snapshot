@@ -188,4 +188,25 @@ public class UserService implements UserDetailsService {
         }
         return userInterviewResults;
     }
+
+    public List<UserResponseDto> findSearcherIdBySkillsAndGrades(List<UserSkillSearchRequestDto> skillGrades) {
+
+        HashMap<Long, Integer> searcherIds = new HashMap<>();
+        for (UserSkillSearchRequestDto skillGrade : skillGrades) {
+            List<Long> searcherId = repository.findSearcherIdsBySkillNameAndSkillGrade(skillGrade.getSkillName(), skillGrade.getSkillGrade());
+            for (Long Id : searcherId) {
+                searcherIds.put(Id, searcherIds.getOrDefault(Id, 0) + 1);
+            }
+        }
+
+        List<UserEntity> users = new ArrayList<>();
+        for (Map.Entry<Long, Integer> id : searcherIds.entrySet()) {
+            if (id.getValue() == skillGrades.size()) {
+                Optional<UserEntity> userEntity = repository.findById(id.getKey());
+                userEntity.ifPresent(users::add);
+            }
+        }
+        return users.stream()
+                .map(userMapper::toDto).toList();
+    }
 }
