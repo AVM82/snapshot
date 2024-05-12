@@ -11,9 +11,13 @@ function Header(): React.JSX.Element {
   useForce(location);
 
   return (
-    <header style={{
-      height: '150px', fontSize: '32px', textAlign: 'center', backgroundColor: 'aqua',
-    }}
+    <header
+      style={{
+        height: '150px',
+        fontSize: '32px',
+        textAlign: 'center',
+        backgroundColor: 'aqua',
+      }}
     >
       <div
         style={{
@@ -24,23 +28,17 @@ function Header(): React.JSX.Element {
           cursor: 'pointer',
         }}
       >
-
         <Link to="/">
           ЛОГО
           <br />
           ТИП
         </Link>
-
+        <Link to="/candidate-search">Знайти кандидата</Link>
         <div>
-
           <Link to={`/profile/${user.id}`}>
-            {user.firstname}
-            {' '}
-            {user.lastname}
+            {user.firstname} {user.lastname}
           </Link>
-          {Boolean(user.id) && (
-            <Notification />
-          )}
+          {Boolean(user.id) && <Notification />}
         </div>
       </div>
     </header>
