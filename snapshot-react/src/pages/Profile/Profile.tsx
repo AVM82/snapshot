@@ -4,12 +4,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/redux';
 import { getLowerSkills, getMyInterviews, getPortrait } from '../../store/reducers/profile/actions';
 import Portrait from './components/Portarit/Portrait';
+import Statistics from './components/Statistics/Statistics';
 import MyInterviews from './MyInterviews';
 import UserRoles from './UserRoles';
 
 function Profile(): JSX.Element {
   const dispatch = useAppDispatch();
-  // const { id } = useAppSelector((state) => state.user.userData);
   const { userId } = useParams();
   const [activeComponent, setActiveComponent] = useState('');
   const navigate = useNavigate();
@@ -48,9 +48,19 @@ function Profile(): JSX.Element {
         >
           Журнал інтерв&apos;ю
         </button>
+        <button
+          type="button"
+          onClick={() => {
+            setActiveComponent('statistics');
+            navigate('statistics');
+          }}
+        >
+          Статистика
+        </button>
       </div>
       {activeComponent === 'settings' && <UserRoles />}
       {activeComponent === 'interview-journal' && <MyInterviews />}
+      {activeComponent === 'statistics' && <Statistics />}
       <Portrait />
     </div>
   );

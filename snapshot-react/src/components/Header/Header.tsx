@@ -27,6 +27,9 @@ function Header(): JSX.Element {
           <br />
           ТИП
         </Link>
+        <Link to="/candidate-search">
+          Знайти кандидата
+        </Link>
         <Link to={`/profile/${user.id}`}>
           {user.firstname}
           {' '}
