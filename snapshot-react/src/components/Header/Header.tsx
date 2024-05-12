@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { useAppSelector } from '../../hooks/redux';
 import useForce from '../../utils/useForce';
+import Notification from './Notification';
 
 function Header(): JSX.Element {
   const user = useAppSelector((state) => state.user.userData);
@@ -22,16 +23,24 @@ function Header(): JSX.Element {
           cursor: 'pointer',
         }}
       >
+
         <Link to="/">
           ЛОГО
           <br />
           ТИП
         </Link>
-        <Link to={`/profile/${user.id}`}>
-          {user.firstname}
-          {' '}
-          {user.lastname}
-        </Link>
+
+        <div>
+
+          <Link to={`/profile/${user.id}`}>
+            {user.firstname}
+            {' '}
+            {user.lastname}
+          </Link>
+          {Boolean(user.id) && (
+            <Notification />
+          )}
+        </div>
       </div>
     </header>
   );

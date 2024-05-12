@@ -11,7 +11,7 @@ import {
   updateInterviewStatus,
 } from '../../store/reducers/interwiew/actions';
 import { redefineQuestions, redefineStatus, setTitle } from '../../store/reducers/interwiew/interviewSlice';
-import { getInterviewById } from '../../store/reducers/profile/actions';
+import { getInterviewById, getMyInterviews } from '../../store/reducers/profile/actions';
 import getUser from '../../store/reducers/user/actions';
 import Feedback from '../Profile/components/Feedback/Feedback';
 import Questions from '../Profile/components/Questions/Questions';
@@ -69,13 +69,14 @@ export default function InterviewPage(): React.JSX.Element {
   };
   const onConnect = (): void => {
     console.log('Connected to WebSocket');
-    stomp.subscribe(`/interview/${interviewId}/questions`, onMessageReceived);// /interview/1/questions
+    stomp.subscribe(`/interview/${interviewId}/questions`, onMessageReceived);
   };
   const connect = (): void => {
     const socket = new SockJS(`${api.baseURL.slice(0, -5)}/socket`);
     stomp = over(socket);
     stomp.connect(headers, onConnect, onError);
   };
+
   useEffect(() => {
     const fetchData = async ():Promise<void> => {
       if (!currentProfileRole) {
@@ -98,8 +99,9 @@ export default function InterviewPage(): React.JSX.Element {
     if (interviewId && !id) {
       navigate(`/interview/${interviewId}`);
     }
-    connect();
-  }, [interviewId]);
+
+    if (interviewStatus === 'ACTIVE') connect();
+  }, [interviewId, interviewStatus]);
 
   const buttonText = ():string => {
     if (interviewStatus === 'PLANNED') { return 'Почати'; }
@@ -109,7 +111,7 @@ export default function InterviewPage(): React.JSX.Element {
     return 'Затвердити дані';
   };
 
-  const interviewLogic = ():void => {
+  const interviewLogic = async ():Promise<void> => {
     if (title && searcher.id) {
       if (!interviewId) {
         const addInterviewData:INewInterview = {
@@ -121,11 +123,13 @@ export default function InterviewPage(): React.JSX.Element {
       }
 
       if (interviewStatus === 'PLANNED') {
-        dispatch(updateInterviewStatus({ id: interviewId, status: 'ACTIVE' }));
+        await dispatch(updateInterviewStatus({ id: interviewId, status: 'ACTIVE' }));
+        dispatch(getMyInterviews());
       }
 
       if (interviewStatus === 'ACTIVE') {
-        dispatch(updateInterviewStatus({ id: interviewId, status: 'FINISHED' }));
+        await dispatch(updateInterviewStatus({ id: interviewId, status: 'FINISHED' }));
+        dispatch(getMyInterviews());
       }
     }
   };
