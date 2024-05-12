@@ -142,7 +142,7 @@ public class InterviewService {
                         .orElseGet(() -> {
                             InterviewerQuestionEntity entity =
                                     interviewerQuestionMapper.toEntity(questionDto);
-                            interviewQuestionEntity.setSkill(skillEntity);
+                            entity.setSkill(skillEntity);
                             return entity;
                         });
         interviewerQuestionEntity.setUpdatedAt(LocalDateTime.now(ZoneOffset.UTC));

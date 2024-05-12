@@ -6,6 +6,8 @@ import com.project.snapshotspringboot.dtos.RoleWithSkillsDto;
 import com.project.snapshotspringboot.dtos.UserResponseDto;
 import com.project.snapshotspringboot.dtos.result.SkillResultDto;
 import com.project.snapshotspringboot.dtos.result.UserResultsByInterviewsResponseDto;
+import com.project.snapshotspringboot.dtos.statistic.QuestionGradeDto;
+import com.project.snapshotspringboot.dtos.statistic.UserStatisticsPeriodDto;
 import com.project.snapshotspringboot.entity.*;
 import com.project.snapshotspringboot.mapper.UserMapper;
 import com.project.snapshotspringboot.repository.*;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -157,6 +160,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<UserResultsByInterviewsResponseDto> getUserInterviewsResults(Long userId) {
+        findById(userId);
         List<UserResultsByInterviewsResponseDto> userInterviewResults = new ArrayList<>();
 
         List<InterviewEntity> interviews = interviewRepository.findBySearcherId(userId);
@@ -221,6 +225,46 @@ public class UserService implements UserDetailsService {
         return users.stream()
                 .map(userMapper::toDto)
                 .toList();
+    }
+
+    public List<UserStatisticsPeriodDto> getUserStatisticsByPeriod(Long userId, LocalDate fromDate, LocalDate toDate) {
+        findById(userId);
+        List<InterviewEntity> interviewEntityList = interviewRepository.findBySearcherIdAndEndDateTimeBetween(userId, fromDate.atStartOfDay(), toDate.atStartOfDay());
+        return calculateUserStatisticsPeriod(interviewEntityList);
+    }
+
+    public List<UserStatisticsPeriodDto> calculateUserStatisticsPeriod(List<InterviewEntity> interviewEntityList) {
+        List<UserStatisticsPeriodDto> userStatisticsList = new ArrayList<>();
+        for (InterviewEntity interview : interviewEntityList) {
+            Map<Long, List<Integer>> skillGradeMap = new HashMap<>();
+            Map<Long, List<QuestionGradeDto>> skillQuestioGradeMap = new HashMap<>();
+            Map<Long, Integer> questionCountMap = new HashMap<>();
+            for (InterviewQuestionEntity question : interview.getQuestions()) {
+                Long skillId = question.getSkill().getId();
+                Integer grade = question.getGrade();
+                skillGradeMap.computeIfAbsent(skillId, k -> new ArrayList<>()).add(grade);
+                skillQuestioGradeMap.computeIfAbsent(skillId, k -> new ArrayList<>()).add(new QuestionGradeDto(
+                        question.getQuestion(), question.getGrade().toString() + "%"));
+                questionCountMap.put(skillId, questionCountMap.getOrDefault(skillId, 0) + 1);
+            }
+            for (Map.Entry<Long, List<Integer>> entry : skillGradeMap.entrySet()) {
+                Long skillId = entry.getKey();
+                List<Integer> grades = entry.getValue();
+                int totalGrade = grades.stream().mapToInt(Integer::intValue).sum();
+                Integer questionCount = questionCountMap.get(skillId);
+                Double averageGrade = questionCount > 0 ? (double) totalGrade / questionCount : 0.0;
+                String skillName = skillRepository.findById(skillId).orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Skill not found by id: " + skillId)).getName();
+                UserStatisticsPeriodDto userStatistics = UserStatisticsPeriodDto.builder()
+                        .skillName(skillName)
+                        .grade(averageGrade)
+                        .date(interview.getEndDateTime())
+                        .questions(skillQuestioGradeMap.get(skillId))
+                        .build();
+                userStatisticsList.add(userStatistics);
+            }
+        }
+        return userStatisticsList;
     }
 
 }
