@@ -193,20 +193,31 @@ public class UserService implements UserDetailsService {
     }
 
     public List<UserResponseDto> findSearcherIdBySkillsAndGrades(Map<String, String> skillGrades) {
-        Map<Long, Integer> searcherIds = new HashMap<>();
+        Map<Long, Integer> searcherIdsCount = new HashMap<>();
+        Map<Long, Long> searcherIdAndSumGrade = new HashMap<>();
         for (Map.Entry<String, String> entry : skillGrades.entrySet()) {
-            List<Long> searcherId = repository.findSearcherIdsBySkillNameAndSkillGrade(entry.getKey(), entry.getValue());
-            for (Long id : searcherId) {
-                searcherIds.put(id, searcherIds.getOrDefault(id, 0) + 1);
+            List<Object[]> searcherIdsAndGrade = repository.findSearcherIdsAndMaxGradeBySkillNameAndSkillGrade(entry.getKey(), entry.getValue());
+            for (Object[] result : searcherIdsAndGrade) {
+                Long searcherId = (Long) result[0];
+                Integer maxGrade = (Integer) result[1];
+                searcherIdsCount.put(searcherId, searcherIdsCount.getOrDefault(searcherId, 0) + 1);
+                searcherIdAndSumGrade.put(searcherId, searcherIdAndSumGrade.getOrDefault(searcherId, 0L) + maxGrade);
             }
         }
 
+        Map<Long, Long> sortedSearcherIdAndSumGrade = searcherIdAndSumGrade.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+
         List<UserEntity> users = new ArrayList<>();
-        for (Map.Entry<Long, Integer> id : searcherIds.entrySet()) {
-            if (id.getValue() == skillGrades.size()) {
-                repository.findById(id.getKey()).ifPresent(users::add);
+        for (Long key : sortedSearcherIdAndSumGrade.keySet()) {
+            if (searcherIdsCount.containsKey(key) && searcherIdsCount.get(key) == skillGrades.size()) {
+                repository.findById(key).ifPresent(users::add);
             }
         }
+
         return users.stream()
                 .map(userMapper::toDto)
                 .toList();

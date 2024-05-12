@@ -92,7 +92,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "Users (IT specialist) found successfully",
             content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDto.class))})
     @ApiResponse(responseCode = "400", description = "User (IT specialist) not found", content = {@Content})
-    @GetMapping("/by-skills")
+    @GetMapping("/by-skills-and-grades")
         public ResponseEntity<List<UserResponseDto>> findUsersBySkillsAndGrades(@RequestParam Map<String, String> skillGrades) {
 
         List<UserResponseDto> responseDto = service.findSearcherIdBySkillsAndGrades(skillGrades);

@@ -20,11 +20,12 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     boolean existsByEmail(String email);
 
     @Query(value = """
-                        SELECT DISTINCT searcher_id
+            SELECT searcher_id, MAX(grade) AS max_grade
             FROM interviews i
             JOIN interview_questions iq ON i.id = iq.interview_id
             JOIN skills s ON iq.skill_id = s.id
-            WHERE s.name = ? AND iq.grade >= ?;
+            WHERE s.name = ? AND iq.grade >= ?
+            GROUP BY searcher_id;
             """, nativeQuery = true)
-    List<Long> findSearcherIdsBySkillNameAndSkillGrade(String skillName, String skillGrade);
+    List<Object[]> findSearcherIdsAndMaxGradeBySkillNameAndSkillGrade(String skillName, String skillGrade);
 }
