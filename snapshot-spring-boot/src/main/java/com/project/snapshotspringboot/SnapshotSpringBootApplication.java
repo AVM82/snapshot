@@ -8,10 +8,12 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @RequiredArgsConstructor
 @EnableConfigurationProperties(AppProps.class)
+@EnableScheduling
 public class SnapshotSpringBootApplication implements ApplicationRunner {
 
     private final DataGeneratorService dataGeneratorService;

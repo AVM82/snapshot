@@ -86,7 +86,7 @@ const interviewSlice = createSlice({
       const { roles } = action.payload;
 
       if (roles.find((role) => role.id === 2)) {
-        const interviewSkills:ISkills[] = action.payload.roles.filter((role:IRoles) => role.id === 2)[0].skills;
+        const interviewSkills:ISkills[] = action.payload.roles.find((role:IRoles) => role.id === 2)?.skills ?? [];
 
         return {
           ...state,
@@ -104,8 +104,8 @@ const interviewSlice = createSlice({
       };
     });
     builder.addCase(getUserByEmail.fulfilled, (state, action) => {
-      const searcherSkills = action.payload.roles.filter((roles:IRoles) => roles.id === 1)[0].skills;
-      const interviewSkills = state.interviewer.roles.filter((roles:IRoles) => roles.id === 2)[0].skills;
+      const searcherSkills = action.payload.roles.find((roles:IRoles) => roles.id === 1)?.skills ?? [];
+      const interviewSkills = state.interviewer.roles.find((roles:IRoles) => roles.id === 2)?.skills ?? [];
 
       return {
         ...state,
@@ -121,7 +121,7 @@ const interviewSlice = createSlice({
     });
     builder.addCase(getAllSkills.fulfilled, (state, action) => {
       const lowLvlSkills:ISkills[] = flattenSkillsHierarchy(action.payload);
-      const interviewSkills:ISkills[] = state.interviewer.roles.filter((roles:IRoles) => roles.id === 2)[0].skills;
+      const interviewSkills:ISkills[] = state.interviewer.roles.find((roles:IRoles) => roles.id === 2)?.skills ?? [];
 
       return {
         ...state,
@@ -144,8 +144,8 @@ const interviewSlice = createSlice({
       currentSkillQuestions: action.payload,
     }));
     builder.addCase(getInterviewById.fulfilled, (state, action) => {
-      const searcherSkills = action.payload.searcher.roles.filter((roles:IRoles) => roles.id === 1)[0].skills;
-      const interviewSkills = action.payload.interviewer.roles.filter((roles:IRoles) => roles.id === 2)[0].skills;
+      const searcherSkills = action.payload.searcher.roles.find((roles:IRoles) => roles.id === 1)?.skills ?? [];
+      const interviewSkills = action.payload.interviewer.roles.find((roles:IRoles) => roles.id === 2)?.skills ?? [];
       const lowLvlSkills = flattenSkillsHierarchy(state.allSkills);
 
       const sharedSkills = calculateAndSortSharedSkills(
