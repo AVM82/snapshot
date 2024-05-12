@@ -11,7 +11,7 @@ import {
   updateInterviewStatus,
 } from '../../store/reducers/interwiew/actions';
 import { redefineQuestions, redefineStatus, setTitle } from '../../store/reducers/interwiew/interviewSlice';
-import { getInterviewById, getMyInterviews } from '../../store/reducers/profile/actions';
+import { getInterviewById } from '../../store/reducers/profile/actions';
 import getUser from '../../store/reducers/user/actions';
 import Feedback from '../Profile/components/Feedback/Feedback';
 import Questions from '../Profile/components/Questions/Questions';
@@ -123,13 +123,11 @@ export default function InterviewPage(): React.JSX.Element {
       }
 
       if (interviewStatus === 'PLANNED') {
-        await dispatch(updateInterviewStatus({ id: interviewId, status: 'ACTIVE' }));
-        dispatch(getMyInterviews());
+        dispatch(updateInterviewStatus({ id: interviewId, status: 'ACTIVE' }));
       }
 
       if (interviewStatus === 'ACTIVE') {
-        await dispatch(updateInterviewStatus({ id: interviewId, status: 'FINISHED' }));
-        dispatch(getMyInterviews());
+        dispatch(updateInterviewStatus({ id: interviewId, status: 'FINISHED' }));
       }
     }
   };

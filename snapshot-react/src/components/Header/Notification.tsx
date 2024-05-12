@@ -10,6 +10,8 @@ function Notification():React.JSX.Element {
   const [remainingTimeInMillis, setRemainingTimeInMillis] = useState(0);
   const dispatch = useAppDispatch();
   const weekInMillis = 604800000;
+  const fifteenMinInMs = 900000;
+
   useEffect(() => {
     (async (): Promise<void> => {
       await dispatch(getMyInterviews());
@@ -31,7 +33,7 @@ function Notification():React.JSX.Element {
       updateInterval();
     }, intervalInMillis);
 
-    if (remainingTimeInMillis < 0) {
+    if (remainingTimeInMillis < -fifteenMinInMs) {
       clearInterval(intervalID);
     }
 
@@ -39,17 +41,17 @@ function Notification():React.JSX.Element {
   }, [remainingTimeInMillis, interviews]);
 
   function formatTime():string {
-    const sec = Math.round(remainingTimeInMillis / 1000);
+    const sec = Math.round(Math.abs(remainingTimeInMillis) / 1000);
     const min = Math.round(sec / 60);
     const hours = Math.round(min / 60);
     const days = Math.round(hours / 24);
 
     if (sec < 60) {
-      return ` ${sec} секунд`;
+      return ` ${remainingTimeInMillis < 0 ? '-' : ''}${sec} секунд`;
     }
 
     if (min < 60) {
-      return ` ${min} хв.`;
+      return ` ${remainingTimeInMillis < 0 ? '-' : ''}${min} хв.`;
     }
 
     if (hours < 24) {
@@ -60,15 +62,18 @@ function Notification():React.JSX.Element {
   }
 
   return (
-    <div style={{ fontSize: '20px' }}>
-      {remainingTimeInMillis > 0 && remainingTimeInMillis < weekInMillis
+    <div style={{
+      fontSize: '20px',
+      color: remainingTimeInMillis >= 0 ? 'white' : 'red',
+    }}
+    >
+      {remainingTimeInMillis > -fifteenMinInMs && remainingTimeInMillis < weekInMillis
         ? (
           <div>
-            Залишилось
+            Наступне  інтерв&apos;ю:
             {formatTime()}
           </div>
-          // eslint-disable-next-line react/no-unescaped-entities
-        ) : (<div>На цьому тижні у вас ще немає інтерв'ю</div>)}
+        ) : (<div>На цьому тижні у вас ще немає інтерв&apos;ю</div>)}
     </div>
   );
 }

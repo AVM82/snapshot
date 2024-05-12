@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
 import { INewInterview } from '../../../../models/profile/INewInterview';
 import { addInterview, getUserByEmail } from '../../../../store/reducers/interwiew/actions';
-import { getMyInterviews } from '../../../../store/reducers/profile/actions';
 import styles from './InterviewScheduler.module.scss';
 
 interface CustomProps {
@@ -30,8 +29,7 @@ function InterviewScheduler({ onClose, ...rest }:CombinedProps):React.JSX.Elemen
       searcherId: searcher.id,
       title,
     };
-    await dispatch(addInterview(addInterviewData));
-    dispatch(getMyInterviews());
+    dispatch(addInterview(addInterviewData));
     onClose();
   };
   const getSearcher = async ():Promise<void> => {
