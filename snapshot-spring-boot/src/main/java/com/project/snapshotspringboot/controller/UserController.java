@@ -3,6 +3,7 @@ package com.project.snapshotspringboot.controller;
 import com.project.snapshotspringboot.dtos.EmailDto;
 import com.project.snapshotspringboot.dtos.RoleDto;
 import com.project.snapshotspringboot.dtos.UserResponseDto;
+import com.project.snapshotspringboot.dtos.UserSearchResponseDto;
 import com.project.snapshotspringboot.dtos.result.UserResultsByInterviewsResponseDto;
 import com.project.snapshotspringboot.dtos.statistic.UserStatisticsPeriodDto;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
@@ -93,12 +94,12 @@ public class UserController {
 
     @Operation(summary = "Get all users by skills and grade", description = "Get all users by skills and grade based on the results of interviews")
     @ApiResponse(responseCode = "200", description = "Users (IT specialist) found successfully",
-            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDto.class))})
+            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserSearchResponseDto.class))})
     @ApiResponse(responseCode = "400", description = "User (IT specialist) not found", content = {@Content})
     @GetMapping("/by-skills-and-grades")
-        public ResponseEntity<List<UserResponseDto>> findUsersBySkillsAndGrades(@RequestParam Map<String, String> skillGrades) {
+        public ResponseEntity<List<UserSearchResponseDto>> findUsersBySkillsAndGrades(@RequestParam Map<String, String> skillGrades) {
 
-        List<UserResponseDto> responseDto = service.findSearcherIdBySkillsAndGrades(skillGrades);
+        List<UserSearchResponseDto> responseDto = service.findSearcherIdBySkillsAndGrades(skillGrades);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
