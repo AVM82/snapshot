@@ -22,7 +22,7 @@ function App(): JSX.Element {
         <Route path="sign-up" element={<SignUpPage />} />
         <Route path="oauth2/redirect" element={<OAuth2RedirectHandler />} />
         <Route element={<ProtectedRoute />}>
-          {/* <Route path="interview" element={<InterviewPage />} /> */}
+          <Route path="interview" element={<InterviewPage />} />
           <Route path="interview/:id" element={<InterviewPage />} />
           <Route path="profile/:userId" element={<Profile />}>
             <Route path="interview-journal" element={<MyInterviews />} />

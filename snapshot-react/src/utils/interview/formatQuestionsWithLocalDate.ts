@@ -1,21 +1,19 @@
 import IQuestion from '../../models/profile/IQuestion';
 
-function formatQuestionsWithLocalDate(questions:IQuestion[]):IQuestion[] {
-  return questions.map((question) => {
-    const localDate = new Date(question.createdAt);
-    const offsetMinutes = localDate.getTimezoneOffset();
-    const actualDate = new Date(localDate.getTime() - (offsetMinutes * 60000));
-    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const userDate = actualDate.toLocaleString(undefined, { timeZone: userTimeZone });
-    const parts = userDate.split(', ');
-    const trimmedTime = parts[1].slice(0, -3);
+const formatToLocalDate = (date:string):Date => {
+  const localDate = new Date(date);
+  const offsetMinutes = localDate.getTimezoneOffset();
 
-    const trimmedUserDate = `${parts[0]}, ${trimmedTime}`;
+  return new Date(localDate.getTime() - (offsetMinutes * 60000));
+};
+const formatQuestionsWithLocalDate = (questions:IQuestion[]):IQuestion[] => questions.map((question) => {
+  const date = formatToLocalDate(question.createdAt);
+  const parts = date.toLocaleString().split(', ');
+  const trimmedTime = parts[1].slice(0, -3);
 
-    return {
-      ...question,
-      createdAt: trimmedUserDate,
-    };
-  });
-}
-export default formatQuestionsWithLocalDate;
+  return {
+    ...question,
+    createdAt: `${parts[0]}, ${trimmedTime}`,
+  };
+});
+export { formatQuestionsWithLocalDate, formatToLocalDate };

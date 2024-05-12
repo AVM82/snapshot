@@ -69,13 +69,14 @@ export default function InterviewPage(): React.JSX.Element {
   };
   const onConnect = (): void => {
     console.log('Connected to WebSocket');
-    stomp.subscribe(`/interview/${interviewId}/questions`, onMessageReceived);// /interview/1/questions
+    stomp.subscribe(`/interview/${interviewId}/questions`, onMessageReceived);
   };
   const connect = (): void => {
     const socket = new SockJS(`${api.baseURL.slice(0, -5)}/socket`);
     stomp = over(socket);
     stomp.connect(headers, onConnect, onError);
   };
+
   useEffect(() => {
     const fetchData = async ():Promise<void> => {
       if (!currentProfileRole) {
@@ -98,8 +99,9 @@ export default function InterviewPage(): React.JSX.Element {
     if (interviewId && !id) {
       navigate(`/interview/${interviewId}`);
     }
-    connect();
-  }, [interviewId]);
+
+    if (interviewStatus === 'ACTIVE') connect();
+  }, [interviewId, interviewStatus]);
 
   const buttonText = ():string => {
     if (interviewStatus === 'PLANNED') { return 'Почати'; }
@@ -109,7 +111,7 @@ export default function InterviewPage(): React.JSX.Element {
     return 'Затвердити дані';
   };
 
-  const interviewLogic = ():void => {
+  const interviewLogic = async ():Promise<void> => {
     if (title && searcher.id) {
       if (!interviewId) {
         const addInterviewData:INewInterview = {

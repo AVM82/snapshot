@@ -60,9 +60,10 @@ const profileSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getMyInterviews.fulfilled, (state, { payload }) => {
-        state.interviews = payload;
-      })
+      .addCase(getMyInterviews.fulfilled, (state, { payload }) => ({
+        ...state,
+        interviews: payload,
+      }))
       .addCase(getInterviewById.fulfilled, (state, { payload }) => {
         state.interview = payload;
       })
