@@ -1,6 +1,9 @@
 package com.project.snapshotspringboot.service;
 
-import com.project.snapshotspringboot.dtos.*;
+import com.project.snapshotspringboot.dtos.EmailDto;
+import com.project.snapshotspringboot.dtos.RoleDto;
+import com.project.snapshotspringboot.dtos.RoleWithSkillsDto;
+import com.project.snapshotspringboot.dtos.UserResponseDto;
 import com.project.snapshotspringboot.dtos.result.SkillResultDto;
 import com.project.snapshotspringboot.dtos.result.UserResultsByInterviewsResponseDto;
 import com.project.snapshotspringboot.entity.*;
@@ -188,4 +191,36 @@ public class UserService implements UserDetailsService {
         }
         return userInterviewResults;
     }
+
+    public List<UserResponseDto> findSearcherIdBySkillsAndGrades(Map<String, String> skillGrades) {
+        Map<Long, Integer> searcherIdsCount = new HashMap<>();
+        Map<Long, Long> searcherIdAndSumGrade = new HashMap<>();
+        for (Map.Entry<String, String> entry : skillGrades.entrySet()) {
+            List<Object[]> searcherIdsAndGrade = repository.findSearcherIdsAndMaxGradeBySkillNameAndSkillGrade(entry.getKey(), entry.getValue());
+            for (Object[] result : searcherIdsAndGrade) {
+                Long searcherId = (Long) result[0];
+                Integer maxGrade = (Integer) result[1];
+                searcherIdsCount.put(searcherId, searcherIdsCount.getOrDefault(searcherId, 0) + 1);
+                searcherIdAndSumGrade.put(searcherId, searcherIdAndSumGrade.getOrDefault(searcherId, 0L) + maxGrade);
+            }
+        }
+
+        Map<Long, Long> sortedSearcherIdAndSumGrade = searcherIdAndSumGrade.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+
+        List<UserEntity> users = new ArrayList<>();
+        for (Long key : sortedSearcherIdAndSumGrade.keySet()) {
+            if (searcherIdsCount.containsKey(key) && searcherIdsCount.get(key) == skillGrades.size()) {
+                repository.findById(key).ifPresent(users::add);
+            }
+        }
+
+        return users.stream()
+                .map(userMapper::toDto)
+                .toList();
+    }
+
 }
