@@ -58,6 +58,7 @@ snapshotApi.interceptors.request.use(
         .catch(() => {
           localStorage.removeItem('token');
           localStorage.removeItem('refresh_token');
+          window.location.href = '/sign-in';
           toast.error('Перелогінтесь');
         });
     }
