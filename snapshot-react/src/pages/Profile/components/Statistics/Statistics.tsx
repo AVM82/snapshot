@@ -1,66 +1,42 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-const javaQuestions = [
-  {
-    question: 'What is the keyword used to define a class in Java?',
-    grade: Math.floor(Math.random() * 101),
-  },
-  { question: 'How do you access elements in an array?', grade: Math.floor(Math.random() * 101) },
-  {
-    question: 'What is the difference between primitive and reference data types?',
-    grade: Math.floor(Math.random() * 101),
-  },
-  { question: 'What is the purpose of the `main` method in a Java program?', grade: Math.floor(Math.random() * 101) },
-  { question: 'How do you create a loop that iterates 10 times?', grade: Math.floor(Math.random() * 101) },
-  { question: 'What is the use of the `static` keyword?', grade: Math.floor(Math.random() * 101) },
-  { question: 'Explain the concept of inheritance in Java.', grade: Math.floor(Math.random() * 101) },
-  { question: 'How do you handle exceptions in Java?', grade: Math.floor(Math.random() * 101) },
-  { question: 'What are the benefits of using interfaces?', grade: Math.floor(Math.random() * 101) },
-  { question: 'What is the difference between `==` and `equals()` methods?', grade: Math.floor(Math.random() * 101) },
-];
+import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
+import { getStatistics } from '../../../../store/reducers/profile/actions';
+import StatisticsItem from './StatisticsItem';
 
 function Statistics(): JSX.Element {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const dispatch = useAppDispatch();
+  const statistics = useAppSelector((state) => state.profile.statistics);
+  const { userId } = useParams();
+  const [formData, setFormData] = useState<{
+    from: string,
+    to: string
+  }>({
+    from: '',
+    to: '',
+  });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    dispatch(getStatistics({ id: Number(userId), from: formData.from, to: formData.to }));
+  };
 
   return (
     <div style={{ width: '100%' }}>
-      <div
-        className="statistics-item"
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          flexDirection: 'column',
-        }}
-      >
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-        }}
-        >
-          <p>Java</p>
-          <p>15.01.2024</p>
-          <p>Good</p>
-          <div
-            style={{ cursor: 'pointer' }}
-            role="button"
-            tabIndex={0}
-            onClick={(): void => setIsExpanded(!isExpanded)}
-          >
-            <p>Show more</p>
-            <span>+</span>
-          </div>
-        </div>
-        {isExpanded && (
-          <div>
-            {javaQuestions.map((question) => (
-              <div key={question.question}>
-                <p>{question.question}</p>
-                <p>{question.grade}</p>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="from" />
+        <input type="date" id="from" name="from" required onChange={handleChange} />
+        <label htmlFor="to" />
+        <input type="date" name="to" id="to" required onChange={handleChange} />
+        <button type="submit">Submit</button>
+      </form>
+      {statistics && statistics.map((stat) => <StatisticsItem {...stat} />) }
     </div>
   );
 }

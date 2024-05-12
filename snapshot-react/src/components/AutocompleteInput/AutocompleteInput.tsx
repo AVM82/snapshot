@@ -39,6 +39,7 @@ function AutocompleteInput({
       <div className="form-control-auto">
         <label htmlFor="tag-input">{label}</label>
         <input
+          id="tag-input"
           placeholder={pholder}
           type="search"
           value={selectedVal}

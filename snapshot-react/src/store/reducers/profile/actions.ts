@@ -6,6 +6,7 @@ import snapshotApi from '../../../api/request';
 import { IInterview } from '../../../models/profile/IInterview';
 import IInterviewPreview from '../../../models/profile/IInterviewPreview';
 import { IPortrait } from '../../../models/profile/IPortrait';
+import IStatistics from '../../../models/profile/IStatistics';
 import ActionType from './common';
 
 type PatchQuestion = {
@@ -22,6 +23,12 @@ type PatchFeedBack = {
 type PatchedQuestion = {
   id: number,
   grade: string,
+};
+
+type GetStatistics = {
+  id: number,
+  from: string,
+  to: string
 };
 
 const changeGrade = createAsyncThunk(
@@ -78,8 +85,17 @@ const getPortrait = createAsyncThunk(
   }
 );
 
+const getStatistics = createAsyncThunk(
+  ActionType.GET_STATISTICS,
+  async ({ id, from, to }: GetStatistics): Promise<IStatistics[]> => {
+    const response: IStatistics[] = await snapshotApi.get(`/users/statistic/${id}?from=${from}&to=${to}`);
+
+    return response;
+  }
+);
+
 export {
   changeFeedback, changeGrade, getInterviewById, getLowerSkills,
-  getMyInterviews, getPortrait
+  getMyInterviews, getPortrait, getStatistics
 };
 
