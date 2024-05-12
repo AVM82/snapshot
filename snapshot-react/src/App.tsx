@@ -10,6 +10,7 @@ import Home from './pages/Home/Home';
 import InterviewPage from './pages/Interview/InterviewPage';
 import MyInterviews from './pages/Profile/MyInterviews';
 import Profile from './pages/Profile/Profile';
+import UserRoles from './pages/Profile/UserRoles';
 import ProtectedRoute from './utils/ProtectedRoute';
 
 function App(): JSX.Element {
@@ -25,6 +26,7 @@ function App(): JSX.Element {
           <Route path="interview/:id" element={<InterviewPage />} />
           <Route path="profile/:userId" element={<Profile />}>
             <Route path="interview-journal" element={<MyInterviews />} />
+            <Route path="settings" element={<UserRoles />} />
           </Route>
         </Route>
         <Route path="*" element={<p>404</p>} />

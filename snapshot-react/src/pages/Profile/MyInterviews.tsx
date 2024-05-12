@@ -11,7 +11,16 @@ function MyInterviews(): React.JSX.Element {
   return (
     <div className={styles.MyInterviewsContainer}>
       <div className={styles.interviewList}>
-        {interviews.map((item) => <InterviewItem key={item.id} id={item.id} title={item.title} status={item.status} />)}
+        {interviews.map((item) => (
+          <InterviewItem
+            key={item.id}
+            id={item.id}
+            title={item.title}
+            status={item.status}
+            searcherFullName={item.searcherFullName}
+            interviewerFullName={item.interviewerFullName}
+          />
+        ))}
       </div>
       <InterviewActionPanel />
     </div>

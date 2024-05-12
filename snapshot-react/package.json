@@ -17,10 +17,12 @@
   "dependencies": {
     "@mui/x-tree-view": "^7.3.0",
     "@react-oauth/google": "^0.12.1",
-    "@reduxjs/toolkit": "^2.2.3",
+    "@reduxjs/toolkit": "^2.2.4",
     "axios": "^1.6.8",
     "d3": "^7.9.0",
+    "dayjs": "^1.11.11",
     "husky": "^9.0.11",
+    "jwt-decode": "^4.0.0",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
     "react": "^18.2.0",
@@ -38,6 +40,7 @@
   "devDependencies": {
     "@ls-lint/ls-lint": "^2.2.3",
     "@types/d3": "^7.4.3",
+    "@types/jwt-decode": "^3.1.0",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
