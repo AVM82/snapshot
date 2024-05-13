@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 import snapshotApi from '../../api/request';
 import EmailRegexp from '../../common/emailRegexp';
@@ -129,7 +130,7 @@ export default function SignUpPage(): JSX.Element {
           role="button"
           tabIndex={0}
         >
-          <p>Уже маєте акаунт? Увійти</p>
+          <Link to="/sign-in">Уже маєте акаунт? Увійти</Link>
           <br />
           <OAuth2 />
         </div>

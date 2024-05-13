@@ -18,7 +18,7 @@ function AutocompleteInput({
   const [selectedVal, setSelectedVal] = useState('');
 
   const handler = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setSugesstions(data.filter((i) => i.startsWith(e.target.value)));
+    setSugesstions(data.filter((i) => i.toLowerCase().startsWith(e.target.value.toLowerCase())));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -49,7 +49,9 @@ function AutocompleteInput({
 
       <div
         className="suggestions"
-        style={{ display: isHideSuggs ? 'none' : 'block' }}
+        style={{
+          display: isHideSuggs ? 'none' : 'block', maxHeight: '250px', overflowY: 'auto', overflowX: 'hidden',
+        }}
       >
         {suggestions.map((item) => (
           <div
