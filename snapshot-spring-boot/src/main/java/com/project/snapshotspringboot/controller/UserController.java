@@ -5,6 +5,7 @@ import com.project.snapshotspringboot.dtos.RoleDto;
 import com.project.snapshotspringboot.dtos.UserResponseDto;
 import com.project.snapshotspringboot.dtos.UserSearchResponseDto;
 import com.project.snapshotspringboot.dtos.result.UserResultsByInterviewsResponseDto;
+import com.project.snapshotspringboot.dtos.search.SearchSkillGradeDto;
 import com.project.snapshotspringboot.dtos.statistic.UserStatisticsPeriodDto;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import com.project.snapshotspringboot.service.UserService;
@@ -96,15 +97,18 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "Users (IT specialist) found successfully",
             content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserSearchResponseDto.class))})
     @ApiResponse(responseCode = "400", description = "User (IT specialist) not found", content = {@Content})
-    @GetMapping("/by-skills-and-grades")
-        public ResponseEntity<List<UserSearchResponseDto>> findUsersBySkillsAndGrades(@RequestParam Map<String, String> skillGrades) {
+    @PostMapping("/by-skills-and-grades")
+        public ResponseEntity<List<UserSearchResponseDto>> findUsersBySkillsAndGrades(@RequestBody List<SearchSkillGradeDto> skillGrades) {
 
         List<UserSearchResponseDto> responseDto = service.findSearcherIdBySkillsAndGrades(skillGrades);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @GetMapping("/statistic/{userId}")
-    @Operation(summary = "Get statistics")
+    @Operation(summary = "Get statistic", description = "Get statistic for the selected time period")
+    @ApiResponse(responseCode = "200", description = "Statistic for the period were collected successfully",
+            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserStatisticsPeriodDto.class))})
+    @ApiResponse(responseCode = "400", description = "User not found", content = {@Content})
     public List<UserStatisticsPeriodDto> getUserStatisticsByPeriod(@PathVariable Long userId,
                                                                    @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
                                                                    @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {

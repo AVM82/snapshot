@@ -28,6 +28,7 @@
         <node.version>v20.12.0</node.version>
         <npm.version>10.5.0</npm.version>
         <maven.resources.plugin.version>3.3.1</maven.resources.plugin.version>
+        <gatling-maven-plugin.version>4.9.0</gatling-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -132,6 +133,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.gatling.highcharts/gatling-charts-highcharts -->
+        <dependency>
+            <groupId>io.gatling.highcharts</groupId>
+            <artifactId>gatling-charts-highcharts</artifactId>
+            <version>3.11.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -166,6 +174,13 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
+            </plugin>
+
+            <!-- https://mvnrepository.com/artifact/io.gatling/gatling-maven-plugin -->
+            <plugin>
+                <groupId>io.gatling</groupId>
+                <artifactId>gatling-maven-plugin</artifactId>
+                <version>${gatling-maven-plugin.version}</version>
             </plugin>
         </plugins>
     </build>
