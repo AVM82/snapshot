@@ -43,9 +43,17 @@ public class SkillController {
     @GetMapping("/{userId}")
     @Operation(summary = "Get all lower-level skills by user id for the SEARCHER role")
     @ApiResponse(responseCode = "200", description = "Skills found successfully",
-            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SkillDto.class))})
+            content = {@Content(mediaType = "application/json")})
     @ApiResponse(responseCode = "400", description = "User not found", content = {@Content})
     public List<String> getAllSkillsByUserId(@PathVariable Long userId) {
         return skillService.getAllSkillsByUserId(userId);
+    }
+
+    @GetMapping("/lower-level")
+    @Operation(summary = "Get all lower-level skills for the SEARCHER role")
+    @ApiResponse(responseCode = "200", description = "Skills found successfully",
+            content = {@Content(mediaType = "application/json")})
+    public List<String> getAllLastLevelSkills() {
+        return skillService.getLastLevelSkills();
     }
 }
