@@ -25,7 +25,7 @@ jobs:
 
       - name: Start app and test
         run: |
-          cd /home/runner/work/test2/test2/snapshot-spring-boot/target/
+          cd /home/runner/work/snapshot/snapshot/snapshot-spring-boot/target/
           java -jar snapshot-spring-boot-1.0.1.jar &
           APP_PID=$! 
           sleep 30s 
