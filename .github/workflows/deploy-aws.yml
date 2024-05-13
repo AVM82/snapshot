@@ -1,0 +1,41 @@
+name: Deploy snapshot to AWS
+on:
+  push:
+    branches:
+      - "test"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build with Maven
+        run: |
+          cd snapshot-spring-boot
+          mvn clean install -DskipTests
+        env:
+          VITE_API_URL: ${{secrets.VITE_API_URL}}
+          BACK_URI: ${{secrets.BACK_URI}}
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v21
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: snapshot
+          environment_name: Snapshot-env
+          version_label: snapshot_${{ github.sha }}
+          existing_bucket_name: elasticbeanstalk-eu-central-1-905418382196
+          region: eu-central-1
+          deployment_package: /home/runner/work/test2/test2/snapshot-spring-boot/target/snapshot-spring-boot-1.0.1.jar
+          wait_for_deployment: true
+          wait_for_environment_recovery: true
