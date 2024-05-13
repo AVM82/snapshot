@@ -1,10 +1,7 @@
+/* eslint-disable max-len */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-nested-ternary */
-/* eslint-disable @typescript-eslint/no-loop-func */
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-mixed-operators */
+
 import {
   Line, line, scaleLinear, select,
 } from 'd3';

@@ -1,11 +1,9 @@
 package com.project.snapshotspringboot.service;
 
-import com.project.snapshotspringboot.dtos.EmailDto;
-import com.project.snapshotspringboot.dtos.RoleDto;
-import com.project.snapshotspringboot.dtos.RoleWithSkillsDto;
-import com.project.snapshotspringboot.dtos.UserResponseDto;
+import com.project.snapshotspringboot.dtos.*;
 import com.project.snapshotspringboot.dtos.result.SkillResultDto;
 import com.project.snapshotspringboot.dtos.result.UserResultsByInterviewsResponseDto;
+import com.project.snapshotspringboot.dtos.search.SearchSkillGradeDto;
 import com.project.snapshotspringboot.dtos.statistic.QuestionGradeDto;
 import com.project.snapshotspringboot.dtos.statistic.UserStatisticsPeriodDto;
 import com.project.snapshotspringboot.entity.*;
@@ -196,9 +194,12 @@ public class UserService implements UserDetailsService {
         return userInterviewResults;
     }
 
-    public List<UserResponseDto> findSearcherIdBySkillsAndGrades(Map<String, String> skillGrades) {
+    public List<UserSearchResponseDto> findSearcherIdBySkillsAndGrades(List<SearchSkillGradeDto> skillGradesList) {
+        Map<String, String> skillGrades = skillGradesList.stream()
+                .collect(Collectors.toMap(SearchSkillGradeDto::getSkill, SearchSkillGradeDto::getGrade));
         Map<Long, Integer> searcherIdsCount = new HashMap<>();
         Map<Long, Long> searcherIdAndSumGrade = new HashMap<>();
+        Map<Long, Map<String, Integer>> searcherIdAndSkillGrade = new HashMap<>();
         for (Map.Entry<String, String> entry : skillGrades.entrySet()) {
             List<Object[]> searcherIdsAndGrade = repository.findSearcherIdsAndMaxGradeBySkillNameAndSkillGrade(entry.getKey(), entry.getValue());
             for (Object[] result : searcherIdsAndGrade) {
@@ -206,6 +207,10 @@ public class UserService implements UserDetailsService {
                 Integer maxGrade = (Integer) result[1];
                 searcherIdsCount.put(searcherId, searcherIdsCount.getOrDefault(searcherId, 0) + 1);
                 searcherIdAndSumGrade.put(searcherId, searcherIdAndSumGrade.getOrDefault(searcherId, 0L) + maxGrade);
+
+                Map<String, Integer> skillGradeMap = searcherIdAndSkillGrade.getOrDefault(searcherId, new HashMap<>());
+                skillGradeMap.put(entry.getKey(), maxGrade);
+                searcherIdAndSkillGrade.put(searcherId, skillGradeMap);
             }
         }
 
@@ -222,9 +227,14 @@ public class UserService implements UserDetailsService {
             }
         }
 
-        return users.stream()
-                .map(userMapper::toDto)
-                .toList();
+        List<UserSearchResponseDto> userSearchResponseDto = new ArrayList<>();
+        for (UserEntity userEntity : users) {
+            UserSearchResponseDto userDto = userMapper.toSearchResponseDto(userEntity);
+            userDto.setSkillGrades(searcherIdAndSkillGrade.get(userEntity.getId()));
+            userSearchResponseDto.add(userDto);
+        }
+
+        return userSearchResponseDto;
     }
 
     public List<UserStatisticsPeriodDto> getUserStatisticsByPeriod(Long userId, LocalDate fromDate, LocalDate toDate) {

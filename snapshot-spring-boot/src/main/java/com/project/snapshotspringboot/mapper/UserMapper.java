@@ -3,6 +3,7 @@ package com.project.snapshotspringboot.mapper;
 import com.project.snapshotspringboot.dtos.RegisterRequest;
 import com.project.snapshotspringboot.dtos.RoleWithSkillsDto;
 import com.project.snapshotspringboot.dtos.UserResponseDto;
+import com.project.snapshotspringboot.dtos.UserSearchResponseDto;
 import com.project.snapshotspringboot.entity.TempUserEntity;
 import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.security.oauth2.model.OAuth2UserInfo;
@@ -72,4 +73,6 @@ public abstract class UserMapper {
     protected Set<RoleWithSkillsDto> mapSkills(UserEntity userEntity) {
         return roleMapper.userRoleSkillsToDto(userEntity.getId(), userEntity.getUserRoleSkillEntitySet());
     }
+
+    public abstract UserSearchResponseDto toSearchResponseDto(UserEntity userEntity);
 }
