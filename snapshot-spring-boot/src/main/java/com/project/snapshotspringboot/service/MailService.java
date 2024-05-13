@@ -29,9 +29,11 @@ public class MailService {
 
     private final InterviewRepository interviewRepository;
 
-    private static final int MAX_RETRY_ATTEMPTS = 3;
+    @Value("${reminder.email.maxRetryAttempts}")
+    private int maxRetryAttempts;
 
-    private static final long RETRY_DELAY_MS = 60000;
+    @Value("${reminder.email.delayRetryInMinutes}")
+    private long retryDelayInMinutes;
 
     @Value("${spring.mail.username}")
     private String username;
@@ -89,7 +91,7 @@ public class MailService {
     private void sendReminder(UserEntity recipient, UserEntity counterpart) {
         boolean success = false;
         int retryAttempts = 0;
-        while (!success && retryAttempts < MAX_RETRY_ATTEMPTS) {
+        while (!success && retryAttempts < maxRetryAttempts) {
             try {
                 send(recipient.getEmail(), "Нагадування про заплановане інтерв'ю",
                         "Доброго дня, " + recipient.getFirstname() + "! Нагадуємо вам про заплановане інтерв'ю з "
@@ -100,8 +102,9 @@ public class MailService {
                 log.error("Failed to send reminder to " + recipient.getId() + ": " + recipient.getEmail(), e);
                 retryAttempts++;
                 try {
-                    Thread.sleep(RETRY_DELAY_MS);
+                    Thread.sleep(retryDelayInMinutes*60*1000);
                 } catch (InterruptedException ex) {
+                    log.error("Interrupted Exception", ex);
                     Thread.currentThread().interrupt();
                 }
             }
