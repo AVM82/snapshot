@@ -1,14 +1,18 @@
-import Portrait from '../Profile/components/Portarit/Portrait';
+import ICandidateSearch from '../../models/candidateSearch/ICandidateSearch';
+import TinyPortrait from './TinyPortrait';
 
-function CandidatePreview(): JSX.Element {
+function CandidatePreview({
+  id, firstname, lastname, skillGrades, email,
+}: ICandidateSearch): JSX.Element {
   return (
-    <div>
+    <div id={`${id}`} style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
       <div>
-        <p>Candidate Name</p>
-        <p>Candidate Surname</p>
+        <p>{firstname}</p>
+        <p>{lastname}</p>
+        <p>{email}</p>
       </div>
       <div>
-        <Portrait />
+        <TinyPortrait {...skillGrades} />
       </div>
     </div>
   );
