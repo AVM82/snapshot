@@ -3,6 +3,7 @@ package com.project.snapshotspringboot.service;
 import com.project.snapshotspringboot.dtos.*;
 import com.project.snapshotspringboot.dtos.result.SkillResultDto;
 import com.project.snapshotspringboot.dtos.result.UserResultsByInterviewsResponseDto;
+import com.project.snapshotspringboot.dtos.search.SearchSkillGradeDto;
 import com.project.snapshotspringboot.dtos.statistic.QuestionGradeDto;
 import com.project.snapshotspringboot.dtos.statistic.UserStatisticsPeriodDto;
 import com.project.snapshotspringboot.entity.*;
@@ -193,7 +194,9 @@ public class UserService implements UserDetailsService {
         return userInterviewResults;
     }
 
-    public List<UserSearchResponseDto> findSearcherIdBySkillsAndGrades(Map<String, String> skillGrades) {
+    public List<UserSearchResponseDto> findSearcherIdBySkillsAndGrades(List<SearchSkillGradeDto> skillGradesList) {
+        Map<String, String> skillGrades = skillGradesList.stream()
+                .collect(Collectors.toMap(SearchSkillGradeDto::getSkill, SearchSkillGradeDto::getGrade));
         Map<Long, Integer> searcherIdsCount = new HashMap<>();
         Map<Long, Long> searcherIdAndSumGrade = new HashMap<>();
         Map<Long, Map<String, Integer>> searcherIdAndSkillGrade = new HashMap<>();
