@@ -7,6 +7,7 @@ import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.repository.SkillRepository;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class SkillService {
         skillDto.getSkillIds().forEach(skillId -> skillRepository.addSkillToUser(user.getId(), roleId, skillId));
     }
 
+    @Cacheable("roleSkills")
     public List<SkillTreeDto> getSkillsByRoleId(Long roleId) {
         return roleId == 1 ? getSkillTree(0L) : getTopLevelSkills(0L);
     }
@@ -127,6 +129,7 @@ public class SkillService {
         }
     }
 
+    @Cacheable("lastLevelSkills")
     public List<String> getLastLevelSkills() {
         List<SkillTreeDto> skillTreeDtoList = getSkillsByRoleId(1L);
         List<String> lastLevelSkills = new ArrayList<>();
