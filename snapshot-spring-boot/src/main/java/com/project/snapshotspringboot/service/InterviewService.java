@@ -23,6 +23,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -261,6 +262,7 @@ public class InterviewService {
         }
     }
 
+    @Cacheable("geminiQuestionsBySkillId")
     public List<String> getGeminiQuestionsBySkillId(long id) {
         SkillEntity skill = skillRepository
                 .findById(id)
