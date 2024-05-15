@@ -1,0 +1,67 @@
+$primary-purple: #574997;
+$medium-purple: #8380b6;
+$light-purple: #c2cae8;
+$cyan: #8de3db;
+$dark-blue: #0f172a;
+$text-color: #0f172a;
+$white: #ffffff;
+$gray: rgb(15 23 41 / 20%);
+$small-border-radius: 2px;
+$large-border-radius: 20px;
+$small-border: 1px solid $medium-purple;
+$large-border: 3px solid $primary-purple;
+
+@mixin primary-button {
+  padding: 0.562rem 0.718rem;
+  color: $white;
+  background: $primary-purple;
+  border: 2px solid $primary-purple;
+  border-radius: 4px;
+
+  &:hover {
+    color: $text-color;
+    background: transparent;
+  }
+
+  &:disabled {
+    background: $gray;
+    border: 1px solid $gray;
+  }
+}
+
+@mixin simple-button {
+  padding: 0.562rem 0.718rem;
+  color: $white;
+  background: $dark-blue;
+  border: 1px solid $dark-blue;
+  border-radius: 4px;
+
+  &:hover {
+    color: $text-color;
+    background: transparent;
+  }
+
+  &:disabled {
+    background: $gray;
+    border: 1px solid $gray;
+  }
+}
+
+@mixin secondary-button {
+  padding: 0.562rem 0.718rem;
+  color: $text-color;
+  background: $white;
+  border: 1px solid $primary-purple;
+  border-radius: 4px;
+
+  &:hover {
+    color: $white;
+    background: $light-purple;
+    border: 1px solid $light-purple;
+  }
+
+  &:disabled {
+    background: $gray;
+    border:1px solid $gray;
+  }
+}
