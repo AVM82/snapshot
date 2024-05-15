@@ -9,6 +9,7 @@ import com.project.snapshotspringboot.dtos.question.InterviewQuestionRequestDto;
 import com.project.snapshotspringboot.dtos.question.InterviewQuestionResponseDto;
 import com.project.snapshotspringboot.entity.*;
 import com.project.snapshotspringboot.enumeration.InterviewStatus;
+import com.project.snapshotspringboot.gemini.GeminiService;
 import com.project.snapshotspringboot.mapper.InterviewMapper;
 import com.project.snapshotspringboot.mapper.InterviewQuestionMapper;
 import com.project.snapshotspringboot.mapper.InterviewerQuestionMapper;
@@ -22,6 +23,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -53,6 +55,7 @@ public class InterviewService {
     final InterviewerQuestionMapper interviewerQuestionMapper;
     final SkillMapper skillMapper;
     final InterviewQuestionMapper interviewQuestionMapper;
+    final GeminiService geminiService;
 
     public InterviewResultsDto getInterviewResults(Long interviewId) {
         Optional<InterviewEntity> optionalInterviewEntity = interviewRepository.findById(interviewId);
@@ -257,5 +260,13 @@ public class InterviewService {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Interview not found");
         }
+    }
+
+    @Cacheable("geminiQuestionsBySkillId")
+    public List<String> getGeminiQuestionsBySkillId(long id) {
+        SkillEntity skill = skillRepository
+                .findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Skill not found!"));
+        return geminiService.generateQuestionsBySkillName(skill.getName());
     }
 }
