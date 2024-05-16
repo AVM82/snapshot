@@ -52,7 +52,7 @@ export default function SignInPage(): JSX.Element {
           />
           <button
             type="submit"
-            className={styles['auth-form-btn']}
+            className={styles.signInButton}
           >
             Увійти
           </button>
