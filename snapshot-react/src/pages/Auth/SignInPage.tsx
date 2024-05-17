@@ -6,7 +6,6 @@ import { useAppDispatch } from '../../hooks/redux';
 import { ISignIn } from '../../models/auth/ISignIn';
 import getUser from '../../store/reducers/user/actions';
 import styles from './AuthPage.module.scss';
-import Input from './components/Input';
 import OAuth2 from './OAuth2';
 
 export default function SignInPage(): JSX.Element {
@@ -34,8 +33,7 @@ export default function SignInPage(): JSX.Element {
         <h3>Вхід</h3>
         <form className={styles['auth-form']} onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="login">Логін *</label>
-          <Input
-            inputName="Email"
+          <input
             type="text"
             id="login"
             className={`${styles['auth-form-input']}`}
