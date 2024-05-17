@@ -35,7 +35,7 @@ module.exports = {
     'react/jsx-props-no-spreading': 'off',
     'padding-line-between-statements': 'off',
     'prefer-const': 'warn',
-    'indent': ['error', 2],
+    'indent': ['error', 2,{SwitchCase:1}],
     'max-len': [
       'error',
       {

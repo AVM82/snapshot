@@ -1,73 +1,112 @@
 @import '/src/utils/constants&mixins';
 
-.auth-container {
-  display: flex;
-  align-items: center;
-  padding: 0 1rem;
-}
-.authPageContainer{
+.authPageContainer {
   display: flex;
   flex-direction: row;
-  align-content: center;
   justify-content: center;
-  gap: 2rem;
-
+  align-content: center;
+  min-height: 100vh;
 }
-.contentContainer{
+
+.switchAuthContainer {
   display: flex;
+  justify-content: center;
   align-items: center;
-  img{
+  width: 100%;
+  background: none;
+  border: none;
+
+  .switchAuthLink {
+    text-decoration: none;
+  }
+
+  p {
+    @include info-text;
+  }
+}
+
+.signContainer {
+  width: 460px;
+  padding: 1.5rem 2rem;
+  border: 1px solid rgb(0 0 0 / 15%);
+  border-radius: 12px;
+
+  form {
+    display: flex;
+    flex-direction: column;
+
+    p {
+      @include info-text;
+    }
+  }
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  img {
     width: 41.375rem;
     height: 37.75rem;
   }
 }
-.auth-form {
+
+.formInputsContainer {
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: start;
-  gap: 10px;
-
+  gap: 2rem;
+  padding: 1.25rem 0;
 }
 
-.auth-form-wrapper {
+.formErr {
+  @include info-text;
+
+  min-height: 1.2rem;
+  padding-left: 1rem;
+}
+
+.submitButton {
+  margin: 0.75rem 0;
+
+  @include primary-button;
+}
+
+.additionalActionsContainer {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
-  width: 300px;
-  height: 500px;
-  padding: 10px;
-  border: 2px solid black;
-}
+  align-items: center;
+  padding-top: 1rem;
 
-.to-sign-in {
-  margin-top: 20px;
-  font-weight: bold;
-  font-size: 18px;
-  text-decoration: underline;
-  cursor: pointer;
+  div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
 
-  &:hover {
-    color: green;
+  .link {
+    color: $text-color;
+    text-decoration: none;
   }
 }
 
-.auth-form-input {
-  width: 100%;
+.decorateLink {
+  color: $secondary-text;
 }
 
-.auth-form-btn {
-  align-self: center;
+.text {
+  display: flex;
+  justify-content: center;
+  padding-top: 2rem;
 }
 
-.auth-form-error {
-  color: red;
-  font-weight: bold;
-  font-size: 14px;
+.googleButtonContainer {
+  padding: 1rem 0;
 }
 
-.signInButton {
-  width: 100%;
-
-  @include primary-button;
+.googleButton {
+  @include secondary-button;
 }
