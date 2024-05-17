@@ -2,16 +2,32 @@
 
 .auth-container {
   display: flex;
-  justify-content: center;
   align-items: center;
+  padding: 0 1rem;
 }
+.authPageContainer{
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+  gap: 2rem;
 
+}
+.contentContainer{
+  display: flex;
+  align-items: center;
+  img{
+    width: 41.375rem;
+    height: 37.75rem;
+  }
+}
 .auth-form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: start;
   gap: 10px;
+
 }
 
 .auth-form-wrapper {
