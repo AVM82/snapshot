@@ -3,6 +3,7 @@ import './App.scss';
 import { Route, Routes } from 'react-router-dom';
 
 import Layout from './components/Layout/Layout';
+import AuthPage from './pages/Auth/AuthPage';
 import OAuth2RedirectHandler from './pages/Auth/OAuth2RedirectHandler';
 import SignInPage from './pages/Auth/SignInPage';
 import SignUpPage from './pages/Auth/SignUpPage';
@@ -20,8 +21,22 @@ function App(): JSX.Element {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route element={<Home />} index />
-        <Route path="sign-in" element={<SignInPage />} />
-        <Route path="sign-up" element={<SignUpPage />} />
+        <Route
+          path="sign-in"
+          element={(
+            <AuthPage>
+              <SignInPage />
+            </AuthPage>
+          )}
+        />
+        <Route
+          path="sign-up"
+          element={(
+            <AuthPage>
+              <SignUpPage />
+            </AuthPage>
+          )}
+        />
         <Route path="oauth2/redirect" element={<OAuth2RedirectHandler />} />
         <Route path="candidate-search" element={<CandidateSearch />} />
         <Route element={<ProtectedRoute />}>

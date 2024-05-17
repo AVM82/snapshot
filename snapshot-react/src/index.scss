@@ -1,16 +1,15 @@
 @import './reset';
-@import './utils/constants&mixins';
+@import 'utils/constants&mixins';
 
 #root {
-  // display: flex;
-  // flex-direction: column;
-  // justify-content: space-between;
+   display: flex;
+   flex-direction: column;
+   width: 100%;
 }
 
 body {
   position: relative;
-  min-width: 320px;
-  margin: 0;
+  display: flex;
 }
 
 h1,
