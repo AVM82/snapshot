@@ -4,6 +4,7 @@ $light-purple: #c2cae8;
 $cyan: #8de3db;
 $dark-blue: #0f172a;
 $text-color: #0f172a;
+$secondary-text: #697077;
 $white: #ffffff;
 $gray: rgb(15 23 41 / 20%);
 $small-border-radius: 2px;
@@ -11,16 +12,32 @@ $large-border-radius: 20px;
 $small-border: 1px solid $medium-purple;
 $large-border: 3px solid $primary-purple;
 
+@mixin info-text {
+  margin: 0;
+  color: #636b74;
+  font-size: 0.75rem;
+}
+
 @mixin primary-button {
+  width: 100%;
   padding: 0.562rem 0.718rem;
-  color: $white;
   background: $primary-purple;
   border: 2px solid $primary-purple;
   border-radius: 4px;
 
+  &,
+  & * {
+    color: $white;
+    text-decoration: none;
+  }
+
   &:hover {
-    color: $text-color;
     background: transparent;
+
+    &,
+    & * {
+      color: $text-color;
+    }
   }
 
   &:disabled {
@@ -30,15 +47,25 @@ $large-border: 3px solid $primary-purple;
 }
 
 @mixin simple-button {
+  width: 100%;
   padding: 0.562rem 0.718rem;
-  color: $white;
   background: $dark-blue;
   border: 1px solid $dark-blue;
   border-radius: 4px;
 
+  &,
+  & * {
+    color: $white;
+    text-decoration: none;
+  }
+
   &:hover {
-    color: $text-color;
     background: transparent;
+
+    &,
+    & * {
+      color: $text-color;
+    }
   }
 
   &:disabled {
@@ -48,20 +75,30 @@ $large-border: 3px solid $primary-purple;
 }
 
 @mixin secondary-button {
+  width: 100%;
   padding: 0.562rem 0.718rem;
-  color: $text-color;
   background: $white;
   border: 1px solid $primary-purple;
   border-radius: 4px;
 
+  &,
+  & * {
+    color: $text-color;
+    text-decoration: none;
+  }
+
   &:hover {
-    color: $white;
     background: $light-purple;
     border: 1px solid $light-purple;
+
+    &,
+    & * {
+      color: $white;
+    }
   }
 
   &:disabled {
     background: $gray;
-    border:1px solid $gray;
+    border: 1px solid $gray;
   }
 }

@@ -11,6 +11,7 @@ function AuthPage({ children }:IProps): React.JSX.Element {
   return (
     <div className={styles.authPageContainer}>
       <div className={styles.contentContainer}>
+        <h1>Snapshot it</h1>
         <img src={authImg} alt="auth-img" />
       </div>
       <div className={styles.contentContainer}>

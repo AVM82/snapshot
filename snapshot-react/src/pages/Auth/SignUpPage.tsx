@@ -1,16 +1,18 @@
-import { useState } from 'react';
+import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import snapshotApi from '../../api/request';
 import EmailRegexp from '../../common/emailRegexp';
 import PasswordRegex from '../../common/passwordRegexp';
 import { ISignUp } from '../../models/auth/ISignUp';
 import styles from './AuthPage.module.scss';
+import AuthActions from './components/AuthActions';
+import Input from './components/Input';
+import SwitchAuth from './components/SwitchAuth';
 import OAuth2 from './OAuth2';
 
-export default function SignUpPage(): JSX.Element {
-  const [message, setMessage] = useState('');
+export default function SignUpPage(): React.JSX.Element {
   const {
     register,
     handleSubmit,
@@ -18,123 +20,106 @@ export default function SignUpPage(): JSX.Element {
     getValues,
     reset,
   } = useForm<ISignUp>({
-    mode: 'onChange',
+    mode: 'onBlur',
   });
+  const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<ISignUp> = async (data): Promise<void> => {
-    setMessage('Обробка...');
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { confirmPassword, ...userData } = data;
+    const { ...userData } = data;
 
     const response: boolean = await snapshotApi.post('/auth/register', { ...userData });
 
-    if (response === true) {
-      setMessage('Вам на пошту було відправлено листа, перевірте свою пошту!');
+    if (response) {
+      navigate('/thank-you');
       reset();
-    } else {
-      setMessage('Помилка при відправці, спробуйте ще раз!');
     }
   };
 
   return (
-    <div className={styles['auth-container']}>
-      <div className={styles['auth-form-wrapper']}>
-        <h3>Реєстрація</h3>
-        <form className={styles['auth-form']} onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor="first-name">Ім&apos;я *</label>
-          <input
-            type="text"
-            id="first-name"
-            className={`${styles['auth-form-input']}`}
-            {...register('firstname')}
-            placeholder="Введіть ім'я"
-            required
-          />
-          <label htmlFor="last-name">Прізвище *</label>
-          <input
-            type="text"
-            id="last-name"
-            className={`${styles['auth-form-input']}`}
-            {...register('lastname')}
-            placeholder="Введіть прізвище"
-            required
-          />
+    <section className={styles.signContainer}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <legend>
+          <h2>Привіт! Вітаємо у SNAPSHOT IT</h2>
+          <p>Введіть облікові дані для доступу до свого акаунта</p>
+        </legend>
+        <div>
+          <div className={styles.formInputsContainer}>
+            <Input
+              inputName="Прізвище та Ім’я"
+              type="text"
+              id="first-name"
+              {...register('firstname', {
+                required: {
+                  value: true,
+                  message: 'Вкажіть ваше Ім\'я',
+                },
+              })}
+              placeholder="Введіть ім'я"
+              error={errors.firstname?.message}
+            />
+            <Input
+              inputName="Email"
+              type="text"
+              id="login"
+              {...register('email', {
+                pattern: {
+                  value: EmailRegexp,
+                  message: 'Неправильна адреса електронної пошти',
+                },
+                required: {
+                  value: true,
+                  message: 'Вкажіть ваш email',
+                },
+              })}
+              placeholder="Введіть електронну адресу"
+              error={errors.email?.message}
+            />
+            <Input
+              inputName="Password"
+              type="password"
+              id="password"
+              {...register('password', {
+                pattern: {
+                  value: PasswordRegex,
+                  message: 'Пароль має складатися з мінімум 8 літер, цифр і символів.',
+                },
+                required: {
+                  value: true,
+                  message: 'Пароль має складатися з мінімум 8 літер, цифр і символів.',
+                },
+              })}
+              error={errors.password?.message}
+              placeholder="Введіть пароль"
+            />
+            <Input
+              inputName="Password"
+              type="password"
+              id="confirm-password"
+              {...register('confirmPassword', {
+                required: {
+                  value: true,
+                  message: 'Введіть пароль ще раз',
+                },
+                validate: (value) => {
+                  const { password } = getValues();
 
-          <label htmlFor="login">Логін *</label>
-          <input
-            type="text"
-            id="login"
-            className={`${styles['auth-form-input']}`}
-            {...register('email', {
-              pattern: {
-                value: EmailRegexp,
-                message: 'Incorrect email',
-              },
-            })}
-            placeholder="Введіть електронну пошту"
-            required
-          />
-          {!!errors && (
-            <p className={styles['auth-form-error']}>{errors.email?.message}</p>
-          )}
-          <label htmlFor="password">Пароль *</label>
-          <input
-            type="password"
-            id="password"
-            className={`${styles['auth-form-input']}`}
-            {...register('password', {
-              pattern: {
-                value: PasswordRegex,
-                message: `Пароль має бути не менше 8 символів у довжину,
-                містити одну велику і маленьку літери, хоча б одну цифру і спецсимволи`,
-              },
-            })}
-            required
-            placeholder="Введіть пароль"
-          />
-          {!!errors && (
-            <p className={styles['auth-form-error']}>
-              {errors.password?.message}
-            </p>
-          )}
-          <label htmlFor="confirm-password">Підтвердити пароль *</label>
-          <input
-            type="password"
-            id="confirm-password"
-            className={`${styles['auth-form-input']}`}
-            {...register('confirmPassword', {
-              validate: (value) => {
-                const { password } = getValues();
-
-                return password === value || 'Passwords should match!';
-              },
-            })}
-            required
-            placeholder="Повторіть пароль"
-          />
-          {!!errors && (
-            <p className={styles['auth-form-error']}>
-              {errors.confirmPassword?.message}
-            </p>
-          )}
-
-          {!!message && (
-            <p>{message}</p>
-          )}
-          <button type="submit" className={styles['auth-form-btn']}>
+                  return password === value || 'Паролі не співпадають';
+                },
+              })}
+              error={errors.confirmPassword?.message}
+              placeholder="Повторіть пароль"
+            />
+          </div>
+          <AuthActions />
+          <button type="submit" className={styles.submitButton}>
             Зареєструватись
           </button>
-        </form>
-        <div
-          className={styles['to-sign-in']}
-          role="button"
-          tabIndex={0}
-        >
-          <Link to="/sign-in">Уже маєте акаунт? Увійти</Link>
-          <br />
-          <OAuth2 />
         </div>
-      </div>
-    </div>
+
+      </form>
+      <SwitchAuth to="/sign-in" text="Вже є акаунт?" />
+
+      <OAuth2 text="Або зареєструйтеся за допомогою:" />
+    </section>
   );
 }
