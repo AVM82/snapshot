@@ -78,7 +78,6 @@ function SignInPage(): React.JSX.Element {
             />
           </div>
         </div>
-
         <AuthActions />
         <button type="submit" className={styles.submitButton}>
           Увійти
