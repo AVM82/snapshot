@@ -1,3 +1,5 @@
+@import "/src/utils/constants&mixins";
+
 .MyInterviewsContainer {
   position: relative;
   display: flex;
@@ -67,4 +69,65 @@
   gap: 2px;
   padding: 6px;
   border: 1px solid #00ffff;
+}
+
+.test-style {
+  @include secondary-button;
+  background-color: $medium-purple;
+  border-radius: 3px;
+}
+
+.interview-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid rgb(87, 73, 151, 1);
+  border-radius: 10px;
+  overflow: hidden;
+  td {
+    text-align: left;
+    padding-left: 1rem;
+    color: black;
+    border-bottom: 1px solid $primary-purple;
+
+  }
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .button-group {
+    display: inline-flex;
+    flex-direction: column;
+    margin: 1rem 0;
+    div {
+      border: 1px solid $primary-purple;
+      border-radius: 3px;
+      margin: 0.3rem 0;
+    }
+  }
+}
+
+.interview-table-header {
+  background-color: $light-purple;
+  color: black;
+  font-family: 'Roboto';
+  th {
+    text-align: left;
+    padding: 1rem 0 1rem 1rem;
+  }
+}
+
+.table-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  button {
+    margin: 5px 3px 5px 5px;
+    background-color: white;
+    border: none;
+    text-align: center;
+    padding: 0;
+  }
+  img {
+    margin: 5px;
+  }
 }
