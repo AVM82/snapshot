@@ -35,6 +35,12 @@ public class MailService {
     @Value("${reminder.email.delayRetryInMinutes}")
     private long retryDelayInMinutes;
 
+    @Value("${admin.email}")
+    private String adminEmail;
+
+    @Value("${reminder.email.host}")
+    private String host;
+
     @Value("${spring.mail.username}")
     private String username;
 
@@ -71,7 +77,7 @@ public class MailService {
         }
     }
 
-    @Scheduled(cron = "0 50 20 * * ?")
+    @Scheduled(cron = "0 0 9 * * ?")
     public void sendInterviewReminders() {
         LocalDateTime tomorrow = LocalDateTime.now().plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
         LocalDateTime endOfTomorrow = tomorrow.plusDays(1).minusSeconds(1);
@@ -83,19 +89,24 @@ public class MailService {
             UserEntity interviewer = interview.getInterviewer();
             UserEntity searcher = interview.getSearcher();
 
-            sendReminder(interviewer, searcher);
-            sendReminder(searcher, interviewer);
+            sendReminder(interviewer, searcher, interview);
+            sendReminder(searcher, interviewer, interview);
         }
     }
 
-    private void sendReminder(UserEntity recipient, UserEntity counterpart) {
+    public void sendReminder(UserEntity recipient, UserEntity counterpart, InterviewEntity interview) {
         boolean success = false;
         int retryAttempts = 0;
         while (!success && retryAttempts < maxRetryAttempts) {
             try {
-                send(recipient.getEmail(), "Нагадування про заплановане інтерв'ю",
-                        "Доброго дня, " + recipient.getFirstname() + "! Нагадуємо вам про заплановане інтерв'ю з "
-                                + counterpart.getFirstname() + " " + counterpart.getLastname() + " завтра.");
+                String interviewLink = generateInterviewLink(interview);
+                            String reminderText = String.format("Доброго дня, %s! Нагадуємо вам про заплановане інтерв'ю з %s %s завтра. Посилання на інтерв'ю: %s",
+                                    recipient.getFirstname(), counterpart.getFirstname(), counterpart.getLastname(), interviewLink);
+
+
+                send(recipient.getEmail(), "Нагадування про заплановане інтерв'ю", reminderText);
+//                        "Доброго дня, " + recipient.getFirstname() + "! Нагадуємо вам про заплановане інтерв'ю з "
+//                                + counterpart.getFirstname() + " " + counterpart.getLastname() + " завтра.");
                 log.info("Sent reminder to " + recipient.getId() + ": " + recipient.getEmail());
                 success = true;
             } catch (Exception e) {
@@ -109,5 +120,20 @@ public class MailService {
                 }
             }
         }
+        if (!success && retryAttempts == maxRetryAttempts) {
+            log.error("Reminder email failed to send after all retry attempts: " + recipient.getEmail());
+            sendAdminNotification(recipient.getEmail(), counterpart.getFirstname(), counterpart.getLastname());
+        }
+
     }
+
+    public String generateInterviewLink(InterviewEntity interview) {
+        String interviewId = interview.getId().toString();
+        return host + "/interview/" + interviewId;
+    }
+    private void sendAdminNotification(String recipientEmail, String counterpartFirstName, String counterpartLastName) {
+        String message = String.format("Failed to send reminder to %s for the interview with %s %s", recipientEmail, counterpartFirstName, counterpartLastName);
+        send(adminEmail, "Failed Interview Reminder Notification", message);
+    }
+
 }
