@@ -1,0 +1,39 @@
+@import 'src/utils/constants&mixins';
+
+.interviewTypesContainer {
+  display: flex;
+  flex-flow: row wrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  padding: 1rem;
+  border: $large-border;
+  border-radius: $large-border-radius;
+
+  div {
+    padding: 0.5rem;
+    border-radius: 10px;
+  }
+}
+
+.link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $text-color;
+  font-weight: 500;
+  font-size: 1rem;
+  font-family: Inter, sans-serif;
+  text-decoration: none;
+}
+
+.activeLink {
+  background: $cyan;
+}
+
+.profileContainer {
+  display: flex;
+  flex-direction: column;
+}
