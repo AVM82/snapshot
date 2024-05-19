@@ -62,7 +62,10 @@ function App(): React.JSX.Element {
           <Route path="interview" element={<InterviewPage />} />
           <Route path="interview/:id" element={<InterviewPage />} />
           <Route path="profile/:userId" element={<Profile />}>
-            <Route path="interview-journal" element={<MyInterviews />} />
+            <Route index element={<MyInterviews status="" />} />
+            <Route path="PLANNED" element={<MyInterviews status="PLANNED" />} />
+            <Route path="FINISHED" element={<MyInterviews status="FINISHED" />} />
+            <Route path="COMPLETED" element={<MyInterviews status="COMPLETED" />} />
             <Route path="settings" element={<UserRoles />} />
             <Route path="statistics" element={<Statistics />} />
           </Route>
