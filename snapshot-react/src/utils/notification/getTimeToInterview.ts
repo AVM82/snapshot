@@ -1,9 +1,11 @@
+import { InterviewStatuses } from '../../models/profile/IInterview';
 import IInterviewPreview from '../../models/profile/IInterviewPreview';
 import { formatToLocalDate } from '../interview/formatQuestionsWithLocalDate';
 
-const getPlannedInterviews = (interviews: IInterviewPreview[]): IInterviewPreview[] => interviews.filter((
+const getInterviewsByStatus = (interviews: IInterviewPreview[], status:InterviewStatuses)
+: IInterviewPreview[] => interviews.filter((
   interview,
-) => interview.status === 'PLANNED');
+) => interview.status === status);
 
 const getNearestInterview = (plannedInterviews: IInterviewPreview[]): IInterviewPreview | undefined => {
   if (plannedInterviews.length === 0) return undefined;
@@ -28,7 +30,7 @@ const getNearestInterview = (plannedInterviews: IInterviewPreview[]): IInterview
 const getTimeToInterview = (interviews: IInterviewPreview[]): number => {
   if (!interviews) return 0;
 
-  const plannedInterviews = getPlannedInterviews(interviews);
+  const plannedInterviews = getInterviewsByStatus(interviews, 'PLANNED');
   const nearestInterview = getNearestInterview(plannedInterviews);
   let nearestInterviewTime:number;
 
@@ -43,4 +45,4 @@ const getTimeToInterview = (interviews: IInterviewPreview[]): number => {
   return nearestInterviewTime - currentTime;
 };
 
-export default getTimeToInterview;
+export { getInterviewsByStatus, getTimeToInterview };

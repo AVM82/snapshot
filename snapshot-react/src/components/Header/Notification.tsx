@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { getMyInterviews } from '../../store/reducers/profile/actions';
 import getInterval from '../../utils/notification/getInterval';
-import getTimeToInterview from '../../utils/notification/getTimeToInterview';
+import { getTimeToInterview } from '../../utils/notification/getTimeToInterview';
 
 function Notification():React.JSX.Element {
   const { interviews } = useAppSelector((state) => state.profile);
