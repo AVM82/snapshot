@@ -277,4 +277,8 @@ public class UserService implements UserDetailsService {
         return userStatisticsList;
     }
 
+    public void setPasswordForUserById(String password,
+                                       long id) {
+        repository.setPasswordForUserById(password, id);
+    }
 }

@@ -47,10 +47,25 @@ public class MailService {
     @Value("${submit.email.text}")
     private String submitText;
 
+    @Value("${reset-password.email.subject}")
+    private String resetPasswordEmailSubject;
+
+    @Value("${reset-password.email.text}")
+    private String resetPasswordEmailText;
+
+    @Value("${reset-password.endpoint}")
+    private String resetPasswordEndpoint;
+
     public void sendEmailSubmitLetter(String to,
                                       String token) {
         String requestUrl = String.format(REQUEST_URL_TEMPLATE, userCreateEndpoint, token);
         send(to, submitSubject, String.format(submitText, requestUrl));
+    }
+
+    public void sendResetPasswordEmail(String to,
+                                       String token) {
+        String requestUrl = String.format(REQUEST_URL_TEMPLATE, resetPasswordEndpoint, token);
+        send(to, resetPasswordEmailSubject, String.format(resetPasswordEmailText, requestUrl));
     }
 
     public void send(String to,
