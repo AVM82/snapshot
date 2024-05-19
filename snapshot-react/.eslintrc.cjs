@@ -28,7 +28,7 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-    // 'linebreak-style': ['error', 'windows'],
+    'linebreak-style': ['error', 'windows'],
     'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/label-has-associated-control': 'off',
     'react/react-in-jsx-scope': 'off',
@@ -124,4 +124,12 @@ module.exports = {
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
   },
+  overrides: [
+    {
+      files: ['src/**/*.ts', 'src/**/*.tsx'],
+      rules: {
+        'import/no-extraneous-dependencies': 'off',
+      },
+    },
+  ],
 };

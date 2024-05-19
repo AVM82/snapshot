@@ -1,8 +1,9 @@
-import styles from './Footer.module.scss';
-import iconIn from '../../assets/icon-in.svg';
-import iconF from '../../assets/icon-f.svg';
-import iconTv from '../../assets/icon-tv.svg';
 import classNames from 'classnames';
+
+import iconF from '../../assets/icon-f.svg';
+import iconIn from '../../assets/icon-in.svg';
+import iconTv from '../../assets/icon-tv.svg';
+import styles from './Footer.module.scss';
 
 function Footer(): React.JSX.Element {
   return (
@@ -20,7 +21,7 @@ function Footer(): React.JSX.Element {
       <div className={styles.footer_copyright}>
         SNAPSHOT IT © 2024. All rights reserved.
       </div>
-    </footer >
+    </footer>
   );
 }
 
