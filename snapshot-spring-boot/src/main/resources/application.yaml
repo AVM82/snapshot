@@ -22,10 +22,10 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: validate
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        format_sql: true
+  #    show-sql: true
+  #    properties:
+  #      hibernate:
+  #        format_sql: true
 
   h2:
     console:
@@ -116,8 +116,13 @@ user:
 
 reminder:
   email:
-    maxRetryAttempts: 3
-    delayRetryInMinutes: 1
+    attempts: 3
+    retryDelayInMinutes: 1
+
+admin:
+  email: snapshot.it.project@gmail.com
+
+host: http://snapshot-env.eba-tkt77dky.eu-central-1.elasticbeanstalk.com/
 
 submit:
   email:
