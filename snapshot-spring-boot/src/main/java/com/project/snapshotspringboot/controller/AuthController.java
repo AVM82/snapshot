@@ -1,9 +1,6 @@
 package com.project.snapshotspringboot.controller;
 
-import com.project.snapshotspringboot.dtos.AuthenticationRequest;
-import com.project.snapshotspringboot.dtos.AuthenticationResponseWithRefreshToken;
-import com.project.snapshotspringboot.dtos.RefreshTokenRequestDto;
-import com.project.snapshotspringboot.dtos.RegisterRequest;
+import com.project.snapshotspringboot.dtos.*;
 import com.project.snapshotspringboot.handler.dto.ResponseExceptionDto;
 import com.project.snapshotspringboot.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +25,7 @@ public class AuthController {
 
     @Operation(summary = "Registers a new user.")
     @ApiResponse(responseCode = "200",
-            content = {@Content(schema = @Schema(implementation = String.class), mediaType = "application/json")})
+            content = {@Content(schema = @Schema(implementation = Boolean.class), mediaType = "application/json")})
     @ApiResponse(responseCode = "400",
             content = {@Content(schema = @Schema(implementation = ResponseExceptionDto.class), mediaType = "application/json")})
     @PostMapping("/register")
@@ -68,6 +65,26 @@ public class AuthController {
     public void createUser(@RequestParam(name = "token") String token,
                            HttpServletResponse response) {
         service.createUser(token, response);
+    }
+
+    @Operation(summary = "Send email for reset password.")
+    @ApiResponse(responseCode = "200",
+            content = {@Content(schema = @Schema(implementation = Boolean.class), mediaType = "application/json")})
+    @ApiResponse(responseCode = "404",
+            content = {@Content(schema = @Schema(implementation = ResponseExceptionDto.class), mediaType = "application/json")})
+    @PostMapping("/send-reset-password-email")
+    public boolean sendEmailForResetPassword(@RequestBody EmailDto emailDto) {
+        return service.sendEmailForResetPassword(emailDto);
+    }
+
+    @Operation(summary = "Reset password.")
+    @ApiResponse(responseCode = "200",
+            content = {@Content(schema = @Schema(implementation = Boolean.class), mediaType = "application/json")})
+    @ApiResponse(responseCode = "404",
+            content = {@Content(schema = @Schema(implementation = ResponseExceptionDto.class), mediaType = "application/json")})
+    @PatchMapping("/reset-password")
+    public boolean resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
+        return service.resetPassword(resetPasswordDto);
     }
 }
 
