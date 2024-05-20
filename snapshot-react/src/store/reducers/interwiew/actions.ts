@@ -48,11 +48,19 @@ const getSkillQuestions = createAsyncThunk(
   ActionType.GET_SKILL_QUESTIONS_BY_ID,
   async (skillId:number):Promise<IQuestion[]> => snapshotApi.get(`interviews/questions/skill/${skillId}?id=${skillId}`),
 );
+const updateInterviewById = createAsyncThunk(
+  ActionType.UPDATE_INTERVIEW_BY_ID,
+  async ({ id, plannedDateTime }:{ id:number,plannedDateTime:Date }) => {
+    console.log(id);
+    await snapshotApi.patch(`/interviews/${id}`, { plannedDateTime,title:'' });
+  },
+);
 
 export {
-    addInterview, addQuestion, getAllSkills, getInterviewId,
-    getSkillQuestions,
-    getUserByEmail,
-    updateInterviewStatus
+  addInterview, addQuestion, getAllSkills, getInterviewId,
+  getSkillQuestions,
+  getUserByEmail,
+  updateInterviewById,
+  updateInterviewStatus,
 };
 

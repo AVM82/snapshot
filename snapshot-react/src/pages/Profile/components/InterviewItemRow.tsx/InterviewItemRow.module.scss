@@ -1,0 +1,61 @@
+@import 'src/constants&mixins';
+
+.buttonGroup {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 0;
+
+  div {
+    margin: 0.3rem 0;
+    border: 1px solid $primary-purple;
+    border-radius: 3px;
+  }
+}
+
+.tableButton {
+  @include secondary-button;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.625rem;
+  text-transform: uppercase;
+  border-radius: 5px;
+  cursor: pointer;
+
+  .cancelIcon {
+    width: 18px;
+    height: 18px;
+    background-image: url('/src/assets/deleteInterviewIcon.svg');
+  }
+
+  .scheduleIcon {
+    width: 16px;
+    height: 18px;
+    background-image: url('/src/assets/scheduleIcon.svg');
+  }
+
+  .toInterview {
+    width: 18px;
+    height: 18px;
+    background-image: url('/src/assets/arrowCircleRight.svg');
+  }
+
+  img {
+    margin: 5px;
+    background: #0f172a;
+  }
+
+  &:hover {
+    .cancelIcon {
+      background-image: url('/src/assets/deleteInterviewIconHover.svg');
+    }
+
+    .scheduleIcon {
+      background-image: url('/src/assets/scheduleIconHover.svg');
+    }
+  }
+}

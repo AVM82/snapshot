@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 import { useAppDispatch } from '../../../../hooks/redux';
 import { resetInterviewState } from '../../../../store/reducers/interwiew/interviewSlice';
-import styles from '../../MyInterviews.module.scss';
 import InterviewScheduler from '../InterviewScheduler/InterviewScheduler';
 
 function InterviewActionPanel():React.JSX.Element {
@@ -20,16 +19,16 @@ function InterviewActionPanel():React.JSX.Element {
   };
 
   const renderNewInterviewBlock = ():React.JSX.Element => (
-    <div className={styles.NewInterviewBlock}>
+    <div>
       <button type="button" onClick={handleLinkToInterview}>
-        <Link to="/interview" className={styles.Link}>
+        <Link to="/interview">
           Розпочати
         </Link>
       </button>
       <button type="button" onClick={() => setShowInterviewScheduler(true)}>
         Запланувати
       </button>
-      <button type="button" onClick={() => setShowNewInterview(false)} className={styles.closeButton}>
+      <button type="button" onClick={() => setShowNewInterview(false)}>
         X
       </button>
     </div>
@@ -51,7 +50,7 @@ function InterviewActionPanel():React.JSX.Element {
     <div>
       {!showInterviewScheduler
         ? renderNewInterviewButton()
-        : <InterviewScheduler onClose={handleSchedulerClose} className={styles.InterviewScheduler} />}
+        : <InterviewScheduler onClose={handleSchedulerClose} />}
     </div>
   );
 }

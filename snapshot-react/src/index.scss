@@ -1,5 +1,5 @@
 @import './reset';
-@import 'utils/constants&mixins';
+@import 'constants&mixins';
 
 #root {
   display: flex;
@@ -17,6 +17,7 @@ h4,
 h5,
 h6,
 p,
+td,
 button {
   font-weight: 400;
   font-family: Roboto, sans-serif;

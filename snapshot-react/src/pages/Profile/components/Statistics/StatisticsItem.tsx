@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import sortBy from 'sort-by';
 
 import IStatistics from '../../../../models/profile/IStatistics';
 import convertTimeStampToDate from '../../../../utils/convertTimeStampToDate';
@@ -7,45 +8,59 @@ function StatisticsItem({
   skillName, grade, date, questions,
 }: IStatistics): JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [data, setData] = useState([...questions]);
 
   return (
-    <div
-      className="statistics-item"
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexDirection: 'column',
-      }}
-    >
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-      }}
-      >
-        <p>{skillName}</p>
-        <p>{convertTimeStampToDate(date)}</p>
-        <p>{Number(grade).toFixed(2)}</p>
-        <div
-          style={{ cursor: 'pointer' }}
-          role="button"
-          tabIndex={0}
-          onClick={(): void => setIsExpanded(!isExpanded)}
-        >
-          <p>Show more</p>
-          <span>+</span>
-        </div>
-      </div>
+    <>
+      <tr style={{ border: '1px solid black' }}>
+        <td style={{ borderRight: '1px solid black' }}>{skillName}</td>
+        <td style={{ borderRight: '1px solid black' }}>{convertTimeStampToDate(date)}</td>
+        <td style={{ borderRight: '1px solid black' }}>{Number(grade).toFixed(2)}</td>
+        <td>
+          <button
+            type="button"
+            aria-label="show more"
+            id="stat-expanded"
+            onClick={(): void => setIsExpanded(!isExpanded)}
+          >
+            { isExpanded ? '-' : '+' }
+          </button>
+        </td>
+      </tr>
       {isExpanded && (
-        <div>
-          {questions.map((question) => (
-            <div key={question.question}>
-              <p>{question.question}</p>
-              <p>{question.grade}</p>
-            </div>
-          ))}
-        </div>
+        <tr>
+          <td>
+            <table style={{ border: '1px solid black', borderCollapse: 'collapse', width: '100%' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid black' }}>
+                  <th
+                    style={{ borderRight: '1px solid black' }}
+                  >
+                    Question
+                  </th>
+                  <th
+                    style={{ borderRight: '1px solid black', cursor: 'pointer' }}
+                    onClick={(): void => {
+                      setData([...data.sort(sortBy('-grade', 'grade'))]);
+                    }}
+                  >
+                    Grade
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((item) => (
+                  <tr style={{ borderRight: '1px solid black', borderBottom: '1px solid black' }}>
+                    <td style={{ borderRight: '1px solid black' }}>{item.question}</td>
+                    <td style={{ borderRight: '1px solid black' }}>{item.grade}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </td>
+        </tr>
       )}
-    </div>
+    </>
   );
 }
 

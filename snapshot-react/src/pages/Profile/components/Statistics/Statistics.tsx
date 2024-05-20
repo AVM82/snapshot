@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
+import { useAppDispatch } from '../../../../hooks/redux';
 import { getStatistics } from '../../../../store/reducers/profile/actions';
-import StatisticsItem from './StatisticsItem';
+import StatisticsTable from './StatisticsTable';
 
 function Statistics(): JSX.Element {
   const dispatch = useAppDispatch();
-  const statistics = useAppSelector((state) => state.profile.statistics);
   const { userId } = useParams();
+  const [fulfilled, setFulfilled] = useState(false);
   const [formData, setFormData] = useState<{
     from: string,
     to: string
@@ -24,7 +24,9 @@ function Statistics(): JSX.Element {
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    dispatch(getStatistics({ id: Number(userId), from: formData.from, to: formData.to }));
+    dispatch(getStatistics({ id: Number(userId), from: formData.from, to: formData.to })).then((res) => {
+      if (res.meta.requestStatus === 'fulfilled') setFulfilled(!fulfilled);
+    });
   };
 
   return (
@@ -36,7 +38,7 @@ function Statistics(): JSX.Element {
         <input type="date" name="to" id="to" required onChange={handleChange} />
         <button type="submit">Submit</button>
       </form>
-      {statistics && statistics.map((stat) => <StatisticsItem {...stat} />) }
+      {fulfilled && <StatisticsTable />}
     </div>
   );
 }

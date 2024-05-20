@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import SockJS from 'sockjs-client';
 import { Client, Frame, over } from 'stompjs';
 
@@ -36,6 +39,7 @@ export default function InterviewPage(): React.JSX.Element {
   const [showQuestionTextField, setShowQuestionTextField] = useState(false);
   const [currentSkillId, setCurrentSkillId] = useState(0);
   const [titleText, setTitleText] = useState('');
+  const stompRef = useRef<Client | null>(null);
   const navigate = useNavigate();
   const {
     searcher, id: interviewId, sharedSkills, status: interviewStatus, isLoading, title,
@@ -46,36 +50,64 @@ export default function InterviewPage(): React.JSX.Element {
   const { id } = useParams();
   const dispatch = useAppDispatch();
 
-  let stomp: Client;
+  // let stomp: Client;
 
   interface IMessage {
     body?: string
   }
 
-  const onMessageReceived = (message: IMessage): void => {
+  // const onMessageReceived = (message: IMessage): void => {
+  //   if (!message.body) { return; }
+
+  //   const receivedMessage = JSON.parse(message.body);
+
+  //   if (!receivedMessage.status) {
+  //     dispatch(redefineQuestions(receivedMessage || []));
+  //   } else {
+  //     dispatch(redefineStatus(receivedMessage.status));
+  //   }
+  // };
+  // const onError = (error: string | Frame): void => {
+  //   toast.error(error.toString());
+  // };
+
+  // const onConnect = (): void => {
+  //   stompRef.current.subscribe(`/interview/${interviewId}/questions`, onMessageReceived);
+  // };
+
+  // const connect = (): void => {
+  //   const socket = new SockJS(`${api.baseURL.slice(0, -5)}/socket`);
+  //   stomp = over(socket);
+  //   stomp.connect(headers, onConnect, onError);
+  // };
+
+  const onMessageReceived = useCallback((message: IMessage): void => {
     if (!message.body) { return; }
 
     const receivedMessage = JSON.parse(message.body);
-    console.log('Message received', receivedMessage);
 
     if (!receivedMessage.status) {
       dispatch(redefineQuestions(receivedMessage || []));
     } else {
       dispatch(redefineStatus(receivedMessage.status));
     }
-  };
-  const onError = (error: string | Frame): void => {
-    console.log('Error', error);
-  };
-  const onConnect = (): void => {
-    console.log('Connected to WebSocket');
-    stomp.subscribe(`/interview/${interviewId}/questions`, onMessageReceived);
-  };
-  const connect = (): void => {
+  }, [dispatch]);
+
+  const onError = useCallback((error: string | Frame): void => {
+    toast.error(error.toString());
+  }, []);
+
+  const onConnect = useCallback((): void => {
+    if (stompRef.current) {
+      stompRef.current.subscribe(`/interview/${interviewId}/questions`, onMessageReceived);
+    }
+  }, [interviewId, onMessageReceived]);
+
+  const connect = useCallback((): void => {
     const socket = new SockJS(`${api.baseURL.slice(0, -5)}/socket`);
-    stomp = over(socket);
-    stomp.connect(headers, onConnect, onError);
-  };
+    stompRef.current = over(socket);
+    stompRef.current.connect(headers, onConnect, onError);
+  }, [onConnect, onError]);
 
   useEffect(() => {
     const fetchData = async ():Promise<void> => {
@@ -101,7 +133,7 @@ export default function InterviewPage(): React.JSX.Element {
     }
 
     if (interviewStatus === 'ACTIVE') connect();
-  }, [interviewId, interviewStatus]);
+  }, [connect, id, interviewId, interviewStatus, navigate]);
 
   const buttonText = ():string => {
     if (interviewStatus === 'PLANNED') { return 'Почати'; }
@@ -151,6 +183,7 @@ export default function InterviewPage(): React.JSX.Element {
   };
 
   if (isLoading) return <div>Loading...</div>;
+  console.log(interviewStatus);
 
   return (
     <div className={styles.pageContainer}>
@@ -233,7 +266,7 @@ export default function InterviewPage(): React.JSX.Element {
           {showQuestionTextField
             && <Question skillId={currentSkillId} onSubmit={() => setShowQuestionTextField(false)} />}
         </div>
-        {interviewStatus === 'COMPLETED' ? <Feedback /> : (
+        {interviewStatus === 'FINISHED' ? <Feedback /> : (
           <div className={styles.questionList}>
             <Questions {...interview} />
           </div>
