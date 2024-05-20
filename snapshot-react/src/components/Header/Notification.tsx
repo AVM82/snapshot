@@ -7,7 +7,7 @@ import getTimeToInterview from '../../utils/notification/getTimeToInterview';
 
 function Notification():React.JSX.Element {
   const { interviews } = useAppSelector((state) => state.profile);
-  const [remainingTimeInMillis, setRemainingTimeInMillis] = useState(0);
+  const [remainingTimeInMillis, setRemainingTimeInMillis] = useState(getTimeToInterview(interviews));
   const dispatch = useAppDispatch();
   const weekInMillis = 604800000;
   const fifteenMinInMs = 900000;
@@ -15,11 +15,9 @@ function Notification():React.JSX.Element {
   useEffect(() => {
     (async (): Promise<void> => {
       await dispatch(getMyInterviews());
-      setRemainingTimeInMillis(getTimeToInterview(interviews));
     })();
   }, [dispatch]);
 
-  // eslint-disable-next-line consistent-return
   useEffect(() => {
     const updateInterval = (): void => {
       const time = getTimeToInterview(interviews);
@@ -37,7 +35,7 @@ function Notification():React.JSX.Element {
       clearInterval(intervalID);
     }
 
-    return () => clearInterval(intervalID);
+    return (): void => clearInterval(intervalID);
   }, [remainingTimeInMillis, interviews]);
 
   function formatTime():string {

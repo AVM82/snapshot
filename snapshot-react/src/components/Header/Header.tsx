@@ -36,7 +36,9 @@ function Header(): React.JSX.Element {
         <Link to="/candidate-search">Знайти кандидата</Link>
         <div>
           <Link to={`/profile/${user.id}`}>
-            {user.firstname} {user.lastname}
+            {user.firstname}
+            {' '}
+            {user.lastname}
           </Link>
           {Boolean(user.id) && <Notification />}
         </div>
