@@ -28,7 +28,7 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-    // 'linebreak-style': ['error', 'windows'],
+    'linebreak-style': ['error', 'windows'],
     'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/label-has-associated-control': 'off',
     'react/react-in-jsx-scope': 'off',
