@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/comma-dangle */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import snapshotApi from '../../../api/request';
