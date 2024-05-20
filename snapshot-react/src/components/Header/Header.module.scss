@@ -1,0 +1,150 @@
+.header {
+  height: 12rem;
+  margin-bottom: 5rem;
+  font-family: Roboto, sans-serif;
+}
+
+.header_top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 8rem;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.header_top_location {
+  display: flex;
+  gap: 0.5rem;
+  color: #697077;
+  text-align: right;
+}
+
+.header_top_location::before {
+  content: url('../../assets/location.svg');
+}
+
+// ------------ user
+.header_top_user {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #000000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.header_top_user::before {
+  content: url('../../assets/icon-user.svg');
+}
+
+// ---------------------------------- drop_menu
+.drop_down_profile {
+  position: absolute;
+  top: 2.5rem;
+  right: -7.5rem;
+  display: none;
+  width: 12rem;
+  height: 10rem;
+  background-color: #ffffff;
+  border: 2px solid #8380b6;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.header_top_user:hover .drop_down_profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.header_user_drpop_down_link {
+  position: relative;
+  display: flex;
+  gap: 0.5rem;
+  height: 2rem;
+  padding-block: 1rem;
+  color: #000000;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.drop_down_profile::before {
+  content: '';
+  position: absolute;
+  top: -0.35rem;
+  left: 1rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: white;
+  border-top: 2px solid #8380b6;
+  border-left: 2px solid #8380b6;
+  transform: rotate(45deg);
+}
+
+.header_user_drpop_down_exit::after {
+  content: url('../../assets/icon-exit.svg');
+}
+
+// ---------------------------------- header_title
+.header_title {
+  padding-block: 1rem;
+  color: #000000;
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 28px;
+  letter-spacing: 0.15px;
+  text-align: center;
+}
+
+// ---------------------------------- header_link
+.header_linksContainer {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 5rem;
+  background-color: #c2cae8;
+}
+
+.header_link {
+  padding: 0.5rem 1rem;
+  color: #21272a;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22.4px;
+  text-align: left;
+  text-decoration: none;
+}
+
+//   -----------------------header_buttons-bar
+.header_top_buttonBar {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.header_top_buttonBar_line {
+  width: 1px;
+  border-left: 1px solid #000000;
+}
+
+.header_top_button_signin {
+  padding: 10px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  font-family: Roboto, sans-serif;
+  background-color: #8de3db;
+  border: none;
+  border-radius: 0.25rem;
+}
+
+.header_top_button_signup {
+  padding: 10px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  font-family: Roboto, sans-serif;
+  background-color: white;
+  border: none;
+  border-radius: 0.25rem;
+  box-shadow: none;
+}

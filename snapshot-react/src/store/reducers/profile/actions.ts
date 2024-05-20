@@ -94,6 +94,6 @@ const getStatistics = createAsyncThunk(
 
 export {
   changeFeedback, changeGrade, getInterviewById, getLowerSkills,
-  getMyInterviews, getPortrait, getStatistics,
+  getMyInterviews, getPortrait, getStatistics
 };
 

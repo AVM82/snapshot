@@ -55,4 +55,3 @@ export {
   getUserByEmail,
   updateInterviewStatus,
 };
-
