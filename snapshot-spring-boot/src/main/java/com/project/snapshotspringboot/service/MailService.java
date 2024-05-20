@@ -29,10 +29,10 @@ public class MailService {
 
     private final InterviewRepository interviewRepository;
 
-    @Value("${reminder.email.maxRetryAttempts}")
+    @Value("${reminder.email.attempts}")
     private int maxRetryAttempts;
 
-    @Value("${reminder.email.delayRetryInMinutes}")
+    @Value("${reminder.email.retryDelayInMinutes}")
     private long retryDelayInMinutes;
 
     @Value("${spring.mail.username}")
@@ -46,6 +46,13 @@ public class MailService {
 
     @Value("${submit.email.text}")
     private String submitText;
+
+    @Value("${admin.email}")
+    private String adminEmail;
+
+    @Value("${host}")
+    private String host;
+
 
     public void sendEmailSubmitLetter(String to,
                                       String token) {
@@ -71,7 +78,7 @@ public class MailService {
         }
     }
 
-    @Scheduled(cron = "0 50 20 * * ?")
+    @Scheduled(cron = "0 50 17 * * ?")
     public void sendInterviewReminders() {
         LocalDateTime tomorrow = LocalDateTime.now().plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
         LocalDateTime endOfTomorrow = tomorrow.plusDays(1).minusSeconds(1);
@@ -83,24 +90,39 @@ public class MailService {
             UserEntity interviewer = interview.getInterviewer();
             UserEntity searcher = interview.getSearcher();
 
-            sendReminder(interviewer, searcher);
-            sendReminder(searcher, interviewer);
+            String interviewLink = generateInterviewLink(interview);
+
+            sendReminder(interviewer, searcher, interviewLink);
+            sendReminder(searcher, interviewer, interviewLink);
         }
     }
 
-    private void sendReminder(UserEntity recipient, UserEntity counterpart) {
+    public String generateInterviewLink(InterviewEntity interview) {
+        String url = String.format(host + "interview/%s", interview.getId());
+        return String.format("<a href=%s><h3>%s<h3/></a>", url, interview.getTitle());
+    }
+
+    public void sendReminder(UserEntity recipient, UserEntity counterpart, String interviewLink) {
         boolean success = false;
         int retryAttempts = 0;
         while (!success && retryAttempts < maxRetryAttempts) {
             try {
-                send(recipient.getEmail(), "Нагадування про заплановане інтерв'ю",
-                        "Доброго дня, " + recipient.getFirstname() + "! Нагадуємо вам про заплановане інтерв'ю з "
-                                + counterpart.getFirstname() + " " + counterpart.getLastname() + " завтра.");
+                String messageText = String.format(
+                        "<p>Доброго дня, %s!</p>" +
+                                "<p>Нагадуємо вам про заплановане інтерв'ю з %s %s завтра. </p>" +
+                                "<p>Посилання на інтерв'ю: %s</p>",
+                        recipient.getFirstname(), counterpart.getFirstname(), counterpart.getLastname(), interviewLink
+                );
+
+                send(recipient.getEmail(), "Нагадування про заплановане інтерв'ю", messageText);
                 log.info("Sent reminder to " + recipient.getId() + ": " + recipient.getEmail());
                 success = true;
             } catch (Exception e) {
                 log.error("Failed to send reminder to " + recipient.getId() + ": " + recipient.getEmail(), e);
                 retryAttempts++;
+                if (retryAttempts >= maxRetryAttempts) {
+                    notifyAdmin(recipient, interviewLink, e);
+                }
                 try {
                     Thread.sleep(retryDelayInMinutes * 60 * 1000);
                 } catch (InterruptedException ex) {
@@ -108,6 +130,18 @@ public class MailService {
                     Thread.currentThread().interrupt();
                 }
             }
+        }
+    }
+
+    public void notifyAdmin(UserEntity recipient, String link, Exception e) {
+        String subject = "Failed to send reminder after multiple attempts";
+        String text = String.format("Failed to send reminder to %s (%s) after %d attempts. Error: %s. <p>Interview link: %s</p>",
+                recipient.getFirstname(), recipient.getEmail(), maxRetryAttempts, e.getMessage(), link);
+        try {
+            send(adminEmail, subject, text);
+            log.info("Sent failure notification to admin: " + adminEmail);
+        } catch (Exception ex) {
+            log.error("Failed to send failure notification to admin: " + adminEmail, ex);
         }
     }
 }
