@@ -1,0 +1,42 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 3rem;
+  height: 16rem;
+  padding: 3rem 5rem;
+  background-color: #0f172a;
+}
+
+.footer_linksContainer {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+}
+
+.footer_link {
+  padding: 0.5rem 0.75rem;
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 1rem;
+  font-family: Roboto, sans-serif;
+  text-align: left;
+}
+
+.footer_link_hr {
+  display: none;
+}
+
+.footer_socialMediaLinks {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.footer_copyright {
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 14px;
+  font-family: Roboto, sans-serif;
+  text-align: center;
+}
