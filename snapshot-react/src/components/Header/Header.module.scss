@@ -90,12 +90,12 @@
 // ---------------------------------- header_title
 .header_title {
   padding-block: 1rem;
+  color: #000000;
   font-weight: 600;
   font-size: 1.25rem;
-  text-align: center;
-  color: #000000;
   line-height: 28px;
   letter-spacing: 0.15px;
+  text-align: center;
 }
 
 // ---------------------------------- header_link
@@ -133,18 +133,18 @@
   font-weight: 500;
   font-size: 0.9rem;
   font-family: Roboto, sans-serif;
+  background-color: #8de3db;
   border: none;
   border-radius: 0.25rem;
-  background-color: #8de3db;
 }
 
 .header_top_button_signup {
   padding: 10px;
-  background-color: white;
-  border: none;
-  border-radius: 0.25rem;
   font-weight: 500;
   font-size: 0.9rem;
   font-family: Roboto, sans-serif;
+  background-color: white;
+  border: none;
+  border-radius: 0.25rem;
   box-shadow: none;
 }
