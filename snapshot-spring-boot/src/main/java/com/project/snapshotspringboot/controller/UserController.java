@@ -93,12 +93,23 @@ public class UserController {
         return service.getUserInterviewsResults(userId);
     }
 
+    @GetMapping("/portrait-by-period/{userId}")
+    @Operation(summary = "Get a portrait (by period) of an IT specialist", description = "Get a portrait (by period) of an IT specialist based on the results of interviews")
+    @ApiResponse(responseCode = "200", description = "Portrait of IT specialist (by period) found successfully",
+            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserResultsByInterviewsResponseDto.class))})
+    @ApiResponse(responseCode = "400", description = "User (IT specialist) not found", content = {@Content})
+    public List<UserResultsByInterviewsResponseDto> getResultsByInterviewsByPeriod(@PathVariable Long userId,
+                                                                                   @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+                                                                                   @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
+        return service.getUserInterviewsResultsByPeriod(userId, fromDate, toDate);
+    }
+
     @Operation(summary = "Get all users by skills and grade", description = "Get all users by skills and grade based on the results of interviews")
     @ApiResponse(responseCode = "200", description = "Users (IT specialist) found successfully",
             content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserSearchResponseDto.class))})
     @ApiResponse(responseCode = "400", description = "User (IT specialist) not found", content = {@Content})
     @PostMapping("/by-skills-and-grades")
-        public ResponseEntity<List<UserSearchResponseDto>> findUsersBySkillsAndGrades(@RequestBody List<SearchSkillGradeDto> skillGrades) {
+    public ResponseEntity<List<UserSearchResponseDto>> findUsersBySkillsAndGrades(@RequestBody List<SearchSkillGradeDto> skillGrades) {
 
         List<UserSearchResponseDto> responseDto = service.findSearcherIdBySkillsAndGrades(skillGrades);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);

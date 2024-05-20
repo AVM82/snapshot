@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/comma-dangle */
-/* eslint-disable comma-dangle */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import snapshotApi from '../../../api/request';
@@ -73,7 +71,7 @@ const getLowerSkills = createAsyncThunk(
     const response: string[] = await snapshotApi.get(`/skills/${id}`);
 
     return response;
-  }
+  },
 );
 
 const getPortrait = createAsyncThunk(
@@ -82,7 +80,7 @@ const getPortrait = createAsyncThunk(
     const response: IPortrait[] = await snapshotApi.get(`/users/portrait/${id}`);
 
     return response;
-  }
+  },
 );
 
 const getStatistics = createAsyncThunk(
@@ -91,7 +89,7 @@ const getStatistics = createAsyncThunk(
     const response: IStatistics[] = await snapshotApi.get(`/users/statistic/${id}?from=${from}&to=${to}`);
 
     return response;
-  }
+  },
 );
 
 export {
