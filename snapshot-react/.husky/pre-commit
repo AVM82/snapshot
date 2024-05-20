@@ -1,5 +1,0 @@
-. "$(dirname -- "$0")/_/husky.sh"
-
-cd snapshot-react
-npx lint-staged
-

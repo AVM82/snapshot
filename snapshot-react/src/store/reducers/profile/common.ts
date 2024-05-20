@@ -5,6 +5,7 @@ enum ActionType {
   CHANGE_GRADE = 'profile/changeGrade',
   GET_LOWER_SKILLS = 'profile/get-lower-skills',
   GET_PORTRAIT = 'profile/get-portrait',
+  GET_STATISTICS = 'profile/get-statistics',
 }
 
 export default ActionType;

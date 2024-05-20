@@ -1,0 +1,49 @@
+name: checkstyle
+on:
+    pull_request:
+        branches:
+             - dev
+
+env: 
+  NODE_VERSION: 20
+  
+jobs:
+  checkstyle:
+    name: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dbelyaev/action-checkstyle@master
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          level: warning
+          checkstyle_config: snapshot-spring-boot/checkstyle.xml
+
+      - name: Setup node env
+        uses: actions/setup-node@v2.1.2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+        if: ${{ always() }}
+
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+        if: ${{ always() }}
+
+      - name: Install dependencies
+        run: npm --prefix snapshot-react install
+        if: ${{ always() }}
+        
+      - name: Run lint
+        run: npm --prefix snapshot-react run lint
+        if: ${{ always() }}
+          
+      - name: Run lint:css
+        run: npm --prefix snapshot-react run lint:css
+        if: ${{ always() }}
+    

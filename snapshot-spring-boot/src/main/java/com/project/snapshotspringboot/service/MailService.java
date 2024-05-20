@@ -126,6 +126,7 @@ public class MailService {
                 try {
                     Thread.sleep(retryDelayInMinutes * 60 * 1000);
                 } catch (InterruptedException ex) {
+                    log.error("Interrupted Exception", ex);
                     Thread.currentThread().interrupt();
                 }
             }

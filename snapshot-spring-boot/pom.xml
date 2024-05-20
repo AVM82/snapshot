@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.project</groupId>
     <artifactId>snapshot-spring-boot</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <name>snapshot-spring-boot</name>
     <description>snapshot-spring-boot</description>
 
@@ -24,10 +24,12 @@
         <oauth2.client.version>6.2.4</oauth2.client.version>
         <jjwt.version>0.12.5</jjwt.version>
         <springdoc.openapi.starter.webmvc.ui.version>2.5.0</springdoc.openapi.starter.webmvc.ui.version>
+        <spring.boot.starter.cache.version>3.2.5</spring.boot.starter.cache.version>
         <maven.compile.plugin.version>3.11.0</maven.compile.plugin.version>
         <node.version>v20.12.0</node.version>
         <npm.version>10.5.0</npm.version>
         <maven.resources.plugin.version>3.3.1</maven.resources.plugin.version>
+        <caffeine.version>3.1.8</caffeine.version>
     </properties>
 
     <dependencies>
@@ -122,6 +124,19 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- cache with caffeine -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+            <version>${spring.boot.starter.cache.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,61 +1,112 @@
-.auth-container {
+@import '/src/utils/constants&mixins';
+
+.authPageContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  min-height: 100vh;
+}
+
+.switchAuthContainer {
   display: flex;
   justify-content: center;
   align-items: center;
-}
+  width: 100%;
+  background: none;
+  border: none;
 
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: start;
-  gap: 10px;
-}
+  .switchAuthLink {
+    text-decoration: none;
+  }
 
-.auth-form-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 300px;
-  height: 500px;
-  padding: 10px;
-  border: 2px solid black;
-}
-
-.to-sign-in {
-  margin-top: 20px;
-  font-weight: bold;
-  font-size: 18px;
-  text-decoration: underline;
-  cursor: pointer;
-
-  &:hover {
-    color: green;
+  p {
+    @include info-text;
   }
 }
 
-.auth-form-input {
-  width: 100%;
+.signContainer {
+  width: 460px;
+  padding: 1.5rem 2rem;
+  border: 1px solid rgb(0 0 0 / 15%);
+  border-radius: 12px;
+
+  form {
+    display: flex;
+    flex-direction: column;
+
+    p {
+      @include info-text;
+    }
+  }
 }
 
-.auth-form-btn {
-  align-self: center;
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  img {
+    width: 41.375rem;
+    height: 37.75rem;
+  }
 }
 
-.auth-form-error {
-  color: red;
-  font-weight: bold;
-  font-size: 14px;
+.formInputsContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1.25rem 0;
 }
 
-// .login {
+.formErr {
+  @include info-text;
 
-// }
+  min-height: 1.2rem;
+  padding-left: 1rem;
+}
 
-// .paswword {
+.submitButton {
+  margin: 0.75rem 0;
 
-// }
+  @include primary-button;
+}
 
-// .confirm-password {
+.additionalActionsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
 
-// }
+  div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .link {
+    color: $text-color;
+    text-decoration: none;
+  }
+}
+
+.decorateLink {
+  color: $secondary-text;
+}
+
+.text {
+  display: flex;
+  justify-content: center;
+  padding-top: 2rem;
+}
+
+.googleButtonContainer {
+  padding: 1rem 0;
+}
+
+.googleButton {
+  @include secondary-button;
+}

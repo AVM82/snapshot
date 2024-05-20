@@ -1,17 +1,25 @@
+import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import snapshotApi from '../../api/request';
+// import EmailRegexp from '../../common/emailRegexp.ts';
+// import passwordRegexp from '../../common/passwordRegexp.ts';
+// import EmailRegexp from '../../common/emailRegexp';
 import { useAppDispatch } from '../../hooks/redux';
 import { ISignIn } from '../../models/auth/ISignIn';
 import getUser from '../../store/reducers/user/actions';
 import styles from './AuthPage.module.scss';
+import AuthActions from './components/AuthActions';
+import Input from './components/Input';
+import SwitchAuth from './components/SwitchAuth';
 import OAuth2 from './OAuth2';
 
-export default function SignInPage(): JSX.Element {
+function SignInPage(): React.JSX.Element {
   const {
-    register, handleSubmit, reset,
-  } = useForm<ISignIn>();
+    register, handleSubmit, reset, formState: { errors },
+  } = useForm<ISignIn>({ mode: 'onBlur' });
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const onSubmit: SubmitHandler<ISignIn> = async (data): Promise<void> => {
@@ -22,52 +30,62 @@ export default function SignInPage(): JSX.Element {
       localStorage.setItem('refresh_token', token.refresh_token);
       dispatch(getUser());
       navigate('/');
+      reset();
+    } else {
+      setMessage('Невірний логін або пароль');
     }
-
-    reset();
   };
 
   return (
-    <div className={styles['auth-container']}>
-      <div className={styles['auth-form-wrapper']}>
-        <h3>Вхід</h3>
-        <form className={styles['auth-form']} onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor="login">Логін *</label>
-          <input
-            type="text"
-            id="login"
-            className={`${styles['auth-form-input']}`}
-            {...register('email')}
-            placeholder="Введіть електронну пошту"
-            required
-          />
-          <label htmlFor="password">Пароль *</label>
-          <input
-            type="password"
-            id="password"
-            className={`${styles['auth-form-input']}`}
-            {...register('password')}
-            required
-            placeholder="Введіть пароль"
-          />
-          <button
-            type="submit"
-            className={styles['auth-form-btn']}
-          >
-            Увійти
-          </button>
-        </form>
-        <div
-          className={styles['to-sign-in']}
-          onClick={() => navigate('/sign-up')}
-          role="button"
-          tabIndex={0}
-        >
-          <p>Не має акаунта? Зареєструватись</p>
+    <section className={styles.signContainer}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <legend>
+          <h2>З поверненням у SNAPSHOT IT</h2>
+          <p>Введіть свої дані щоб продовжити</p>
+        </legend>
+        <div>
+          <div className={styles.formInputsContainer}>
+            <Input
+              inputName="Email"
+              type="text"
+              id="login"
+              {...register('email', {
+                // pattern: {
+                //   value: EmailRegexp,
+                //   message: 'Неправильна адреса електронної пошти',
+                // },
+                required: {
+                  value: true,
+                  message: 'Вкажіть ваш email',
+                },
+              })}
+              placeholder="Введіть електронну адресу"
+              error={message || errors.email?.message}
+            />
+
+            <Input
+              inputName="Password"
+              type="password"
+              id="password"
+              placeholder="Введіть пароль"
+              {...register('password', {
+                required: {
+                  value: true,
+                  message: 'Вкажіть ваш пароль',
+                },
+              })}
+              error={message || errors.password?.message}
+            />
+          </div>
         </div>
-        <br />
-        <OAuth2 />
-      </div>
-    </div>
+        <AuthActions />
+        <button type="submit" className={styles.submitButton}>
+          Увійти
+        </button>
+      </form>
+      <SwitchAuth to="/sign-up" text="Ще немає облікового запису? Зареєструватися" />
+      <OAuth2 text="Або увійдіть за допомогою:" />
+    </section>
   );
 }
+export default SignInPage;

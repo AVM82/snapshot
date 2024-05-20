@@ -50,9 +50,8 @@ const getSkillQuestions = createAsyncThunk(
 );
 
 export {
-    addInterview, addQuestion, getAllSkills, getInterviewId,
-    getSkillQuestions,
-    getUserByEmail,
-    updateInterviewStatus
+  addInterview, addQuestion, getAllSkills, getInterviewId,
+  getSkillQuestions,
+  getUserByEmail,
+  updateInterviewStatus,
 };
-
