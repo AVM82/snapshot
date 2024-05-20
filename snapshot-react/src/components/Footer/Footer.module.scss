@@ -2,8 +2,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  height: 16rem;
   gap: 3rem;
+  height: 16rem;
   padding: 3rem 5rem;
   background-color: #0f172a;
 }
@@ -15,11 +15,11 @@
 }
 
 .footer_link {
-  color: #fff;
+  padding: 0.5rem 0.75rem;  
+  color: #ffffff;
   font-weight: 400;
   font-size: 1rem;
   font-family: Roboto, sans-serif;
-  padding: 0.5rem 0.75rem;
   text-align: left;
 }
 
@@ -34,8 +34,8 @@
 }
 
 .footer_copyright {
+  color: #ffffff; 
   text-align: center;
-  color: #fff;
   font-weight: 400;
   font-size: 14px;
   font-family: Roboto;
