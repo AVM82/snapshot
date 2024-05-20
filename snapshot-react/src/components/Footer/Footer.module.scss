@@ -3,40 +3,40 @@
   flex-direction: column;
   justify-content: space-evenly;
   height: 16rem;
-  padding: 3rem 5rem;
   gap: 3rem;
-  background-color: #0F172A; 
+  padding: 3rem 5rem;
+  background-color: #0f172a;
 }
-    
+
 .footer_linksContainer {
   display: flex;
   justify-content: center;
   align-items: end;
 }
-  
+
 .footer_link {
-  color: #FFF;
-  font-family: 'Roboto', sans-serif;
-  font-size: 1rem;
+  color: #fff;
   font-weight: 400;
-  text-align: left;
+  font-size: 1rem;
+  font-family: Roboto, sans-serif;
   padding: 0.5rem 0.75rem;
+  text-align: left;
 }
-  
+
 .footer_link_hr {
   display: none;
 }
-  
+
 .footer_socialMediaLinks {
   display: flex;
   justify-content: center;
   gap: 1rem;
 }
-  
+
 .footer_copyright {
   text-align: center;
-  font-family: Roboto;
-  font-size: 14px;
+  color: #fff;
   font-weight: 400;
-  color: #FFF;
+  font-size: 14px;
+  font-family: Roboto;
 }
