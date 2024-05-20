@@ -5,6 +5,7 @@ import snapshotApi from '../../api/request';
 import AutocompleteInput from '../../components/AutocompleteInput/AutocompleteInput';
 import ICandidateSearch from '../../models/candidateSearch/ICandidateSearch';
 import CandidatePreview from './CandidatePreview';
+import styles from './CandidateSearch.module.scss';
 
 type Criteria = { skill: string, grade: string };
 
@@ -14,7 +15,8 @@ function CandidateSearch(): JSX.Element {
   const [selectOptions, setSelectOptions] = useState<string[]>([]);
   const [formData, setFormData] = useState<Criteria[]>([]);
   const [click, setClick] = useState(false);
-
+  const [isExpanded, setIsExpanded] = useState(false);
+  const endOfSlice = isExpanded ? selectOptions.length : 7;
   useEffect(() => {
     const getLowerSkills = async (): Promise<void> => {
       const response: string[] = await snapshotApi.get('/skills/lower-level');
@@ -68,44 +70,62 @@ function CandidateSearch(): JSX.Element {
   };
 
   return (
-    <section style={{ display: 'flex', flexDirection: 'column' }}>
-      <div style={{ display: 'flex', gap: '10px' }}>
-        <AutocompleteInput
-          label="languages"
-          pholder="Keyword..."
-          data={selectOptions}
-          onSelected={getSelectedVal}
-        />
-      </div>
-      <form
-        style={{
-          display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'start', gap: '10px',
-        }}
-        onSubmit={handleSubmit}
-      >
-        {showSelected.map((value) => (
-          <div style={{ backgroundColor: 'blueviolet', padding: '5px' }}>
-            <label id={`${value}`}>
-              {value}
-              {' '}
-              <input
-                type="text"
-                name={`${value}`}
-                id={`${value}`}
-                placeholder="Введіть рівень у %"
-                maxLength={2}
-                onChange={handleChange}
-              />
-            </label>
+    <section className={styles.candidateSearchPage}>
+      <div className={styles.candidateSearchRow}>
+        <div className={styles.candidateSearchInput}>
+          <AutocompleteInput
+            pholder="Keyword..."
+            data={selectOptions}
+            onSelected={getSelectedVal}
+          />
+          <div className={styles.skillsBlock}>
+            {[...selectOptions.sort()].slice(0, endOfSlice).map((skill) => (
+              <div
+                key={skill}
+                className={styles.skillChip}
+              >
+                {skill}
+              </div>
+            ))}
+            <div
+              aria-label="expand-skill-block"
+              className={styles.chevron}
+              role="button"
+              tabIndex={0}
+              onClick={(): void => setIsExpanded(!isExpanded)}
+            />
+          </div>
+          <form
+            style={{
+              display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'start', gap: '10px',
+            }}
+            onSubmit={handleSubmit}
+          >
+            {showSelected.map((value) => (
+              <div style={{ backgroundColor: 'blueviolet', padding: '5px' }} key={value}>
+                <label id={`${value}`}>
+                  {value}
+                  {' '}
+                  <input
+                    type="text"
+                    name={`${value}`}
+                    id={`${value}`}
+                    placeholder="Введіть рівень у %"
+                    maxLength={2}
+                    onChange={handleChange}
+                  />
+                </label>
+              </div>
+            ))}
+            {formData.length > 0 && <button type="submit">Знайти</button>}
+          </form>
+        </div>
+        {userPreviews && userPreviews.map((preview) => (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <CandidatePreview key={preview.id} {...preview} />
           </div>
         ))}
-        {formData.length > 0 && <button type="submit">Знайти</button>}
-      </form>
-      {userPreviews && userPreviews.map((preview) => (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <CandidatePreview key={preview.id} {...preview} />
-        </div>
-      ))}
+      </div>
     </section>
   );
 }

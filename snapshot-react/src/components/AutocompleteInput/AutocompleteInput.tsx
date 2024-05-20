@@ -1,14 +1,12 @@
 import { useState } from 'react';
 
 type AutocompleteInputProps = {
-  label: string,
   pholder: string,
   data: string[],
   onSelected: (param: string) => void,
 };
 
 function AutocompleteInput({
-  label,
   pholder,
   data,
   onSelected,
@@ -37,8 +35,8 @@ function AutocompleteInput({
   return (
     <div className="sugesstion-auto">
       <div className="form-control-auto">
-        <label htmlFor="tag-input">{label}</label>
         <input
+          aria-label="candidate-search"
           id="tag-input"
           placeholder={pholder}
           type="search"
@@ -46,7 +44,6 @@ function AutocompleteInput({
           onChange={handleChange}
         />
       </div>
-
       <div
         className="suggestions"
         style={{
