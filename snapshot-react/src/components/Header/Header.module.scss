@@ -42,13 +42,13 @@
 .drop_down_profile {
   position: absolute;
   top: 2.5rem;
-  display: none;
   right: -7.5rem;
+  display: none;
   width: 12rem;
   height: 10rem;
   background-color: #ffffff;
+  border: 2px solid #8380b6;
   border-radius: 0.25rem;
-  border: 2px solid #8380B6;
   cursor: pointer;
 }
 
@@ -61,13 +61,13 @@
 
 .header_user_drpop_down_link {
   display: flex;
-  gap: 0.5rem;
   position: relative;
+  gap: 0.5rem;
   height: 2rem;
   padding-block: 1rem;
   color: #000000;
-  text-decoration: none;
   font-size: 0.9rem;
+  text-decoration: none;
 }
 
 .drop_down_profile::before {
@@ -78,9 +78,9 @@
   width: 0.5rem;
   height: 0.5rem;
   background-color: white;
-  transform: rotate(45deg);
-  border-left: 2px solid #8380b6;
   border-top: 2px solid #8380b6;
+  border-left: 2px solid #8380b6;
+  transform: rotate(45deg);
 }
 
 .header_user_drpop_down_exit::after {
@@ -91,10 +91,10 @@
 .header_title {
   padding-block: 1rem;
   font-weight: 600;
-  text-align: center;
   font-size: 1.25rem;
-  line-height: 28px;
+  text-align: center;
   color: #000000;
+  line-height: 28px;
   letter-spacing: 0.15px;
 }
 
@@ -130,21 +130,21 @@
 
 .header_top_button_signin {
   padding: 10px;
-  border: none;
   font-weight: 500;
-  border-radius: 0.25rem;
-  font-family: Roboto;
   font-size: 0.9rem;
+  font-family: Roboto, sans-serif;
+  border: none;
+  border-radius: 0.25rem;
   background-color: #8de3db;
 }
 
 .header_top_button_signup {
-  border: none;
-  background-color: white;
   padding: 10px;
+  background-color: white;
+  border: none;
   border-radius: 0.25rem;
-  box-shadow: none;
-  font-family: Roboto, sans-serif;
   font-weight: 500;
   font-size: 0.9rem;
+  font-family: Roboto, sans-serif;
+  box-shadow: none;
 }
