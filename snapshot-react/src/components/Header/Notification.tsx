@@ -19,7 +19,6 @@ function Notification():React.JSX.Element {
     })();
   }, [dispatch]);
 
-  // eslint-disable-next-line consistent-return
   useEffect(() => {
     const updateInterval = (): void => {
       const time = getTimeToInterview(interviews);
