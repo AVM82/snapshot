@@ -1,10 +1,10 @@
 import React from 'react';
 
-import {useAppSelector} from '../../hooks/redux';
-import {InterviewStatuses} from '../../models/profile/IInterview';
+import { useAppSelector } from '../../hooks/redux';
+import { InterviewStatuses } from '../../models/profile/IInterview';
 import IInterviewPreview from '../../models/profile/IInterviewPreview';
-import {getInterviewsByStatus} from '../../utils/notification/getTimeToInterview';
-import InterviewItemRow from './components/InterviewTableRow/InterviewItemRow';
+import { getInterviewsByStatus } from '../../utils/notification/getTimeToInterview';
+import InterviewItemRow from './components/InterviewItemRow.tsx/InterviewItemRow';
 import styles from './MyInterviews.module.scss';
 
 interface MyInterviewsProps {
@@ -16,8 +16,8 @@ function MyInterviews({ status }:MyInterviewsProps): React.JSX.Element {
   const actualInterviews:IInterviewPreview[] = status === '' ? interviews : getInterviewsByStatus(interviews, status);
 
   return (
-    <table className={styles['interview-table']}>
-      <thead className={styles['interview-table-header']}>
+    <table className={styles.interviewTable}>
+      <thead className={styles.interviewTableHeader}>
         <tr>
           <th>Дата</th>
           <th>Направлення</th>
@@ -28,6 +28,7 @@ function MyInterviews({ status }:MyInterviewsProps): React.JSX.Element {
       <tbody>
         {actualInterviews.map((item) => (
           <InterviewItemRow
+            key={item.id}
             {...item}
           />
         ))}
