@@ -1,11 +1,15 @@
 import React, { useEffect } from 'react';
 import {
-  NavLink, Outlet, useParams,
+  Link,
+  Outlet, useParams,
 } from 'react-router-dom';
 
 import { useAppDispatch } from '../../hooks/redux';
-import { InterviewStatuses } from '../../models/profile/IInterview';
 import { getLowerSkills, getMyInterviews, getPortrait } from '../../store/reducers/profile/actions';
+import Feedback from './components/Feedback/Feedback';
+import InterviewActionPanel from './components/InterviewActionPanel/InterviewActionPanel';
+import NavBar from './components/NavBar/NavBar';
+import UserCard from './components/UserCard/UserCard';
 import styles from './profile.module.scss';
 
 function Profile(): React.JSX.Element {
@@ -19,32 +23,52 @@ function Profile(): React.JSX.Element {
       await dispatch(getPortrait(Number(userId)));
     };
 
-    fetchProfileData();
+    (async ():Promise<void> => {
+      await fetchProfileData();
+    })();
   }, [dispatch, userId]);
-  const interviewStatuses:InterviewStatuses[] = ['', 'PLANNED', 'FINISHED', 'COMPLETED'];
 
   return (
     <section className={styles.profileContainer}>
+      <Feedback/>
 
-      <nav className={styles.interviewTypesContainer}>
-        {interviewStatuses.map((status) => (
-          <NavLink
-            key={status}
-            to={`${status}`}
-            end
-            className={({ isActive }) => (isActive ? `${styles.activeLink} ${styles.link}` : styles.link)}
-          >
-            <p>{status}</p>
-            <p>0</p>
-          </NavLink>
-        ))}
-      </nav>
-      <div>
-        <Outlet />
-
-        {/* <Portrait /> */}
+      <div className={styles.profileHeader}>
+        <h2>Мій профіль</h2>
+        <InterviewActionPanel />
       </div>
+      <section className={styles.bodyContainer}>
+        <section className={styles.avatar}>
+          <div className={styles.profileVisibility}>
+            <span className={styles.info} />
+            <p>Відкритий профіль</p>
+            <label className={styles.switcher}>
+              <input type="checkbox" />
+              <span className={styles.slider} />
+            </label>
+          </div>
+          <UserCard />
+          <div />
+        </section>
+        <section className={styles.InterviewStatisticsContainer}>
+          <div>
+
+            <h3>Статистика співбесід</h3>
+            <NavBar />
+          </div>
+          <div>
+            <div className={styles.tableHeader}>
+              <h3>Журнал співбесід</h3>
+              <Link to="all" className={styles.link}>
+
+                <h5>всі співбесіди</h5>
+              </Link>
+            </div>
+            <Outlet />
+          </div>
+        </section>
+      </section>
     </section>
+
   );
 }
 

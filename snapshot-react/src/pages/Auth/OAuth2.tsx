@@ -18,11 +18,11 @@ function OAuth2({ text }:OAuth2Params): React.JSX.Element {
     <>
       <h4 className={styles.text}>{text}</h4>
       <div className={styles.googleButtonContainer}>
-        <button type="button" tabIndex={0} className={styles.googleButton}>
-          <Link to={googleAuthUri} className={styles.googleButtonText}>
+        <Link to={googleAuthUri} className={styles.googleButtonText}>
+          <button type="button" tabIndex={0} className={styles.googleButton}>
             GOOGLE
-          </Link>
-        </button>
+          </button>
+        </Link>
       </div>
 
     </>
