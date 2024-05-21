@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useAppSelector } from '../../hooks/redux';
-import InterviewActionPanel from './components/InterviewActionPanel/InterviewActionPanel';
+import { useAppSelector } from '../../../../../../hooks/redux';
+import InterviewActionPanel from '../InterviewActionPanel/InterviewActionPanel';
 import InterviewItem from './InterviewItem';
 import styles from './MyInterviews.module.scss';
 

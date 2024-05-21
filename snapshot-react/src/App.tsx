@@ -13,10 +13,10 @@ import SuccessfulSignUp from './pages/Auth/SuccessfulSignUp';
 import CandidateSearch from './pages/CandidateSearch/CandidateSearch';
 import Home from './pages/Home/Home';
 import InterviewPage from './pages/Interview/InterviewPage';
+import MyInterviews from './pages/Profile/components/Interviews/components/MyInterviews/MyInterviews';
+import UserRoles from './pages/Profile/components/Roles/UserRoles';
 import Statistics from './pages/Profile/components/Statistics/Statistics';
-import MyInterviews from './pages/Profile/MyInterviews';
 import Profile from './pages/Profile/Profile';
-import UserRoles from './pages/Profile/UserRoles';
 import ProtectedRoute from './utils/ProtectedRoute';
 
 function App(): React.JSX.Element {
@@ -24,35 +24,35 @@ function App(): React.JSX.Element {
     <Routes>
       <Route
         path="sign-in"
-        element={(
+        element={
           <AuthPage>
             <SignInPage />
           </AuthPage>
-        )}
+        }
       />
       <Route
         path="forgot-password"
-        element={(
+        element={
           <AuthPage>
             <ForgotPassword />
           </AuthPage>
-        )}
+        }
       />
       <Route
         path="sign-up"
-        element={(
+        element={
           <AuthPage>
             <SignUpPage />
           </AuthPage>
-        )}
+        }
       />
       <Route
         path="thank-you"
-        element={(
+        element={
           <AuthPage>
             <SuccessfulSignUp />
           </AuthPage>
-        )}
+        }
       />
       <Route path="/" element={<Layout />}>
         <Route element={<Home />} index />

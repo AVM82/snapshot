@@ -7,9 +7,9 @@ import {
   getMyInterviews,
   getPortrait
 } from '../../store/reducers/profile/actions';
+import MyInterviews from './components/Interviews/components/MyInterviews/MyInterviews';
+import UserRoles from './components/Roles/UserRoles';
 import Statistics from './components/Statistics/Statistics';
-import MyInterviews from './MyInterviews';
-import UserRoles from './UserRoles';
 
 function Profile(): JSX.Element {
   const dispatch = useAppDispatch();
