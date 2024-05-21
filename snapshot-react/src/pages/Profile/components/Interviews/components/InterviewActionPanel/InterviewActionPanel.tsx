@@ -1,29 +1,27 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { useAppDispatch } from '../../../../hooks/redux';
-import { resetInterviewState } from '../../../../store/reducers/interwiew/interviewSlice';
+import { useAppDispatch } from '../../../../../../hooks/redux';
+import { resetInterviewState } from '../../../../../../store/reducers/interwiew/interviewSlice';
 import InterviewScheduler from '../InterviewScheduler/InterviewScheduler';
 
-function InterviewActionPanel():React.JSX.Element {
+function InterviewActionPanel(): React.JSX.Element {
   const [showNewInterview, setShowNewInterview] = useState(false);
   const [showInterviewScheduler, setShowInterviewScheduler] = useState(false);
-  const handleNewInterviewClick = ():void => setShowNewInterview(true);
+  const handleNewInterviewClick = (): void => setShowNewInterview(true);
   const dispatch = useAppDispatch();
-  const handleSchedulerClose = ():void => {
+  const handleSchedulerClose = (): void => {
     setShowInterviewScheduler(false);
     setShowNewInterview(false);
   };
-  const handleLinkToInterview = ():void => {
+  const handleLinkToInterview = (): void => {
     dispatch(resetInterviewState());
   };
 
-  const renderNewInterviewBlock = ():React.JSX.Element => (
+  const renderNewInterviewBlock = (): React.JSX.Element => (
     <div>
       <button type="button" onClick={handleLinkToInterview}>
-        <Link to="/interview">
-          Розпочати
-        </Link>
+        <Link to="/interview">Розпочати</Link>
       </button>
       <button type="button" onClick={() => setShowInterviewScheduler(true)}>
         Запланувати
@@ -34,7 +32,7 @@ function InterviewActionPanel():React.JSX.Element {
     </div>
   );
 
-  const renderNewInterviewButton = ():React.JSX.Element => (
+  const renderNewInterviewButton = (): React.JSX.Element => (
     <div>
       {!showNewInterview ? (
         <button type="button" onClick={handleNewInterviewClick}>
@@ -48,9 +46,11 @@ function InterviewActionPanel():React.JSX.Element {
 
   return (
     <div>
-      {!showInterviewScheduler
-        ? renderNewInterviewButton()
-        : <InterviewScheduler onClose={handleSchedulerClose} />}
+      {!showInterviewScheduler ? (
+        renderNewInterviewButton()
+      ) : (
+        <InterviewScheduler onClose={handleSchedulerClose} />
+      )}
     </div>
   );
 }

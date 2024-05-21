@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom';
 
-import IInterviewPreview from '../../models/profile/IInterviewPreview';
+import IInterviewPreview from '../../../../../../models/profile/IInterviewPreview';
 
 function InterviewItem({
-  id, title, status, interviewerFullName, searcherFullName,
+  id,
+  title,
+  status,
+  interviewerFullName,
+  searcherFullName
 }: Partial<IInterviewPreview>): JSX.Element {
   return (
     <div
@@ -13,18 +17,19 @@ function InterviewItem({
       style={{ cursor: 'pointer' }}
     >
       <button type="button">
-        <Link onClick={(event) => event.stopPropagation()} to={`/interview/${id}`}>Сторінка Інтервью</Link>
+        <Link
+          onClick={(event) => event.stopPropagation()}
+          to={`/interview/${id}`}
+        >
+          Сторінка Інтервью
+        </Link>
       </button>
       <p>{title}</p>
       <p>{status}</p>
       <p>
-        from:
-        {' '}
-        {interviewerFullName}
+        from: {interviewerFullName}
         <br />
-        to:
-        {' '}
-        {searcherFullName}
+        to: {searcherFullName}
       </p>
     </div>
   );

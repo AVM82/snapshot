@@ -1,10 +1,7 @@
-/* eslint-disable max-len */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-nested-ternary */
 
-import {
-  Line, line, scaleLinear, select,
-} from 'd3';
+import { Line, line, scaleLinear, select } from 'd3';
 import { useEffect, useRef, useState } from 'react';
 
 import { useAppSelector } from '../../../../hooks/redux';
@@ -37,26 +34,39 @@ interface ExpandProps {
 
 function Portrait(): JSX.Element {
   const [expanded, setExpanded] = useState<ExpandProps>({
-    expanded: false, radius: 150, width: 500, height: 400,
+    expanded: false,
+    radius: 150,
+    width: 500,
+    height: 400
   });
   const { lowerSkills, portrait } = useAppSelector((state) => state.profile);
   const svgRef = useRef<SVGSVGElement | null>(null);
   const margin = {
-    top: 20, right: 10, bottom: 60, left: 10,
+    top: 20,
+    right: 10,
+    bottom: 60,
+    left: 10
   };
   const width = expanded.width - margin.left - margin.right;
   const height = expanded.height - margin.top - margin.bottom;
 
-  const capitalize = (str: string): string => str.charAt(0).toUpperCase() + str.slice(1);
+  const capitalize = (str: string): string =>
+    str.charAt(0).toUpperCase() + str.slice(1);
 
   const handleExpand = (): void => {
     if (!expanded.expanded) {
       setExpanded({
-        expanded: true, radius: 250, width: 860, height: 800,
+        expanded: true,
+        radius: 250,
+        width: 860,
+        height: 800
       });
     } else {
       setExpanded({
-        expanded: false, radius: 150, width: 500, height: 450,
+        expanded: false,
+        radius: 150,
+        width: 500,
+        height: 450
       });
     }
   };
@@ -64,11 +74,12 @@ function Portrait(): JSX.Element {
   useEffect(() => {
     if (svgRef.current) svgRef.current.innerHTML = '';
     const svg = select(svgRef.current);
-    svg.attr('width', width + margin.left + margin.right)
+    svg
+      .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`)
-      .attr('fill', 'gray');
+      .attr('fill', 'black');
 
     const { radius } = expanded;
     // const ticks = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
@@ -79,7 +90,10 @@ function Portrait(): JSX.Element {
     const radAxis = scaleLinear().domain([0.1, 1.0]).range([0, radius]);
     const radAxis1 = scaleLinear().domain([10, 100]).range([0, radius]);
 
-    const cordForAngle = (angle: number, len: number): { x: number, y: number } => {
+    const cordForAngle = (
+      angle: number,
+      len: number
+    ): { x: number; y: number } => {
       const x = Math.cos(angle) * len;
       const y = Math.sin(angle) * len;
 
@@ -99,7 +113,7 @@ function Portrait(): JSX.Element {
         .attr('y2', y + height / 1.5)
         .attr('x1', width / 2.5)
         .attr('y1', height / 1.5)
-        .attr('stroke', 'white')
+        .attr('stroke', 'black')
         .attr('stroke-width', 1.5)
         .style('opacity', 0.1);
 
@@ -108,34 +122,40 @@ function Portrait(): JSX.Element {
         .attr('x', x + width / 3)
         .attr('y', y + height / 1.5)
         .text(capitalize(key))
-        .style('text-anchor', (_d) => (i === 0
-          ? 'start'
-          : i === 1
+        .style('text-anchor', (_d) =>
+          i === 0
             ? 'start'
-            : i === 2
+            : i === 1
               ? 'start'
               : i === 2
-                ? 'end'
-                : 'start'))
-        .attr('dx', (_d) => (i === 0
-          ? '0.7em'
-          : i === 1
-            ? '-0.7em'
-            : i === 2
-              ? '-0.5em'
-              : i === 3
-                ? '0.3em'
-                : '0.6em'))
-        .attr('dy', (_d) => (i === 0
-          ? '1.3em'
-          : i === 1
-            ? '0.4em'
-            : i === 2
-              ? '-0.5em'
-              : i === 3
+                ? 'start'
+                : i === 2
+                  ? 'end'
+                  : 'start'
+        )
+        .attr('dx', (_d) =>
+          i === 0
+            ? '0.7em'
+            : i === 1
+              ? '-0.7em'
+              : i === 2
                 ? '-0.5em'
-                : '0.4em'))
-        .attr('fill', 'white');
+                : i === 3
+                  ? '0.3em'
+                  : '0.6em'
+        )
+        .attr('dy', (_d) =>
+          i === 0
+            ? '1.3em'
+            : i === 1
+              ? '0.4em'
+              : i === 2
+                ? '-0.5em'
+                : i === 3
+                  ? '-0.5em'
+                  : '0.4em'
+        )
+        .attr('fill', 'black');
     }
 
     // circle labels
@@ -145,7 +165,7 @@ function Portrait(): JSX.Element {
         .attr('x', width / 2.5)
         .attr('y', height / 1.5 - radAxis1(el) - 0.85)
         .text(el)
-        .attr('fill', 'white')
+        .attr('fill', 'black')
         .attr('stroke', 'none')
         .attr('opacity', '0.5')
         .style('text-anchor', 'middle')
@@ -159,7 +179,7 @@ function Portrait(): JSX.Element {
         .attr('cx', width / 2.5)
         .attr('cy', height / 1.5)
         .attr('fill', 'none')
-        .attr('stroke', 'gray')
+        .attr('stroke', 'black')
         .attr('stroke-width', 1.0)
         .attr('r', radAxis1(el));
     });
@@ -178,8 +198,11 @@ function Portrait(): JSX.Element {
         coord.push(cordForAngle(angle, radAxis(grade.averageGrade) / 111));
 
         if (index === array.length - 1) {
-          const firstAngle = Math.PI / 2 + (2 * Math.PI * 0) / lowerSkills.length;
-          coord.push(cordForAngle(firstAngle, radAxis(array[0].averageGrade) / 111));
+          const firstAngle =
+            Math.PI / 2 + (2 * Math.PI * 0) / lowerSkills.length;
+          coord.push(
+            cordForAngle(firstAngle, radAxis(array[0].averageGrade) / 111)
+          );
         }
       });
 
@@ -197,7 +220,7 @@ function Portrait(): JSX.Element {
         .attr('class', 'areapath')
         .attr('d', lineGen)
         .attr('stroke-width', 4)
-        .attr('stroke', () => (randomColor()))
+        .attr('stroke', () => randomColor())
         .attr('fill', 'none')
         .attr('opacity', 1)
         .attr('transform', `translate(${width / 2.5}, ${height / 1.5})`)
@@ -218,18 +241,31 @@ function Portrait(): JSX.Element {
         .on('click', () => {
           // Toggle visibility of other data points
           const clickedIndex = i;
-          svg.selectAll('.areapath')
+          svg
+            .selectAll('.areapath')
             .style('opacity', (_d, index) => (index === clickedIndex ? 1 : 0));
         });
     }
-  }, [expanded, height, lowerSkills, lowerSkills.length, margin.bottom, margin.left, margin.right, margin.top, portrait, width]);
+  }, [
+    expanded,
+    height,
+    lowerSkills,
+    lowerSkills.length,
+    margin.bottom,
+    margin.left,
+    margin.right,
+    margin.top,
+    portrait,
+    width
+  ]);
 
   return (
     <div className={expanded.expanded ? styles.portraitExpanded : ''}>
-      <button type="button" tabIndex={0} onClick={handleExpand}>{expanded.expanded ? 'Collapse' : 'Expand'}</button>
+      <button type="button" tabIndex={0} onClick={handleExpand}>
+        {expanded.expanded ? 'Collapse' : 'Expand'}
+      </button>
       <svg ref={svgRef} />
     </div>
-
   );
 }
 export default Portrait;
