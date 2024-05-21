@@ -85,23 +85,19 @@ public class UserController {
     }
 
     @GetMapping("/portrait/{userId}")
-    @Operation(summary = "Get a portrait of an IT specialist", description = "Get a portrait of an IT specialist based on the results of interviews")
+    @Operation(summary = "Get a portrait of an IT specialist",
+            description = "Get a portrait of an IT specialist based on the results of interviews, optionally within a specified period")
     @ApiResponse(responseCode = "200", description = "Portrait of IT specialist found successfully",
             content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserResultsByInterviewsResponseDto.class))})
     @ApiResponse(responseCode = "400", description = "User (IT specialist) not found", content = {@Content})
-    public List<UserResultsByInterviewsResponseDto> getResultsByInterviews(@PathVariable Long userId) {
-        return service.getUserInterviewsResults(userId);
-    }
-
-    @GetMapping("/portrait-by-period/{userId}")
-    @Operation(summary = "Get a portrait (by period) of an IT specialist", description = "Get a portrait (by period) of an IT specialist based on the results of interviews")
-    @ApiResponse(responseCode = "200", description = "Portrait of IT specialist (by period) found successfully",
-            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserResultsByInterviewsResponseDto.class))})
-    @ApiResponse(responseCode = "400", description = "User (IT specialist) not found", content = {@Content})
-    public List<UserResultsByInterviewsResponseDto> getResultsByInterviewsByPeriod(@PathVariable Long userId,
-                                                                                   @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
-                                                                                   @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
-        return service.getUserInterviewsResultsByPeriod(userId, fromDate, toDate);
+    public List<UserResultsByInterviewsResponseDto> getResultsByInterviews(@PathVariable Long userId,
+                                                                           @RequestParam(value = "from", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+                                                                           @RequestParam(value = "to", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
+        if (fromDate != null && toDate != null) {
+            return service.getUserInterviewsResultsByPeriod(userId, fromDate, toDate);
+        } else {
+            return service.getUserInterviewsResults(userId);
+        }
     }
 
     @Operation(summary = "Get all users by skills and grade", description = "Get all users by skills and grade based on the results of interviews")
