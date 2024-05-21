@@ -1,17 +1,23 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
-import { INewInterview } from '../../../../models/profile/INewInterview';
-import { addInterview, getUserByEmail } from '../../../../store/reducers/interwiew/actions';
+import { useAppDispatch, useAppSelector } from '../../../../../../hooks/redux';
+import { INewInterview } from '../../../../../../models/profile/INewInterview';
+import {
+  addInterview,
+  getUserByEmail
+} from '../../../../../../store/reducers/interwiew/actions';
 
 interface CustomProps {
-  onClose:()=>void
+  onClose: () => void;
 }
 
 type CombinedProps = CustomProps & React.HTMLProps<HTMLFormElement>;
 
-function InterviewScheduler({ onClose, ...rest }:CombinedProps):React.JSX.Element {
+function InterviewScheduler({
+  onClose,
+  ...rest
+}: CombinedProps): React.JSX.Element {
   const { register, handleSubmit, watch } = useForm();
   const { searcher } = useAppSelector((state) => state.interview);
   const dispatch = useAppDispatch();
@@ -19,19 +25,21 @@ function InterviewScheduler({ onClose, ...rest }:CombinedProps):React.JSX.Elemen
   const title = watch('title');
   const date = watch('date');
 
-  const handleOnsubmit = async ():Promise<void> => {
-    const formattedDateString = date.toLocaleString('en-US', { timeZone: 'UTC-0' });
+  const handleOnsubmit = async (): Promise<void> => {
+    const formattedDateString = date.toLocaleString('en-US', {
+      timeZone: 'UTC-0'
+    });
     const formattedDate = new Date(formattedDateString);
-    const addInterviewData:INewInterview = {
+    const addInterviewData: INewInterview = {
       status: 'PLANNED',
       plannedDateTime: formattedDate,
       searcherId: searcher.id,
-      title,
+      title
     };
     dispatch(addInterview(addInterviewData));
     onClose();
   };
-  const getSearcher = async ():Promise<void> => {
+  const getSearcher = async (): Promise<void> => {
     dispatch(getUserByEmail(login));
   };
 
@@ -50,8 +58,8 @@ function InterviewScheduler({ onClose, ...rest }:CombinedProps):React.JSX.Elemen
           {...register('login', {
             required: {
               value: true,
-              message: 'Введіть логін шукача',
-            },
+              message: 'Введіть логін шукача'
+            }
           })}
           onBlur={getSearcher}
           placeholder='"Введіть електронну пошту"'
@@ -66,8 +74,8 @@ function InterviewScheduler({ onClose, ...rest }:CombinedProps):React.JSX.Elemen
           {...register('title', {
             required: {
               value: true,
-              message: 'Введіть назву інтерв\'ю',
-            },
+              message: 'Введіть назву інтерв&apos;ю'
+            }
           })}
           placeholder="Введіть назву"
         />
@@ -81,19 +89,13 @@ function InterviewScheduler({ onClose, ...rest }:CombinedProps):React.JSX.Elemen
           {...register('date', {
             required: {
               value: true,
-              message: 'оберіть дату та час інтревью',
-            },
+              message: 'оберіть дату та час інтрев&apos;ю'
+            }
           })}
         />
       </div>
-      <button type="submit">
-        Запланувати
-      </button>
-
-      <button
-        type="button"
-        onClick={onClose}
-      >
+      <button type="submit">Запланувати</button>
+      <button type="button" onClick={onClose}>
         X
       </button>
     </form>
