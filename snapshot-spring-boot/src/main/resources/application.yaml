@@ -82,8 +82,7 @@ app:
     jwt-refresh-expiration-time-in-days: 1
 
   gemini:
-    api-key: ${API_KEY}
-    model: gemini-1.5-pro-latest
+    url: http://test-env.eba-5mnfjmjt.us-east-2.elasticbeanstalk.com/gemini
 
   security:
     permit-all-uris:
