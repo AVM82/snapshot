@@ -18,7 +18,7 @@ function MyInterviews({ status }:MyInterviewsProps): React.JSX.Element {
   const actualInterviews:IInterviewPreview[] = status === '' ? interviews : getInterviewsByStatus(interviews, status);
   const renderTableBody = (): React.JSX.Element[] => (
 
-    [...actualInterviews]?.reverse().slice(0,numberOfRows).map((item) => (
+    [...actualInterviews].reverse().slice(0,numberOfRows).map((item) => (
       <InterviewItemRow
         key={item.id}
         {...item}
