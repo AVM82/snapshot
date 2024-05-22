@@ -42,7 +42,6 @@ public class AppProps {
     @Getter
     @Setter
     public static class GeminiProps {
-        private String apiKey;
-        private String model;
+        private String url;
     }
 }
