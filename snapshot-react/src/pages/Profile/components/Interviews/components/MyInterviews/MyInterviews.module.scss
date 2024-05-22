@@ -1,0 +1,100 @@
+@import 'src/constants&mixins';
+
+.interviewTable {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 32rem;
+  overflow: hidden;
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: $white;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    width: 5px;
+    background: $medium-purple;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: $primary-purple;
+  }
+
+  .interviewTableHeader {
+    width: 100%;
+    background-color: $light-purple;
+    border: 1px solid $primary-purple;
+    border-radius: 10px 10px 0 0;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    tr {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      align-items: center;
+      width: 100%;
+    }
+
+    th {
+      padding: 1rem;
+    }
+  }
+
+  .tableBody {
+    display: flex;
+    flex-direction: column;
+    max-height: 27.84rem;
+    overflow-y: scroll;
+
+    tr {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      align-items: center;
+      width: 100%;
+      min-height: 6.96rem;
+      border: 1px solid $primary-purple;
+      border-top: none;
+    }
+
+    tr:last-child {
+      border-radius: 0 0  10px 10px;
+    }
+
+    td,
+    th {
+      text-align: center;
+    }
+  }
+}
+
+.DropDownButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  padding: 4rem 0;
+
+  button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.4rem;
+    background: $white;
+    border: none;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

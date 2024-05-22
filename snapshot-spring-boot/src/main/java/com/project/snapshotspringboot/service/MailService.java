@@ -47,6 +47,15 @@ public class MailService {
     @Value("${submit.email.text}")
     private String submitText;
 
+    @Value("${reset-password.email.subject}")
+    private String resetPasswordEmailSubject;
+
+    @Value("${reset-password.email.text}")
+    private String resetPasswordEmailText;
+
+    @Value("${reset-password.endpoint}")
+    private String resetPasswordEndpoint;
+
     @Value("${admin.email}")
     private String adminEmail;
 
@@ -58,6 +67,12 @@ public class MailService {
                                       String token) {
         String requestUrl = String.format(REQUEST_URL_TEMPLATE, userCreateEndpoint, token);
         send(to, submitSubject, String.format(submitText, requestUrl));
+    }
+
+    public void sendResetPasswordEmail(String to,
+                                       String token) {
+        String requestUrl = String.format(REQUEST_URL_TEMPLATE, resetPasswordEndpoint, token);
+        send(to, resetPasswordEmailSubject, String.format(resetPasswordEmailText, requestUrl));
     }
 
     public void send(String to,
@@ -78,7 +93,7 @@ public class MailService {
         }
     }
 
-    @Scheduled(cron = "0 50 17 * * ?")
+    @Scheduled(cron = "0 0 9 * * ?")
     public void sendInterviewReminders() {
         LocalDateTime tomorrow = LocalDateTime.now().plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
         LocalDateTime endOfTomorrow = tomorrow.plusDays(1).minusSeconds(1);

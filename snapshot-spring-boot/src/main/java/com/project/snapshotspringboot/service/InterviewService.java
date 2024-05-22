@@ -109,14 +109,16 @@ public class InterviewService {
     }
 
     public InterviewDto updateInterviewStatus(Long interviewId, InterviewStatus status) {
-        Optional<InterviewEntity> optionalInterviewEntity = interviewRepository.findById(interviewId);
-        if (optionalInterviewEntity.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Interview not found");
-        }
-        InterviewEntity interviewEntity = optionalInterviewEntity.get();
+        InterviewEntity interviewEntity = interviewRepository.findById(interviewId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Interview not found"));
         InterviewStatus.validateStatusTransition(interviewEntity.getStatus(), status);
-        log.debug("Interview id = {} status updated from {} to {}", interviewId, interviewEntity.getStatus(), status);
+        if (status == InterviewStatus.FINISHED) {
+            interviewEntity.setEndDateTime(LocalDateTime.now());
+        } else if (status == InterviewStatus.ACTIVE) {
+            interviewEntity.setStartDateTime(LocalDateTime.now());
+        }
         interviewEntity.setStatus(status);
+        log.debug("Interview id = {} status updated from {} to {}", interviewId, interviewEntity.getStatus(), status);
         return interviewMapper.toDto(interviewRepository.save(interviewEntity));
     }
 

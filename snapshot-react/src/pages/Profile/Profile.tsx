@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
-import { Link, Outlet, useParams } from 'react-router-dom';
+import {
+  Link,
+  Outlet, useParams,
+} from 'react-router-dom';
 
 import { useAppDispatch } from '../../hooks/redux';
 import { getLowerSkills, getMyInterviews, getPortrait } from '../../store/reducers/profile/actions';
-import InterviewActionPanel from './components/InterviewActionPanel/InterviewActionPanel';
+import InterviewActionPanel from './components/Interviews/components/InterviewActionPanel/InterviewActionPanel';
 import NavBar from './components/NavBar/NavBar';
 import UserCard from './components/UserCard/UserCard';
 import styles from './profile.module.scss';
@@ -16,7 +19,7 @@ function Profile(): React.JSX.Element {
     const fetchProfileData = async (): Promise<void> => {
       await dispatch(getMyInterviews());
       await dispatch(getLowerSkills(Number(userId)));
-      await dispatch(getPortrait(Number(userId)));
+      await dispatch(getPortrait({ id: userId as string }));
     };
 
     (async ():Promise<void> => {

@@ -10,7 +10,7 @@ const toLocalDate = (date:string):string => {
   const parts = formatToLocalDate(date).toLocaleString().split(', ');
   const trimmedTime = parts[1].slice(0, -3);
 
-  return `${parts[0]}, ${trimmedTime}`;
+  return `${parts[0]} о ${trimmedTime}`;
 };
 const formatQuestionsWithLocalDate = (questions:IQuestion[]):IQuestion[] => questions.map((question) => ({
   ...question,

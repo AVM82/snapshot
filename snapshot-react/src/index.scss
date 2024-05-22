@@ -2,14 +2,15 @@
 @import 'constants&mixins';
 
 #root {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
 }
 
 body {
   position: relative;
   display: flex;
+  width: 100vw;
+  overflow-x: hidden;
 }
 
 h1,
@@ -27,6 +28,11 @@ h1 {
   font-weight: 400;
   font-family: 'Days one', sans-serif;
   text-transform: uppercase;
+}
+
+a {
+  color: $text-color;
+  text-decoration: none;
 }
 
 h2,

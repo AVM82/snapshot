@@ -10,6 +10,7 @@ import com.project.snapshotspringboot.security.token.RefreshToken;
 import com.project.snapshotspringboot.security.token.RefreshTokenService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -111,5 +112,27 @@ public class AuthenticationService {
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Redirect failed!");
         }
+    }
+
+    public boolean sendEmailForResetPassword(EmailDto emailDto) {
+        UserEntity user = userService.getByEmail(emailDto.getEmail());
+        String token = jwtService.generateResetPasswordToken(user.getId());
+        mailService.sendResetPasswordEmail(user.getEmail(), token);
+        return true;
+    }
+
+    public boolean resetPassword(ResetPasswordDto resetPasswordDto) {
+        if (!StringUtils.equals(resetPasswordDto.getPassword(), resetPasswordDto.getRepeatPassword())) {
+            return false;
+        }
+
+        long userId = jwtService.getUserIdFromResetPasswordToken(resetPasswordDto.getToken());
+        UserEntity user = userService.findById(userId);
+
+        userService.setPasswordForUserById(
+                passwordEncoder.encode(resetPasswordDto.getPassword()),
+                user.getId());
+
+        return true;
     }
 }

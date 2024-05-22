@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 import userPhoto from '../../../../assets/profilePhoto.jpg';
 import { useAppSelector } from '../../../../hooks/redux';
 import styles from './UserCard.module.scss';
 
-function UserCard():React.JSX.Element {
+const UserCard:React.FC = memo(() => {
   const { avatarImgUrl, firstname, lastname } = useAppSelector((state) => state.user.userData);
 
   return (
@@ -27,6 +27,6 @@ function UserCard():React.JSX.Element {
       </div>
     </div>
   );
-}
+});
 
 export default UserCard;
