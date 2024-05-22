@@ -2,47 +2,56 @@ import { InterviewStatuses } from '../../models/profile/IInterview';
 import IInterviewPreview from '../../models/profile/IInterviewPreview';
 import { formatToLocalDate } from '../interview/formatQuestionsWithLocalDate';
 
-const getInterviewsByStatus = (interviews: IInterviewPreview[], status:InterviewStatuses)
-: IInterviewPreview[] => interviews.filter((
-  interview,
-) => interview.status === status);
+const getInterviewsByStatus = (interviews: IInterviewPreview[], status: InterviewStatuses): IInterviewPreview[] =>
+  interviews.filter((interview) => interview.status === status);
+
+const getNearestInterviewFromList = (interviews: IInterviewPreview[]): IInterviewPreview =>
+  interviews.reduce((nearest, current) => {
+    const nearestTime = new Date(nearest.plannedDateTime).getTime();
+    const currentTime = new Date(current.plannedDateTime).getTime();
+
+    return currentTime < nearestTime ? current : nearest;
+  });
 
 const getNearestInterview = (plannedInterviews: IInterviewPreview[]): IInterviewPreview | undefined => {
   if (plannedInterviews.length === 0) return undefined;
 
   if (plannedInterviews.length === 1) return { ...plannedInterviews[0] };
+
   const fifteenMinInMs = 900000;
+  const now = new Date().getTime();
   const plannedInterviewsWithoutOverdue = plannedInterviews.filter((interview) => {
-    const now = new Date().getTime();
     const interviewTime = new Date(formatToLocalDate(interview.plannedDateTime)).getTime();
 
     return ((now - interviewTime) < fifteenMinInMs);
   });
 
-  return plannedInterviewsWithoutOverdue.length !== 0 ? plannedInterviewsWithoutOverdue.reduce((nearest, current) => {
-    const nearestTime = new Date(nearest.plannedDateTime).getTime();
-    const currentTime = new Date(current.plannedDateTime).getTime();
-
-    return currentTime < nearestTime ? current : nearest;
-  }) : undefined;
+  return plannedInterviewsWithoutOverdue.length !== 0
+    ? getNearestInterviewFromList(plannedInterviewsWithoutOverdue)
+    : undefined;
 };
 
-const getTimeToInterview = (interviews: IInterviewPreview[]): number => {
-  if (!interviews) return 0;
+const getTimeToInterview = (interviews: IInterviewPreview[]):{ id:number,time:number,title:string } => {
+  if (!interviews) return { id:0,time:0,title:'' };
 
   const plannedInterviews = getInterviewsByStatus(interviews, 'PLANNED');
   const nearestInterview = getNearestInterview(plannedInterviews);
-  let nearestInterviewTime:number;
+  let nearestInterviewTime: number;
 
   if (nearestInterview) {
-    const actualDate = formatToLocalDate(nearestInterview.plannedDateTime);
+    const actualDate = new Date(formatToLocalDate(nearestInterview.plannedDateTime));
     nearestInterviewTime = actualDate.getTime();
   } else {
     nearestInterviewTime = 0;
   }
+
   const currentTime = new Date().getTime();
 
-  return nearestInterviewTime - currentTime;
+  return {
+    time:nearestInterviewTime - currentTime,
+    id: nearestInterview?.id||0,
+    title:nearestInterview?.title||''
+  };
 };
 
-export { getInterviewsByStatus, getTimeToInterview };
+export { getInterviewsByStatus, getNearestInterview,getTimeToInterview };

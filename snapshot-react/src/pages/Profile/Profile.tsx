@@ -6,8 +6,7 @@ import {
 
 import { useAppDispatch } from '../../hooks/redux';
 import { getLowerSkills, getMyInterviews, getPortrait } from '../../store/reducers/profile/actions';
-import Feedback from './components/Feedback/Feedback';
-import InterviewActionPanel from './components/InterviewActionPanel/InterviewActionPanel';
+import InterviewActionPanel from './components/Interviews/components/InterviewActionPanel/InterviewActionPanel';
 import NavBar from './components/NavBar/NavBar';
 import UserCard from './components/UserCard/UserCard';
 import styles from './profile.module.scss';
@@ -20,7 +19,7 @@ function Profile(): React.JSX.Element {
     const fetchProfileData = async (): Promise<void> => {
       await dispatch(getMyInterviews());
       await dispatch(getLowerSkills(Number(userId)));
-      await dispatch(getPortrait(Number(userId)));
+      await dispatch(getPortrait({ id: userId as string }));
     };
 
     (async ():Promise<void> => {
@@ -30,8 +29,6 @@ function Profile(): React.JSX.Element {
 
   return (
     <section className={styles.profileContainer}>
-      <Feedback/>
-
       <div className={styles.profileHeader}>
         <h2>Мій профіль</h2>
         <InterviewActionPanel />

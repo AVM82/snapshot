@@ -16,14 +16,19 @@ function HeaderAccount(): React.JSX.Element {
     <header className={styles.header}>
       <div className={styles.header_top}>
         <div className={styles.header_top_location}>Location</div>
+        {Boolean(user.id) && <Notification/>}
         <div className={styles.header_top_user}>
           {user.firstname}
           <div className={styles.drop_down_profile}>
             <div className={styles.header_user_drpop_down_menu}>
-              <Link className={classNames(styles.header_top_user, styles.header_top_user_hover, styles.header_user_drpop_down_link, styles.header_user_drpop_down_user)} to={`/profile/${user.id}`}>
+              <Link
+                className={classNames(styles.header_top_user,
+                  styles.header_top_user_hover, styles.header_user_drpop_down_link, styles.header_user_drpop_down_user)}
+                to={`/profile/${user.id}`}>
                 Мій профіль
               </Link>
-              <Link className={styles.header_user_drpop_down_link} to={`/profile/${user.id}/settings`}>Налаштувати профіль</Link>
+              <Link className={styles.header_user_drpop_down_link} to={`/profile/${user.id}/settings`}>Налаштувати
+                профіль</Link>
               <Link
                 className={classNames(styles.header_user_drpop_down_link, styles.header_user_drpop_down_exit)}
                 to="/sign-in"
@@ -39,19 +44,9 @@ function HeaderAccount(): React.JSX.Element {
         <div><Link className={styles.header_link} to={`/profile/${user.id}/settings`}>Співбесіда</Link></div>
         <div><Link className={styles.header_link} to={`/profile/${user.id}/statistics`}>Статистика</Link></div>
         <div><Link className={styles.header_link} to={`/profile/${user.id}/statistics`}>Довідник скілів</Link></div>
+        <div><Link className={styles.header_link} to="/candidate-search">Знайти кандидата</Link></div>
       </div>
-      <Link to="/">
-        ЛОГОТИП
-      </Link>
-      <Link to="/candidate-search">Знайти кандидата</Link>
-      <div>
-        <Link to={`/profile/${user.id}`}>
-          {user.firstname}
-          {' '}
-          {user.lastname}
-        </Link>
-        {Boolean(user.id) && <Notification />}
-      </div>
+
     </header>
 
   );
