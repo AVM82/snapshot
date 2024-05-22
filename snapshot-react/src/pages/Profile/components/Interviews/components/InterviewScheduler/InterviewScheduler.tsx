@@ -43,12 +43,12 @@ function InterviewScheduler({
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.schedulerCard}>
-        <div className={styles.schedulerHeader}>
-          <h3>HEADER</h3>
+      <div className={styles.formCard}>
+        <div className={styles.formHeader}>
+          <h3>Створити інтерв'ю</h3>
         </div>
         <form
-          className={styles.schedulerBody}
+          className={styles.formBody}
           name="bookInterview"
           onSubmit={handleSubmit(handleOnSubmit)}
           {...rest}
@@ -100,10 +100,10 @@ function InterviewScheduler({
           </div>
 
         </form>
-        <div>
-          <p>FOOTER</p>
-          <button type="submit">Запланувати</button>
-          <button type="button" onClick={onClose}>
+        <div className={styles.formFooter}>
+          {/*<p>FOOTER</p>*/}
+          <button className={styles.submitButton} type="submit">Створити співбесіду</button>
+          <button className={styles.cancelButton} type="button" onClick={onClose}>
             X
           </button>
         </div>
