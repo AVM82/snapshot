@@ -1,9 +1,9 @@
 import React from 'react';
-import {useForm} from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
-import {useAppDispatch, useAppSelector} from '../../../../../../hooks/redux';
-import {INewInterview} from '../../../../../../models/profile/INewInterview';
-import {addInterview, getUserByEmail} from '../../../../../../store/reducers/interwiew/actions';
+import { useAppDispatch, useAppSelector } from '../../../../../../hooks/redux';
+import { INewInterview } from '../../../../../../models/profile/INewInterview';
+import { addInterview, getUserByEmail } from '../../../../../../store/reducers/interwiew/actions';
 import styles from './InterviewScheduler.module.scss';
 
 interface CustomProps {
