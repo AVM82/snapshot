@@ -68,10 +68,6 @@ function InterviewScheduler({
               placeholder="Введіть назву"
             />
           </div>
-          {/*<div className={styles.row}>*/}
-          {/*  <input type="text" placeholder="Field 1"/>*/}
-          {/*  <input type="text" placeholder="Field 1"/>*/}
-          {/*</div>*/}
           <div>
             <label htmlFor="date">Дата та час</label>
             <input
@@ -91,6 +87,10 @@ function InterviewScheduler({
               type="text"
               id="login"
               {...register('login', {
+                // pattern: {
+                //   value: EmailRegexp,
+                //   message: 'Неправильна адреса електронної пошти',
+                // },
                 required: {
                   value: true,
                   message: 'Введіть логін шукача'
