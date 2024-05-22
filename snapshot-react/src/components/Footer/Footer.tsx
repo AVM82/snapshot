@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import classNames from 'classnames';
+import { useState, useEffect } from 'react';
 
 import iconF from '../../assets/icon-f.svg';
 import iconIn from '../../assets/icon-in.svg';
@@ -18,6 +18,7 @@ function Footer(): React.JSX.Element {
 
     getVersion();
   }, []);
+
   return (
     <footer className={styles.footer}>
       <div className={styles.footer_linksContainer}>
