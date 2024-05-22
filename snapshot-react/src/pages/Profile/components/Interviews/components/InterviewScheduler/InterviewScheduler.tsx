@@ -45,7 +45,7 @@ function InterviewScheduler({
     <div className={styles.wrapper}>
       <div className={styles.formCard}>
         <div className={styles.formHeader}>
-          <h3>Створити інтерв'ю</h3>
+          <h2>Створити інтерв&apos;ю</h2>
         </div>
         <form
           className={styles.formBody}
@@ -55,7 +55,38 @@ function InterviewScheduler({
           noValidate
         >
           <div>
-            <label htmlFor="login"/>
+            <label htmlFor="title">Назва співбесіди</label>
+            <input
+              type="text"
+              id="title"
+              {...register('title', {
+                required: {
+                  value: true,
+                  message: 'Введіть назву інтерв&apos;ю'
+                }
+              })}
+              placeholder="Введіть назву"
+            />
+          </div>
+          {/*<div className={styles.row}>*/}
+          {/*  <input type="text" placeholder="Field 1"/>*/}
+          {/*  <input type="text" placeholder="Field 1"/>*/}
+          {/*</div>*/}
+          <div>
+            <label htmlFor="date">Дата та час</label>
+            <input
+              type="datetime-local"
+              id="date"
+              {...register('date', {
+                required: {
+                  value: true,
+                  message: 'оберіть дату та час інтрев&apos;ю'
+                }
+              })}
+            />
+          </div>
+          <div>
+            <label htmlFor="login">Додати учасника</label>
             <input
               type="text"
               id="login"
@@ -69,39 +100,8 @@ function InterviewScheduler({
               placeholder='"Введіть електронну пошту"'
             />
           </div>
-
-          <div>
-            <label htmlFor="title"/>
-            <input
-              type="text"
-              id="title"
-              {...register('title', {
-                required: {
-                  value: true,
-                  message: 'Введіть назву інтерв&apos;ю'
-                }
-              })}
-              placeholder="Введіть назву"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="date"/>
-            <input
-              type="datetime-local"
-              id="date"
-              {...register('date', {
-                required: {
-                  value: true,
-                  message: 'оберіть дату та час інтрев&apos;ю'
-                }
-              })}
-            />
-          </div>
-
         </form>
         <div className={styles.formFooter}>
-          {/*<p>FOOTER</p>*/}
           <button className={styles.submitButton} type="submit">Створити співбесіду</button>
           <button className={styles.cancelButton} type="button" onClick={onClose}>
             X
