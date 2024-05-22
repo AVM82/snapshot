@@ -4,8 +4,22 @@ import iconF from '../../assets/icon-f.svg';
 import iconIn from '../../assets/icon-in.svg';
 import iconTv from '../../assets/icon-tv.svg';
 import styles from './Footer.module.scss';
+import { useEffect, useState } from 'react';
+import snapshotApi from '../../api/request';
 
 function Footer(): React.JSX.Element {
+  const [version, setVersion] = useState('');
+  useEffect(() => {
+    const getVersion = async (): Promise<void> => {
+      try {
+        const response: string = await snapshotApi.get('/version');
+        setVersion(response); 
+      } catch (error) {
+        console.error('Error fetching version:', error);
+      }
+    };
+    getVersion();
+  }, []);
   return (
     <footer className={styles.footer}>
       <div className={styles.footer_linksContainer}>
@@ -19,7 +33,8 @@ function Footer(): React.JSX.Element {
         <img src={iconIn} alt="LinkedIn icon" />
       </div>
       <div className={styles.footer_copyright}>
-        SNAPSHOT IT © 2024. All rights reserved.
+        {version &&<span className={styles.footer_num_version}> v{version.substring(0, 3)}</span>}
+        <span className={styles.footer_copyright_name_project}>SNAPSHOT IT</span>© 2024. All rights reserved.
       </div>
     </footer>
   );
