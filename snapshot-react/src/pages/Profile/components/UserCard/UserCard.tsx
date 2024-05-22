@@ -1,25 +1,32 @@
-import styles from './UserCard.module.scss';
-import userPhoto from '../../../../assets/profilePhoto.jpg';
+import React, { memo } from 'react';
 
-function UserCard(/*props*/) {
+import userPhoto from '../../../../assets/profilePhoto.jpg';
+import { useAppSelector } from '../../../../hooks/redux';
+import styles from './UserCard.module.scss';
+
+const UserCard:React.FC = memo(() => {
+  const { avatarImgUrl, firstname, lastname } = useAppSelector((state) => state.user.userData);
+
   return (
     <div className={styles['user-card']}>
-      <div className={styles['card-top']}>
-      </div>
+      <div className={styles['card-top']} />
       <div className={styles['card-content']}>
         <div className={styles['profile-picture']}>
-          <img src={userPhoto} alt='Profile photo' />
+          <img src={avatarImgUrl && userPhoto} alt="user avatar" />
         </div>
         <div className={styles['profile-name']}>
-          {/*TODO add props data*/}
-          <h3>John Doe</h3>
+          <h3>
+            {firstname}
+            {' '}
+            {lastname}
+          </h3>
         </div>
       </div>
       <div className={styles['profile-button']}>
-        <button type='button'>Налаштувати профіль</button>
+        <button type="button">Налаштувати профіль</button>
       </div>
     </div>
   );
-}
+});
 
 export default UserCard;

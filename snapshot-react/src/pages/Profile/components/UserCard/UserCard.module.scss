@@ -5,11 +5,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 300px;
-  height: 400px;
+  width: 18.125rem;
+  height: 22.438rem;
   overflow: hidden;
   background-color: white;
-  border: 2px solid $medium-purple;
+  border: 3px solid $medium-purple;
   border-radius: 20px;
 }
 
@@ -26,15 +26,17 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding-top: 6rem;
+  width: 100%;
 }
 
 .profile-picture {
   position: absolute;
-  top: -5rem;
-  width: 10rem;
-  height: 10rem;
+  top: 0;
+  width: 9.438rem;
+  height: 9.625rem;
+  transform: translateY(-50%);
 
   img {
     border-radius: 50%;
@@ -42,21 +44,20 @@
 }
 
 .profile-name {
-  color: black;
-  font-weight: bold;
+  padding-top: 2rem;
   font-size: 1.2rem;
+  text-transform: capitalize;
 }
 
 .profile-button {
-  padding: 2rem;
+  padding-bottom: 2rem;
 
   button {
     @include secondary-button;
 
-    padding: 10px 20px;
+    padding: 0.625rem 1rem;
     color: $medium-purple !important;
-    font-size: 1.1rem;
-    background-color: white;
+    font-size: 1rem;
     border-color: $medium-purple;
     border-radius: 20px;
     cursor: pointer;

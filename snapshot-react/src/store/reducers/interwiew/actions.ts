@@ -50,9 +50,8 @@ const getSkillQuestions = createAsyncThunk(
 );
 const updateInterviewById = createAsyncThunk(
   ActionType.UPDATE_INTERVIEW_BY_ID,
-  async ({ id, plannedDateTime }:{ id:number,plannedDateTime:Date }) => {
-    console.log(id);
-    await snapshotApi.patch(`/interviews/${id}`, { plannedDateTime,title:'' });
+  async ({ id, plannedDateTime,title }:{ id:number,plannedDateTime:Date,title:string }) => {
+    await snapshotApi.patch(`/interviews/${id}`, { plannedDateTime,title });
   },
 );
 
