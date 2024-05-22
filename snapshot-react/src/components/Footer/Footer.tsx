@@ -1,11 +1,10 @@
 import classNames from 'classnames';
 import { useState, useEffect } from 'react';
-
+import snapshotApi from '../../api/request';
 import iconF from '../../assets/icon-f.svg';
 import iconIn from '../../assets/icon-in.svg';
 import iconTv from '../../assets/icon-tv.svg';
 import styles from './Footer.module.scss';
-import snapshotApi from '../../api/request';
 
 function Footer(): React.JSX.Element {
   const [version, setVersion] = useState('');
