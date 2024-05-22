@@ -16,8 +16,9 @@ function MyInterviews({ status }:MyInterviewsProps): React.JSX.Element {
   const [numberOfRows, setNumberOfRows] = useState(4);
   const interviews = useAppSelector((state) => state.profile.interviews);
   const actualInterviews:IInterviewPreview[] = status === '' ? interviews : getInterviewsByStatus(interviews, status);
-  const renderTableBody = (): React.JSX.Element[] =>(
-    actualInterviews.slice(0,numberOfRows).map((item) => (
+  const renderTableBody = (): React.JSX.Element[] => (
+
+    [...actualInterviews]?.reverse().slice(0,numberOfRows).map((item) => (
       <InterviewItemRow
         key={item.id}
         {...item}

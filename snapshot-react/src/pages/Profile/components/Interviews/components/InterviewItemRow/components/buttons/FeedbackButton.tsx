@@ -6,7 +6,7 @@ function FeedbackButton() :React.JSX.Element {
   return (
     <button className={styles.tableButton} type="button">
       відгук
-      <span className={styles.closeIcon}/>
+      <span className={styles.cancelIcon}/>
     </button>
   );
 }
