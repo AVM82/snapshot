@@ -41,7 +41,7 @@ function HeaderAccount(): React.JSX.Element {
       </div>
       <div className={styles.header_title}>SNAPSHOT IT</div>
       <div className={styles.header_linksContainer}>
-        <div><Link className={styles.header_link} to={`/profile/${user.id}/settings`}>Співбесіда</Link></div>
+        <div><Link className={styles.header_link} to={`/profile/${user.id}/interview-journal`}>Співбесіда</Link></div>
         <div><Link className={styles.header_link} to={`/profile/${user.id}/statistics`}>Статистика</Link></div>
         <div><Link className={styles.header_link} to={`/profile/${user.id}/statistics`}>Довідник скілів</Link></div>
         <div><Link className={styles.header_link} to="/candidate-search">Знайти кандидата</Link></div>
