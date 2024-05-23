@@ -48,7 +48,6 @@ function Profile(): React.JSX.Element {
         </section>
         <section className={styles.InterviewStatisticsContainer}>
           <div>
-
             <h3>Статистика співбесід</h3>
             <NavBar />
           </div>
@@ -56,16 +55,14 @@ function Profile(): React.JSX.Element {
             <div className={styles.tableHeader}>
               <h3>Журнал співбесід</h3>
               <Link to="all" className={styles.link}>
-
                 <h5>всі співбесіди</h5>
               </Link>
             </div>
-            <Outlet />
+            <Outlet/>
           </div>
         </section>
       </section>
     </section>
-
   );
 }
 

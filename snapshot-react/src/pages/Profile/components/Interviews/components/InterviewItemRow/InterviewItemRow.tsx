@@ -10,7 +10,6 @@ function InterviewTable({
   status, searcherFullName, plannedDateTime, endDateTime,title
 }: IInterviewPreview): React.JSX.Element {
   const date = endDateTime ? toLocalDate(endDateTime) : toLocalDate(plannedDateTime);
-  console.log(endDateTime);
   const statusText = ():string=>{
     switch (status){
       case 'CANCELLED':return 'скасована';

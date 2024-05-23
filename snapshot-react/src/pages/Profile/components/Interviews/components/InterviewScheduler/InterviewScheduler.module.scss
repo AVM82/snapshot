@@ -1,9 +1,10 @@
-@import '/src/utils/constants&mixins';
+@import '/src/constants&mixins';
 
 .wrapper {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;

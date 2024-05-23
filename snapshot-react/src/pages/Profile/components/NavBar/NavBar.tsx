@@ -20,12 +20,13 @@ function NavBar():React.JSX.Element {
 
   return (
     <nav className={styles.interviewTypesContainer}>
-      {interviewStatuses.map((status, index) => (
+      {interviewStatuses.map((status:InterviewStatuses, index) => (
         <NavLink
           key={status}
           to={index === 0 ? '' : `${status.toLocaleLowerCase()}`}
           end
           className={({ isActive }) => (isActive ? `${styles.activeLink} ${styles.link}` : styles.link)}
+          state={ status }
         >
           <p>{NavText[status]}</p>
           <p>{getInterviewsByStatus(interviews, status).length}</p>

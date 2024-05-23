@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
-import   arrowDropDown  from '../../../../../../assets/arrowDropDown.svg';
+import arrowDropDown from '../../../../../../assets/arrowDropDown.svg';
 import { useAppSelector } from '../../../../../../hooks/redux';
 import { InterviewStatuses } from '../../../../../../models/profile/IInterview';
 import IInterviewPreview from '../../../../../../models/profile/IInterviewPreview';
@@ -8,14 +9,13 @@ import { getInterviewsByStatus } from '../../../../../../utils/notification/getT
 import InterviewItemRow from '../InterviewItemRow/InterviewItemRow';
 import styles from './MyInterviews.module.scss';
 
-interface MyInterviewsProps {
-  status: InterviewStatuses;
-}
-
-function MyInterviews({ status }:MyInterviewsProps): React.JSX.Element {
+function MyInterviews(): React.JSX.Element {
   const [numberOfRows, setNumberOfRows] = useState(4);
   const interviews = useAppSelector((state) => state.profile.interviews);
-  const actualInterviews:IInterviewPreview[] = status === '' ? interviews : getInterviewsByStatus(interviews, status);
+  const { state } = useLocation();
+  const actualStatus: InterviewStatuses = state || '';
+  const actualInterviews:IInterviewPreview[] = actualStatus === '' ? interviews :
+    getInterviewsByStatus(interviews, actualStatus);
   const renderTableBody = (): React.JSX.Element[] => (
 
     [...actualInterviews].reverse().slice(0,numberOfRows).map((item) => (
