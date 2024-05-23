@@ -115,7 +115,13 @@ public class AuthenticationService {
     }
 
     public boolean sendEmailForResetPassword(EmailDto emailDto) {
-        UserEntity user = userService.getByEmail(emailDto.getEmail());
+        UserEntity user;
+        try {
+            user = userService.getByEmail(emailDto.getEmail());
+        } catch (ResponseStatusException e) {
+            return false;
+        }
+
         String token = jwtService.generateResetPasswordToken(user.getId());
         mailService.sendResetPasswordEmail(user.getEmail(), token);
         return true;
@@ -133,6 +139,11 @@ public class AuthenticationService {
                 passwordEncoder.encode(resetPasswordDto.getPassword()),
                 user.getId());
 
+        return true;
+    }
+
+    public boolean verifyResetToken(String token) {
+        jwtService.getUserIdFromResetPasswordToken(token);
         return true;
     }
 }
