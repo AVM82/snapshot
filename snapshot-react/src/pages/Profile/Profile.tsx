@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import {  useParams } from 'react-router-dom';
 
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { InterviewStatuses } from '../../models/profile/IInterview';
+import IInterviewPreview from '../../models/profile/IInterviewPreview';
 import { getLowerSkills, getMyInterviews, getPortrait } from '../../store/reducers/profile/actions';
+import { getInterviewsByStatus } from '../../utils/notification/getTimeToInterview';
 import InterviewActionPanel from './components/Interviews/components/InterviewActionPanel/InterviewActionPanel';
 import MyInterviews from './components/Interviews/components/MyInterviews/MyInterviews';
 import InterviewStatusSelector from './components/InterviewStatusSelector/InterviewStatusSelector';
+import ProfileVisibility from './components/ProfileVisibility/ProfileVisibility';
 import UserCard from './components/UserCard/UserCard';
 import styles from './profile.module.scss';
 
@@ -29,6 +32,11 @@ function Profile(): React.JSX.Element {
     setStatus(newStatus as InterviewStatuses);
   };
 
+  const interviews = useAppSelector((state) => state.profile.interviews);
+  const actualStatus: InterviewStatuses = status || '';
+  const actualInterviews:IInterviewPreview[] = actualStatus === '' ? interviews :
+    getInterviewsByStatus(interviews, actualStatus);
+
   return (
     <section className={styles.profileContainer}>
       <div className={styles.profileHeader}>
@@ -37,14 +45,7 @@ function Profile(): React.JSX.Element {
       </div>
       <section className={styles.bodyContainer}>
         <section className={styles.avatar}>
-          <div className={styles.profileVisibility}>
-            <span className={styles.info} />
-            <p>Відкритий профіль</p>
-            <label className={styles.switcher}>
-              <input type="checkbox" />
-              <span className={styles.slider} />
-            </label>
-          </div>
+          <ProfileVisibility/>
           <UserCard />
           <div />
         </section>
@@ -60,7 +61,7 @@ function Profile(): React.JSX.Element {
                 <h5>всі співбесіди</h5>
               </button>
             </div>
-            <MyInterviews status={status}/>
+            <MyInterviews interviews={actualInterviews}/>
           </div>
         </section>
       </section>
