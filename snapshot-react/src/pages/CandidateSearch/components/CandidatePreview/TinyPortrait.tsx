@@ -1,5 +1,4 @@
 /* eslint-disable no-plusplus */
-/* eslint-disable no-nested-ternary */
 
 import { Line, line, scaleLinear, select } from 'd3';
 import { useEffect, useRef } from 'react';

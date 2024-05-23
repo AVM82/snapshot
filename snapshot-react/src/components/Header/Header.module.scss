@@ -20,7 +20,7 @@
 }
 
 .header_top_location::before {
-  content: url('../../assets/location.svg');
+  content: url("../../assets/location.svg");
 }
 
 // ------------ user
@@ -35,7 +35,7 @@
 }
 
 .header_top_user::before {
-  content: url('../../assets/icon-user.svg');
+  content: url("../../assets/icon-user.svg");
 }
 
 // ---------------------------------- drop_menu
@@ -71,7 +71,7 @@
 }
 
 .drop_down_profile::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -0.35rem;
   left: 1rem;
@@ -84,7 +84,7 @@
 }
 
 .header_user_drpop_down_exit::after {
-  content: url('../../assets/icon-exit.svg');
+  content: url("../../assets/icon-exit.svg");
 }
 
 // ---------------------------------- header_title
