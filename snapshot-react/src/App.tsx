@@ -3,8 +3,12 @@ import { Route, Routes } from 'react-router-dom';
 
 import Layout from './components/Layout/Layout';
 import AuthPage from './pages/Auth/AuthPage';
+import EditPasswordEmailSent from './pages/Auth/EditPasswordEmailSent';
+import EditPasswordHandler from './pages/Auth/EditPasswordHandler';
 import ForgotPassword from './pages/Auth/ForgotPassword';
+import InvalidResetTokenPage from './pages/Auth/InvalidResetTokenPage';
 import OAuth2RedirectHandler from './pages/Auth/OAuth2RedirectHandler';
+import ResetPasswordPage from './pages/Auth/ResetPasswordPage';
 import SignInPage from './pages/Auth/SignInPage';
 import SignUpPage from './pages/Auth/SignUpPage';
 import SuccessfulSignUp from './pages/Auth/SuccessfulSignUp';
@@ -45,6 +49,14 @@ function App(): React.JSX.Element {
         )}
       />
       <Route
+        path="reset-password"
+        element={(
+          <AuthPage>
+            <ResetPasswordPage />
+          </AuthPage>
+        )}
+      />
+      <Route
         path="thank-you"
         element={(
           <AuthPage>
@@ -52,18 +64,35 @@ function App(): React.JSX.Element {
           </AuthPage>
         )}
       />
+      <Route
+        path="email-sent"
+        element={(
+          <AuthPage>
+            <EditPasswordEmailSent />
+          </AuthPage>
+        )}
+      />
+      <Route
+        path="invalid-link"
+        element={(
+          <AuthPage>
+            <InvalidResetTokenPage />
+          </AuthPage>
+        )}
+      />
       <Route path="/" element={<Layout />}>
         <Route element={<Home />} index />
         <Route path="oauth2/redirect" element={<OAuth2RedirectHandler />} />
+        <Route path="edit-password" element={<EditPasswordHandler />} />
         <Route path="candidate-search" element={<CandidateSearch />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="interview" element={<InterviewPage />} />
           <Route path="interview/:id" element={<InterviewPage />} />
-          <Route path="profile/:userId/settings" element={<UserRoles />}/>
-          <Route path="profile/:userId/statistics" element={<Statistics />}/>
-          <Route path="profile/:userId/:id" element={<Feedback />}/>
-          <Route path="profile/:userId" element={<Profile />}/>
+          <Route path="profile/:userId/settings" element={<UserRoles />} />
+          <Route path="profile/:userId/statistics" element={<Statistics />} />
+          <Route path="profile/:userId/:id" element={<Feedback />} />
+          <Route path="profile/:userId" element={<Profile />} />
         </Route>
         <Route path="*" element={<p>404</p>} />
       </Route>

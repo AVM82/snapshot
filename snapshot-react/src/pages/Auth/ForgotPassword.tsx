@@ -1,17 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
+import snapshotApi from '../../api/request';
 import EmailRegexp from '../../common/emailRegexp';
 import { ISignIn } from '../../models/auth/ISignIn';
 import styles from './AuthPage.module.scss';
 import Input from './components/Input';
 
-function ForgotPassword():React.JSX.Element {
+export default function ForgotPassword(): React.JSX.Element {
   const {
     register, handleSubmit, formState: { errors },
   } = useForm<ISignIn>({ mode: 'onBlur' });
+  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
-  const onSubmit:SubmitHandler<ISignIn> = () => {};
+  const onSubmit: SubmitHandler<ISignIn> = async (data): Promise<void> => {
+    setMessage('Відправка даних...');
+    const response: boolean = await snapshotApi.post('/auth/send-reset-password-email', data);
+
+    if (response === true) {
+      navigate('/email-sent');
+    } else if (response === false) {
+      setMessage('Ви не зареестровані на нашому сервісі!');
+    } else {
+      setMessage('При відправці пошти сталася помилка, спробуйте пізніше!');
+    }
+  };
 
   return (
     <div className={styles.signContainer}>
@@ -42,7 +57,8 @@ function ForgotPassword():React.JSX.Element {
                 },
               })}
               placeholder="Введіть електронну адресу"
-              error={errors.email?.message}
+              error={errors.email?.message || message}
+              onChange={() => setMessage('')}
             />
           </div>
           <button type="submit" className={styles.submitButton}>
@@ -53,5 +69,3 @@ function ForgotPassword():React.JSX.Element {
     </div>
   );
 }
-
-export default ForgotPassword;
