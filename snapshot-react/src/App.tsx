@@ -12,7 +12,6 @@ import CandidateSearch from './pages/CandidateSearch/CandidateSearch';
 import Home from './pages/Home/Home';
 import InterviewPage from './pages/Interview/InterviewPage';
 import Feedback from './pages/Profile/components/Feedback/Feedback';
-import MyInterviews from './pages/Profile/components/Interviews/components/MyInterviews/MyInterviews';
 import UserRoles from './pages/Profile/components/Roles/UserRoles';
 import Statistics from './pages/Profile/components/Statistics/Statistics';
 import Profile from './pages/Profile/Profile';
@@ -64,13 +63,7 @@ function App(): React.JSX.Element {
           <Route path="profile/:userId/settings" element={<UserRoles />}/>
           <Route path="profile/:userId/statistics" element={<Statistics />}/>
           <Route path="profile/:userId/:id" element={<Feedback />}/>
-          <Route path="profile/:userId" element={<Profile />}>
-            <Route index element={<MyInterviews />} />
-            <Route path="planned" element={<MyInterviews  />} />
-            <Route path="active" element={<MyInterviews />} />
-            <Route path="finished" element={<MyInterviews  />} />
-            <Route path="all" element={<MyInterviews />} />
-          </Route>
+          <Route path="profile/:userId" element={<Profile />}/>
         </Route>
         <Route path="*" element={<p>404</p>} />
       </Route>
