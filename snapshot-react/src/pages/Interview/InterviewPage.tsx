@@ -183,6 +183,7 @@ export default function InterviewPage(): React.JSX.Element {
   };
 
   if (isLoading) return <div>Loading...</div>;
+  console.log(interviewStatus);
 
   return (
     <div className={styles.pageContainer}>
@@ -265,7 +266,7 @@ export default function InterviewPage(): React.JSX.Element {
           {showQuestionTextField
             && <Question skillId={currentSkillId} onSubmit={() => setShowQuestionTextField(false)} />}
         </div>
-        {interviewStatus === 'COMPLETED' ? <Feedback /> : (
+        {interviewStatus === 'FINISHED' ? <Feedback /> : (
           <div className={styles.questionList}>
             <Questions {...interview} />
           </div>

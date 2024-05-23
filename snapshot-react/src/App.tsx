@@ -11,6 +11,7 @@ import SuccessfulSignUp from './pages/Auth/SuccessfulSignUp';
 import CandidateSearch from './pages/CandidateSearch/CandidateSearch';
 import Home from './pages/Home/Home';
 import InterviewPage from './pages/Interview/InterviewPage';
+import Feedback from './pages/Profile/components/Feedback/Feedback';
 import MyInterviews from './pages/Profile/components/Interviews/components/MyInterviews/MyInterviews';
 import UserRoles from './pages/Profile/components/Roles/UserRoles';
 import Statistics from './pages/Profile/components/Statistics/Statistics';
@@ -22,47 +23,53 @@ function App(): React.JSX.Element {
     <Routes>
       <Route
         path="sign-in"
-        element={
+        element={(
           <AuthPage>
             <SignInPage />
           </AuthPage>
-        }
+        )}
       />
       <Route
         path="forgot-password"
-        element={
+        element={(
           <AuthPage>
             <ForgotPassword />
           </AuthPage>
-        }
+        )}
       />
       <Route
         path="sign-up"
-        element={
+        element={(
           <AuthPage>
             <SignUpPage />
           </AuthPage>
-        }
+        )}
       />
       <Route
         path="thank-you"
-        element={
+        element={(
           <AuthPage>
             <SuccessfulSignUp />
           </AuthPage>
-        }
+        )}
       />
       <Route path="/" element={<Layout />}>
         <Route element={<Home />} index />
         <Route path="oauth2/redirect" element={<OAuth2RedirectHandler />} />
         <Route path="candidate-search" element={<CandidateSearch />} />
+
         <Route element={<ProtectedRoute />}>
           <Route path="interview" element={<InterviewPage />} />
           <Route path="interview/:id" element={<InterviewPage />} />
+          <Route path="profile/:userId/settings" element={<UserRoles />}/>
+          <Route path="profile/:userId/statistics" element={<Statistics />}/>
+          <Route path="profile/:userId/:id" element={<Feedback />}/>
           <Route path="profile/:userId" element={<Profile />}>
-            <Route path="interview-journal" element={<MyInterviews />} />
-            <Route path="settings" element={<UserRoles />} />
-            <Route path="statistics" element={<Statistics />} />
+            <Route index element={<MyInterviews />} />
+            <Route path="planned" element={<MyInterviews  />} />
+            <Route path="active" element={<MyInterviews />} />
+            <Route path="finished" element={<MyInterviews  />} />
+            <Route path="all" element={<MyInterviews />} />
           </Route>
         </Route>
         <Route path="*" element={<p>404</p>} />

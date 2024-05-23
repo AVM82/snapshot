@@ -1,21 +1,19 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import {
+  Link,
+  Outlet, useParams,
+} from 'react-router-dom';
 
 import { useAppDispatch } from '../../hooks/redux';
-import {
-  getLowerSkills,
-  getMyInterviews,
-  getPortrait
-} from '../../store/reducers/profile/actions';
-import MyInterviews from './components/Interviews/components/MyInterviews/MyInterviews';
-import UserRoles from './components/Roles/UserRoles';
-import Statistics from './components/Statistics/Statistics';
+import { getLowerSkills, getMyInterviews, getPortrait } from '../../store/reducers/profile/actions';
+import InterviewActionPanel from './components/Interviews/components/InterviewActionPanel/InterviewActionPanel';
+import NavBar from './components/NavBar/NavBar';
+import UserCard from './components/UserCard/UserCard';
+import styles from './profile.module.scss';
 
-function Profile(): JSX.Element {
+function Profile(): React.JSX.Element {
   const dispatch = useAppDispatch();
   const { userId } = useParams();
-  const [activeComponent, setActiveComponent] = useState('');
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfileData = async (): Promise<void> => {
@@ -24,52 +22,47 @@ function Profile(): JSX.Element {
       await dispatch(getPortrait({ id: userId as string }));
     };
 
-    fetchProfileData();
+    (async ():Promise<void> => {
+      await fetchProfileData();
+    })();
   }, [dispatch, userId]);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '50px',
-        width: '100%',
-        height: '100%'
-      }}
-    >
-      <div style={{ alignSelf: 'start' }}>
-        <button
-          type="button"
-          onClick={() => {
-            setActiveComponent('settings');
-            navigate('settings');
-          }}
-        >
-          Налаштувати профіль
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setActiveComponent('interview-journal');
-            navigate('interview-journal');
-          }}
-        >
-          Журнал інтерв&apos;ю
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setActiveComponent('statistics');
-            navigate('statistics');
-          }}
-        >
-          Статистика
-        </button>
+    <section className={styles.profileContainer}>
+      <div className={styles.profileHeader}>
+        <h2>Мій профіль</h2>
+        <InterviewActionPanel />
       </div>
-      {activeComponent === 'settings' && <UserRoles />}
-      {activeComponent === 'interview-journal' && <MyInterviews />}
-      {activeComponent === 'statistics' && <Statistics />}
-    </div>
+      <section className={styles.bodyContainer}>
+        <section className={styles.avatar}>
+          <div className={styles.profileVisibility}>
+            <span className={styles.info} />
+            <p>Відкритий профіль</p>
+            <label className={styles.switcher}>
+              <input type="checkbox" />
+              <span className={styles.slider} />
+            </label>
+          </div>
+          <UserCard />
+          <div />
+        </section>
+        <section className={styles.InterviewStatisticsContainer}>
+          <div>
+            <h3>Статистика співбесід</h3>
+            <NavBar />
+          </div>
+          <div>
+            <div className={styles.tableHeader}>
+              <h3>Журнал співбесід</h3>
+              <Link to="all" className={styles.link}>
+                <h5>всі співбесіди</h5>
+              </Link>
+            </div>
+            <Outlet/>
+          </div>
+        </section>
+      </section>
+    </section>
   );
 }
 

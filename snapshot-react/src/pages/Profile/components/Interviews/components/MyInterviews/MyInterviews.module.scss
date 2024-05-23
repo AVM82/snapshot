@@ -1,70 +1,100 @@
-.MyInterviewsContainer {
+@import "src/constants&mixins";
+
+.interviewTable {
   position: relative;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-top: 1rem;
-}
+  flex-direction: column;
+  min-height: 32rem;
+  overflow: hidden;
 
-.NewInterviewBlock {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  padding: 8px;
-  border: 1px solid #00ffff;
-  border-radius: 8px;
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
 
-  .Link {
-    color: #000000;
-    text-decoration: none;
+  ::-webkit-scrollbar-track {
+    background: $white;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    width: 5px;
+    background: $medium-purple;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: $primary-purple;
+  }
+
+  .interviewTableHeader {
+    width: 100%;
+    background-color: $light-purple;
+    border: 1px solid $primary-purple;
+    border-radius: 10px 10px 0 0;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    tr {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      align-items: center;
+      width: 100%;
+    }
+
+    th {
+      padding: 1rem;
+    }
+  }
+
+  .tableBody {
+    display: flex;
+    flex-direction: column;
+    max-height: 27.84rem;
+    overflow-y: scroll;
+
+    tr {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      align-items: center;
+      width: 100%;
+      min-height: 6.96rem;
+      border: 1px solid $primary-purple;
+      border-top: none;
+    }
+
+    tr:last-child {
+      border-radius: 0 0  10px 10px;
+    }
+
+    td,
+    th {
+      text-align: center;
+    }
   }
 }
 
-.closeButton {
-  width: 20px;
-  height: 20px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.InterviewScheduler {
-  position: absolute;
-  top: 15%;
-  right: -20%;
+.DropDownButton {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
-  gap: 1rem;
-  padding: 8px;
-  border: 1px solid #00ffff;
-  border-radius: 8px;
-}
+  align-self: center;
+  padding: 4rem 0;
 
-.interviewList {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-height: 600px;
-  overflow-y: scroll;
+  button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.4rem;
+    background: $white;
+    border: none;
+    cursor: pointer;
 
-  div {
-    padding: 5px;
-    border: 1px solid black;
-    border-radius: 5px;
+    &:focus {
+      outline: none;
+    }
   }
-}
-
-.asd {
-  display: flex;
-  flex-direction: column;
-}
-
-.bbb {
-  display: flex;
-  flex-direction: row;
-  gap: 2px;
-  padding: 6px;
-  border: 1px solid #00ffff;
 }
