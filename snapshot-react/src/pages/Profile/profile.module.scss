@@ -101,6 +101,9 @@
   .link {
     color: $text-color;
     text-decoration: none;
+    background: $white;
+    border: none;
+    outline: none;
   }
 }
 

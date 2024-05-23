@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
 
 import arrowDropDown from '../../../../../../assets/arrowDropDown.svg';
 import { useAppSelector } from '../../../../../../hooks/redux';
@@ -9,11 +8,10 @@ import { getInterviewsByStatus } from '../../../../../../utils/notification/getT
 import InterviewItemRow from '../InterviewItemRow/InterviewItemRow';
 import styles from './MyInterviews.module.scss';
 
-function MyInterviews(): React.JSX.Element {
+function MyInterviews({ status }:{ status:InterviewStatuses }): React.JSX.Element {
   const [numberOfRows, setNumberOfRows] = useState(4);
   const interviews = useAppSelector((state) => state.profile.interviews);
-  const { state } = useLocation();
-  const actualStatus: InterviewStatuses = state || '';
+  const actualStatus: InterviewStatuses = status || '';
   const actualInterviews:IInterviewPreview[] = actualStatus === '' ? interviews :
     getInterviewsByStatus(interviews, actualStatus);
   const renderTableBody = (): React.JSX.Element[] => (

@@ -1,20 +1,19 @@
-import React, { useEffect } from 'react';
-import {
-  Link,
-  Outlet, useParams,
-} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import {  useParams } from 'react-router-dom';
 
 import { useAppDispatch } from '../../hooks/redux';
+import { InterviewStatuses } from '../../models/profile/IInterview';
 import { getLowerSkills, getMyInterviews, getPortrait } from '../../store/reducers/profile/actions';
 import InterviewActionPanel from './components/Interviews/components/InterviewActionPanel/InterviewActionPanel';
-import NavBar from './components/NavBar/NavBar';
+import MyInterviews from './components/Interviews/components/MyInterviews/MyInterviews';
+import InterviewStatusSelector from './components/InterviewStatusSelector/InterviewStatusSelector';
 import UserCard from './components/UserCard/UserCard';
 import styles from './profile.module.scss';
 
 function Profile(): React.JSX.Element {
   const dispatch = useAppDispatch();
   const { userId } = useParams();
-
+  const [status, setStatus] = useState<InterviewStatuses>('COMPLETED');
   useEffect(() => {
     const fetchProfileData = async (): Promise<void> => {
       await dispatch(getMyInterviews());
@@ -26,6 +25,9 @@ function Profile(): React.JSX.Element {
       await fetchProfileData();
     })();
   }, [dispatch, userId]);
+  const handleChangeStatus=(newStatus: InterviewStatuses):void => {
+    setStatus(newStatus as InterviewStatuses);
+  };
 
   return (
     <section className={styles.profileContainer}>
@@ -49,16 +51,16 @@ function Profile(): React.JSX.Element {
         <section className={styles.InterviewStatisticsContainer}>
           <div>
             <h3>Статистика співбесід</h3>
-            <NavBar />
+            <InterviewStatusSelector onClick={handleChangeStatus} status={status}/>
           </div>
           <div>
             <div className={styles.tableHeader}>
               <h3>Журнал співбесід</h3>
-              <Link to="all" className={styles.link}>
+              <button type="button" className={styles.link} onClick={()=>setStatus('')}>
                 <h5>всі співбесіди</h5>
-              </Link>
+              </button>
             </div>
-            <Outlet/>
+            <MyInterviews status={status}/>
           </div>
         </section>
       </section>
