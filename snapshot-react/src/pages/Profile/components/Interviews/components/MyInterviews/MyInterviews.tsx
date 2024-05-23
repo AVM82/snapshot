@@ -45,17 +45,15 @@ function MyInterviews(): React.JSX.Element {
         </tbody>
 
       </table>
-      {numberOfRows<=actualInterviews.length&&
-
-(      <div className={styles.DropDownButton}>
-  <button type="button" onClick={increaseNumberOfRows}>
+      {numberOfRows<=actualInterviews.length&& (
+        <div className={styles.DropDownButton}>
+          <button type="button" onClick={increaseNumberOfRows}>
           завантажити ще
-    <img src={arrowDropDown} width="24px" height="24px" alt="downward pointing arrow"
-      className={styles.DropDownIcon}/>
-  </button>
-
-</div>
-)      }
+            <img src={arrowDropDown} width="24px" height="24px" alt="downward pointing arrow"
+              className={styles.DropDownIcon}/>
+          </button>
+        </div>
+      )      }
     </>
   );
 }

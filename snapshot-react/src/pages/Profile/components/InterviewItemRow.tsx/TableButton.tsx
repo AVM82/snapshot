@@ -8,10 +8,11 @@ import styles from './InterviewItemRow.module.scss';
 
 interface TableButtonProps {
   id:number,
-  status:InterviewStatuses
+  status:InterviewStatuses,
+  title:string
 }
 
-function TableButton({ status, id }:TableButtonProps):React.JSX.Element {
+function TableButton({ status, id,title }:TableButtonProps):React.JSX.Element {
   const [plannedDateTime, setPlannedDateTime] = useState('');
   const [showDateInput, setShowDateInput] = useState(false);
   const dispatch = useAppDispatch();
@@ -19,11 +20,8 @@ function TableButton({ status, id }:TableButtonProps):React.JSX.Element {
     dispatch(updateInterviewStatus({ id, status: 'CANCELLED' }));
   };
   const handleChangePlanedTime = ():void => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    const formattedDateString = plannedDateTime.toLocaleString('en-US', { timeZone: 'UTC-0' });
-    const formattedDate = new Date(formattedDateString);
-    dispatch(updateInterviewById({ id, plannedDateTime:formattedDate }));
+
+    dispatch(updateInterviewById({ id, plannedDateTime:new Date(plannedDateTime),title }));
   };
   const renderTableButton = ():React.JSX.Element => {
     switch (status) {
