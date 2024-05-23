@@ -4,9 +4,11 @@
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  gap: 3rem;
-  height: 16rem;
-  padding: 3rem 5rem;
+  min-height: 148px;
+  padding: 2rem 5rem;
+  color: #ffffff;
+  font-weight: 400;
+  font-family: Roboto, sans-serif;
   background-color: #0f172a;
 }
 
@@ -18,10 +20,8 @@
 
 .footer_link {
   padding: 0.5rem 0.75rem;
-  color: #ffffff;
   font-weight: 400;
   font-size: 1rem;
-  font-family: Roboto, sans-serif;
   text-align: left;
 }
 
@@ -29,9 +29,14 @@
   display: none;
 }
 
+.footer_social_copyright {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
 .footer_socialMediaLinks {
   display: flex;
-  justify-content: center;
   gap: 1rem;
 }
 
@@ -39,15 +44,13 @@
   color: #ffffff;
   font-weight: 400;
   font-size: 14px;
-  font-family: Roboto, sans-serif;
-  text-align: center;
 }
 
 .footer_num_version {
   display: inline-block;
   padding-inline: 0.5rem;
   color: $text-color;
-  font-size: 16px;
+  font-size: 14px;
   text-align: center;
   text-decoration: none;
   background-color: $light-purple;
