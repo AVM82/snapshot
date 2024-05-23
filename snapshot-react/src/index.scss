@@ -1,10 +1,6 @@
 @import "./reset";
 @import "src/constants&mixins";
 
-html {
-  scrollbar-gutter: stable;
-}
-
 #root {
   width: 100%;
 }
@@ -12,6 +8,8 @@ html {
 body {
   position: relative;
   display: flex;
+  width: 100vw;
+  overflow-x: hidden;
 }
 
 h1,
