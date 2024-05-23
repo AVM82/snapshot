@@ -1,5 +1,6 @@
 package com.project.snapshotspringboot.service;
 
+import com.project.snapshotspringboot.config.AppProps;
 import com.project.snapshotspringboot.entity.InterviewEntity;
 import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.enumeration.InterviewStatus;
@@ -28,6 +29,7 @@ public class MailService {
     private final JavaMailSender mailSender;
 
     private final InterviewRepository interviewRepository;
+    private final AppProps appProps;
 
     @Value("${reminder.email.attempts}")
     private int maxRetryAttempts;
@@ -66,13 +68,23 @@ public class MailService {
     public void sendEmailSubmitLetter(String to,
                                       String token) {
         String requestUrl = String.format(REQUEST_URL_TEMPLATE, userCreateEndpoint, token);
-        send(to, submitSubject, String.format(submitText, requestUrl));
+        String text = String.format(
+                submitText,
+                requestUrl,
+                appProps.getJwt().getExpirationTimeInMinutes());
+
+        send(to, submitSubject, text);
     }
 
     public void sendResetPasswordEmail(String to,
                                        String token) {
         String requestUrl = String.format(REQUEST_URL_TEMPLATE, resetPasswordEndpoint, token);
-        send(to, resetPasswordEmailSubject, String.format(resetPasswordEmailText, requestUrl));
+        String text = String.format(
+                resetPasswordEmailText,
+                requestUrl,
+                appProps.getJwt().getExpirationTimeInMinutes());
+
+        send(to, resetPasswordEmailSubject, text);
     }
 
     public void send(String to,
