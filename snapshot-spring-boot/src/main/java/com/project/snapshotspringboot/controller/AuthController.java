@@ -86,6 +86,16 @@ public class AuthController {
     public boolean resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
         return service.resetPassword(resetPasswordDto);
     }
+
+    @Operation(summary = "Verify reset token.")
+    @ApiResponse(responseCode = "200",
+            content = {@Content(schema = @Schema(implementation = Boolean.class), mediaType = "application/json")})
+    @ApiResponse(responseCode = "401",
+            content = {@Content(schema = @Schema(implementation = ResponseExceptionDto.class), mediaType = "application/json")})
+    @PostMapping("/verify-reset-token")
+    public boolean verifyResetToken(@RequestBody TokenDto tokenDto) {
+        return service.verifyResetToken(tokenDto.getToken());
+    }
 }
 
 
