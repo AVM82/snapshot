@@ -43,19 +43,19 @@ function InterviewScheduler({
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.formCard}>
-        <div className={styles.formHeader}>
+      <form
+        className={styles.formCard}
+        name="bookInterview"
+        onSubmit={handleSubmit(handleOnSubmit)}
+        {...rest}
+        noValidate
+      >
+        <legend className={styles.formHeader}>
           <h2>Створити інтерв&apos;ю</h2>
-        </div>
-        <form
-          className={styles.formBody}
-          name="bookInterview"
-          onSubmit={handleSubmit(handleOnSubmit)}
-          {...rest}
-          noValidate
-        >
-          <div>
-            <label htmlFor="title">Назва співбесіди</label>
+        </legend>
+        <div className={styles.formBody}>
+          <label>
+            Назва співбесіди
             <input
               type="text"
               id="title"
@@ -67,9 +67,9 @@ function InterviewScheduler({
               })}
               placeholder="Введіть назву"
             />
-          </div>
-          <div>
-            <label htmlFor="date">Дата та час</label>
+          </label>
+          <label>
+            Дата та час
             <input
               type="datetime-local"
               id="date"
@@ -80,9 +80,9 @@ function InterviewScheduler({
                 }
               })}
             />
-          </div>
-          <div>
-            <label htmlFor="login">Додати учасника</label>
+          </label>
+          <label>
+            Додати учасника
             <input
               type="text"
               id="login"
@@ -99,15 +99,16 @@ function InterviewScheduler({
               onBlur={getSearcher}
               placeholder='"Введіть електронну пошту"'
             />
-          </div>
-        </form>
+          </label>
+
+        </div>
         <div className={styles.formFooter}>
           <button className={styles.submitButton} type="submit">Створити співбесіду</button>
           <button className={styles.cancelButton} type="button" onClick={onClose}>
             X
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
