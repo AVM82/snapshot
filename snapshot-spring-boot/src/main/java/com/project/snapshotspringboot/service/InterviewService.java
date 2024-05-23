@@ -9,6 +9,7 @@ import com.project.snapshotspringboot.dtos.question.InterviewQuestionRequestDto;
 import com.project.snapshotspringboot.dtos.question.InterviewQuestionResponseDto;
 import com.project.snapshotspringboot.entity.*;
 import com.project.snapshotspringboot.enumeration.InterviewStatus;
+import com.project.snapshotspringboot.enumeration.UserRole;
 import com.project.snapshotspringboot.gemini.GeminiService;
 import com.project.snapshotspringboot.mapper.InterviewMapper;
 import com.project.snapshotspringboot.mapper.InterviewQuestionMapper;
@@ -83,10 +84,43 @@ public class InterviewService {
 
     public InterviewDto createInterview(AuthDetails authDetails, InterviewCreationDto interviewCreationDto) {
         InterviewEntity interviewEntity = interviewMapper.toEntity(interviewCreationDto);
-        interviewEntity.setInterviewer(authDetails.getUserEntity());
-        interviewEntity.setSearcher(userService.findById(interviewCreationDto.getSearcherId()));
+        UserEntity interviewer = authDetails.getUserEntity();
+        UserEntity searcher = userService.findById(interviewCreationDto.getSearcherId());
+        validateRoles(interviewer, searcher);
+        checkForSchedulingConflicts(interviewer.getId(), searcher.getId(), interviewEntity.getPlannedDateTime());
+        interviewEntity.setInterviewer(interviewer);
+        interviewEntity.setSearcher(searcher);
         InterviewEntity savedInterview = interviewRepository.save(interviewEntity);
         return interviewMapper.toDto(savedInterview);
+    }
+
+    private void validateRoles(UserEntity interviewer, UserEntity searcher) {
+        if (!userContainsRole(interviewer, UserRole.INTERVIEWER) || !userContainsRole(searcher, UserRole.SEARCHER)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Searcher or interviewer don't have appropriate role");
+        }
+    }
+
+    private boolean userContainsRole(UserEntity userEntity, UserRole role) {
+        return userEntity.getUserRoleSkillEntitySet().stream()
+                .map(x -> x.getRole().getName())
+                .anyMatch(x -> x.equals(role.toString()));
+    }
+
+    private void checkForSchedulingConflicts(Long interviewerId, Long searcherId, LocalDateTime plannedTime) {
+        LocalDateTime start = plannedTime.minusHours(1);
+        LocalDateTime end = plannedTime.plusHours(1);
+
+        boolean interviewerConflict = interviewRepository.interviewerHaveInterviewOn(interviewerId, start, end);
+        if (interviewerConflict) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Interviewer already have interview on specified date time");
+        }
+
+        boolean searcherConflict = interviewRepository.searcherHaveInterviewOn(searcherId, start, end);
+        if (searcherConflict) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Searcher already have interview on specified date time");
+        }
     }
 
     public List<ShortInterviewDto> getInterviewList(AuthDetails authDetails) {
