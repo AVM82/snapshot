@@ -1,9 +1,7 @@
-@import './reset';
-@import 'utils/constants&mixins';
+@import "./reset";
+@import "utils/constants&mixins";
 
 #root {
-  display: flex;
-  flex-direction: column;
   width: 100%;
 }
 
@@ -24,7 +22,7 @@ button {
 
 h1 {
   font-weight: 400;
-  font-family: 'Days one', sans-serif;
+  font-family: "Days one", sans-serif;
   text-transform: uppercase;
 }
 
