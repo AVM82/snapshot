@@ -1,16 +1,13 @@
-@import './reset';
-@import 'constants&mixins';
+@import "./reset";
+@import "utils/constants&mixins";
 
 #root {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
 }
 
 body {
   position: relative;
   display: flex;
-  width: 100vw;
-  overflow-x: hidden;
 }
 
 h1,
@@ -18,7 +15,6 @@ h4,
 h5,
 h6,
 p,
-td,
 button {
   font-weight: 400;
   font-family: Roboto, sans-serif;
@@ -26,13 +22,8 @@ button {
 
 h1 {
   font-weight: 400;
-  font-family: 'Days one', sans-serif;
+  font-family: "Days one", sans-serif;
   text-transform: uppercase;
-}
-
-a {
-  color: $text-color;
-  text-decoration: none;
 }
 
 h2,

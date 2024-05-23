@@ -11,7 +11,7 @@ rules:
   max-nesting-depth: 3
   no-descending-specificity: true
   #  scss/at-import-partial-extension: always
-  string-quotes: single
+  string-quotes: double
 
   order/order:
     - custom-properties
