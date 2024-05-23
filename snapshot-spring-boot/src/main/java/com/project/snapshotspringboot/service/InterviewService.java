@@ -113,9 +113,9 @@ public class InterviewService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Interview not found"));
         InterviewStatus.validateStatusTransition(interviewEntity.getStatus(), status);
         if (status == InterviewStatus.FINISHED) {
-            interviewEntity.setEndDateTime(LocalDateTime.now());
+            interviewEntity.setEndDateTime(LocalDateTime.now(ZoneOffset.UTC));
         } else if (status == InterviewStatus.ACTIVE) {
-            interviewEntity.setStartDateTime(LocalDateTime.now());
+            interviewEntity.setStartDateTime(LocalDateTime.now(ZoneOffset.UTC));
         }
         interviewEntity.setStatus(status);
         log.debug("Interview id = {} status updated from {} to {}", interviewId, interviewEntity.getStatus(), status);
