@@ -1,9 +1,9 @@
 import React from 'react';
-import {useForm} from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
-import {useAppDispatch, useAppSelector} from '../../../../../../hooks/redux';
-import {INewInterview} from '../../../../../../models/profile/INewInterview';
-import {addInterview, getUserByEmail} from '../../../../../../store/reducers/interwiew/actions';
+import { useAppDispatch, useAppSelector } from '../../../../../../hooks/redux';
+import { INewInterview } from '../../../../../../models/profile/INewInterview';
+import { addInterview, getUserByEmail } from '../../../../../../store/reducers/interwiew/actions';
 import styles from './InterviewScheduler.module.scss';
 
 interface CustomProps {
@@ -13,11 +13,11 @@ interface CustomProps {
 type CombinedProps = CustomProps & React.HTMLProps<HTMLFormElement>;
 
 function InterviewScheduler({
-                              onClose,
-                              ...rest
-                            }: CombinedProps): React.JSX.Element {
-  const {register, handleSubmit, watch} = useForm();
-  const {searcher} = useAppSelector((state) => state.interview);
+  onClose,
+  ...rest
+}: CombinedProps): React.JSX.Element {
+  const { register, handleSubmit, watch } = useForm();
+  const { searcher } = useAppSelector((state) => state.interview);
   const dispatch = useAppDispatch();
   const login = watch('login');
   const title = watch('title');
