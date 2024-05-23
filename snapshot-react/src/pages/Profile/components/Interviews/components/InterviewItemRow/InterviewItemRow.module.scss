@@ -1,4 +1,4 @@
-@import '../../../../../../constants&mixins';
+@import "src/constants&mixins";
 
 .buttonGroup {
   display: inline-flex;
@@ -30,13 +30,13 @@
   .cancelIcon {
     width: 18px;
     height: 18px;
-    background-image: url('/src/assets/cancelInterviewIcon.svg');
+    background-image: url("/src/assets/cancelInterviewIcon.svg");
   }
 
   .scheduleIcon {
     width: 16px;
     height: 18px;
-    background-image: url('/src/assets/scheduleIcon.svg');
+    background-image: url("/src/assets/scheduleIcon.svg");
   }
 
   img {
@@ -46,11 +46,11 @@
 
   &:hover {
     .cancelIcon {
-      background-image: url('/src/assets/cancelInterviewIconHover.svg');
+      background-image: url("/src/assets/cancelInterviewIconHover.svg");
     }
 
     .scheduleIcon {
-      background-image: url('/src/assets/scheduleIconHover.svg');
+      background-image: url("/src/assets/scheduleIconHover.svg");
     }
   }
 
@@ -61,7 +61,7 @@
     cursor: auto;
 
     .cancelIcon {
-      background-image: url('/src/assets/cancelInterviewIconDisabled.svg');
+      background-image: url("/src/assets/cancelInterviewIconDisabled.svg");
     }
   }
 }
@@ -76,7 +76,7 @@
     display: block;
     width: 1.5rem;
     height: 1.25rem;
-    background-image: url('/src/assets/mdCheck.svg');
+    background-image: url("/src/assets/mdCheck.svg");
     border: none;
   }
 }
