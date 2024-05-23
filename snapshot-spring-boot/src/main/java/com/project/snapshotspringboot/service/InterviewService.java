@@ -111,11 +111,15 @@ public class InterviewService {
         LocalDateTime end = plannedTime.plusHours(1);
 
         boolean interviewerConflict = interviewRepository.interviewerHaveInterviewOn(interviewerId, start, end);
-        boolean searcherConflict = interviewRepository.searcherHaveInterviewOn(searcherId, start, end);
-
-        if (interviewerConflict || searcherConflict) {
+        if (interviewerConflict) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Searcher or interviewer already have interview on specified date time");
+                    "Interviewer already have interview on specified date time");
+        }
+
+        boolean searcherConflict = interviewRepository.searcherHaveInterviewOn(searcherId, start, end);
+        if (searcherConflict) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Searcher already have interview on specified date time");
         }
     }
 

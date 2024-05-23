@@ -18,8 +18,6 @@ public interface InterviewRepository extends JpaRepository<InterviewEntity, Long
 
     List<InterviewEntity> findByStatusAndPlannedDateTimeBetween(InterviewStatus interviewStatus, LocalDateTime tomorrow, LocalDateTime endOfTomorrow);
 
-//    boolean existsBySearcherIdAndPlannedDateTimeBetween(Long id, LocalDateTime start, LocalDateTime end);
-
     @Query("""
         SELECT COUNT(i) > 0 FROM interviews i
         WHERE i.interviewer.id = :id
