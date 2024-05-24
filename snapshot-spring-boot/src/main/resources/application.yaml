@@ -89,6 +89,7 @@ app:
       - ${rest.prefix}/users/hello
       - ${rest.prefix}/auth/**
       - ${rest.prefix}/oauth2/**
+      - ${rest.prefix}/version
     secured-uris:
       - ${rest.prefix}/**
 

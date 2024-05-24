@@ -1,6 +1,8 @@
 .header {
   margin-bottom: 5rem;
   font-family: Roboto, sans-serif;
+
+  // border-bottom: 1px solid pink;
 }
 
 .header_top {
@@ -43,6 +45,7 @@
   position: absolute;
   top: 2.5rem;
   right: -3.5rem;
+  z-index: 10;
   display: none;
   width: 12rem;
   height: 10rem;
@@ -83,19 +86,76 @@
   transform: rotate(45deg);
 }
 
+.header_user_drpop_down_exit {
+  padding-left: 0;
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
+}
+
 .header_user_drpop_down_exit::after {
   content: url("../../assets/icon-exit.svg");
 }
 
-// ---------------------------------- header_title
+// ---------------------------------- header_title_notification
+.header_title_notification {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// .header_title_notification::before {
+//   content: "";
+//   flex: 1;
+// }
+
 .header_title {
-  padding-block: 0.8rem;
+  flex-grow: 1;
   color: #000000;
   font-weight: 600;
   font-size: 1.25rem;
   line-height: 28px;
   letter-spacing: 0.15px;
   text-align: center;
+  padding-block: 0.8rem;
+}
+
+.header_notification {
+  position: absolute;
+  right: 1.2rem;
+  min-width: 33rem;
+  padding: 0.6rem 0.75rem;
+  text-align: center;
+  background-color: #ffd54f;
+  border-radius: 0.25rem;
+}
+
+.header_notification_message {
+  align-self: center;
+  font-weight: 500;
+  font-size: 1.25rem;
+  font-family: Roboto, sans-serif;
+}
+
+.header_notification_link {
+  align-self: center;
+  font-weight: 400;
+  font-size: 0.8rem;
+  font-family: Roboto, sans-serif;
+  text-decoration: underline;
+}
+
+.header_notification_link::after {
+  // content: "▶";
+  content: "\25B8";
+  text-decoration: none;
+}
+
+.header_notification_inside {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }
 
 // ---------------------------------- header_link

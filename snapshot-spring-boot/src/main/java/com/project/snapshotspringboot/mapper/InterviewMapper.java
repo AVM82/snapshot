@@ -47,14 +47,7 @@ public abstract class InterviewMapper {
         return interviewFullDto;
     }
 
-    @Mapping(source = "interviewer", target = "interviewerFullName", qualifiedByName = "concatenateFullName")
-    @Mapping(source = "searcher", target = "searcherFullName", qualifiedByName = "concatenateFullName")
     public abstract  ShortInterviewDto toShortDto(InterviewEntity interviewEntity);
-
-    @Named("concatenateFullName")
-    String concatenateFullName(UserEntity user) {
-        return user.getFirstname() + " " + user.getLastname();
-    }
 
     @Named("mapUserToDto")
     UserResponseDto mapUserToDto(UserEntity user) {
