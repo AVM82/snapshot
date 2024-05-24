@@ -264,7 +264,10 @@ export default function InterviewPage(): React.JSX.Element {
             />
           ))}
           {showQuestionTextField
-            && <Question skillId={currentSkillId} onSubmit={() => setShowQuestionTextField(false)} />}
+            && <Question 
+              skillId={currentSkillId}
+              interviewQuestions={interview.questions.map((q) => q.question)}
+              onSubmit={() => setShowQuestionTextField(false)} />}
         </div>
         {interviewStatus === 'FINISHED' ? <Feedback /> : (
           <div className={styles.questionList}>
