@@ -3,7 +3,7 @@
 .main_first_page {
   position: relative;
 
-  //kostyl
+  // //kostyl
   top: -5rem;
   display: flex;
   justify-content: center;
@@ -13,8 +13,6 @@
 
   // margin-inline: auto;
   padding-block: 3rem;
-
-  // border: 1px solid green;
 }
 
 .main_first_page_container {
@@ -22,20 +20,11 @@
 
   // flex-wrap: wrap;
   justify-content: center;
-
-  // border: 1px solid yellow;
 }
 
 .main_first_page_image_container {
   min-width: 35rem;
-
-  // border: 1px solid pink;
 }
-
-// .main_first_page_image_container img {
-//   height: 90%;
-//   border: 1px solid lightblue;
-// }
 
 .main_first_page_action_container {
   display: flex;
