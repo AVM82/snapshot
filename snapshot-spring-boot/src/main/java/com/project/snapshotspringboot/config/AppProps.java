@@ -13,6 +13,7 @@ public class AppProps {
     private final JwtProps jwt = new JwtProps();
     private final SecurityProps security = new SecurityProps();
     private final OAuth2Props oauth2 = new OAuth2Props();
+    private final GeminiProps gemini = new GeminiProps();
 
     @Getter
     @Setter
@@ -36,5 +37,11 @@ public class AppProps {
         private int cookieExpireSeconds;
         private String authorizationBaseUri;
         private String redirectionBaseUri;
+    }
+
+    @Getter
+    @Setter
+    public static class GeminiProps {
+        private String url;
     }
 }

@@ -6,14 +6,14 @@ const formatToLocalDate = (date:string):Date => {
 
   return new Date(localDate.getTime() - (offsetMinutes * 60000));
 };
-const formatQuestionsWithLocalDate = (questions:IQuestion[]):IQuestion[] => questions.map((question) => {
-  const date = formatToLocalDate(question.createdAt);
-  const parts = date.toLocaleString().split(', ');
+const toLocalDate = (date:string):string => {
+  const parts = formatToLocalDate(date).toLocaleString().split(', ');
   const trimmedTime = parts[1].slice(0, -3);
 
-  return {
-    ...question,
-    createdAt: `${parts[0]}, ${trimmedTime}`,
-  };
-});
-export { formatQuestionsWithLocalDate, formatToLocalDate };
+  return `${parts[0]} о ${trimmedTime}`;
+};
+const formatQuestionsWithLocalDate = (questions:IQuestion[]):IQuestion[] => questions.map((question) => ({
+  ...question,
+  createdAt: toLocalDate(question.createdAt),
+}));
+export { formatQuestionsWithLocalDate, formatToLocalDate, toLocalDate };

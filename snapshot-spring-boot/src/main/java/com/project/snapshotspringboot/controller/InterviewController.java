@@ -3,7 +3,10 @@ package com.project.snapshotspringboot.controller;
 import com.project.snapshotspringboot.dtos.InterviewResultsDto;
 import com.project.snapshotspringboot.dtos.QuestionScoreDto;
 import com.project.snapshotspringboot.dtos.interview.*;
-import com.project.snapshotspringboot.dtos.question.*;
+import com.project.snapshotspringboot.dtos.question.InterviewQuestionGradeRequestDto;
+import com.project.snapshotspringboot.dtos.question.InterviewQuestionGradeResponseDto;
+import com.project.snapshotspringboot.dtos.question.InterviewQuestionRequestDto;
+import com.project.snapshotspringboot.dtos.question.InterviewQuestionResponseDto;
 import com.project.snapshotspringboot.dtos.status.StatusDto;
 import com.project.snapshotspringboot.enumeration.InterviewStatus;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
@@ -43,7 +46,7 @@ public class InterviewController {
     @GetMapping("/{interviewId}/results")
     @Operation(summary = "Get interview results", description = "Get interview results")
     @ApiResponse(responseCode = "200", description = "Interview results found",
-        content = {@Content(mediaType = "application/json", schema = @Schema(implementation = InterviewResultsDto.class))})
+            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = InterviewResultsDto.class))})
     @ApiResponse(responseCode = "404", description = "Interview not found", content = {@Content})
     public InterviewResultsDto getInterviewResults(@PathVariable Long interviewId) {
         return interviewService.getInterviewResults(interviewId);
@@ -52,9 +55,9 @@ public class InterviewController {
     @GetMapping("/{interviewId}")
     @Operation(summary = "Get interview by id", description = "get interview by id")
     @ApiResponse(responseCode = "200", description = "Interview found",
-        content = {@Content(mediaType = "application/json", schema = @Schema(implementation = InterviewFullDto.class))})
+            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = InterviewFullDto.class))})
     @ApiResponse(responseCode = "404", description = "Interview not found",
-        content = {@Content})
+            content = {@Content})
     public InterviewFullDto getInterviewById(@PathVariable Long interviewId) {
         return interviewService.getInterviewById(interviewId);
     }
@@ -62,7 +65,7 @@ public class InterviewController {
     @GetMapping
     @Operation(summary = "Get all interviews", description = "Get all interviews of user")
     @ApiResponse(responseCode = "200", description = "Interviews found",
-        content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ShortInterviewDto.class)))})
+            content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ShortInterviewDto.class)))})
     public List<ShortInterviewDto> getAllInterviews(@AuthenticationPrincipal AuthDetails authDetails) {
         return interviewService.getInterviewList(authDetails);
     }
@@ -70,7 +73,7 @@ public class InterviewController {
     @PatchMapping("/{interviewId}")
     @Operation(summary = "Update interview before it's start", description = "Update interview before it's start")
     @ApiResponse(responseCode = "200", description = "Interview updated successfully",
-        content = {@Content(mediaType = "application/json", schema = @Schema(implementation = InterviewDto.class))})
+            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = InterviewDto.class))})
     @ApiResponse(responseCode = "404", description = "Interview not found", content = {@Content})
     @ApiResponse(responseCode = "400", description = "Invalid interview data", content = {@Content})
     public InterviewDto updateInterview(@PathVariable Long interviewId,
@@ -146,5 +149,16 @@ public class InterviewController {
     @ApiResponse(responseCode = "400", description = "Interview not found", content = {@Content})
     public String updateFeedback(@PathVariable Long interviewId, @RequestBody String feedback) {
         return interviewService.updateFeedback(interviewId, feedback);
+    }
+
+    @GetMapping("/questions/gemini/skill/{id}")
+    @Operation(summary = "Get questions from Gemini ai by skill id.")
+    @ApiResponse(responseCode = "200",
+            content = {@Content(
+                    array = @ArraySchema(schema = @Schema(implementation = String.class)),
+                    mediaType = "application/json")})
+    @ApiResponse(responseCode = "404", description = "Skill not found or Gemini does not work!", content = {@Content})
+    public List<String> gemini(@PathVariable(name = "id") long id) {
+        return interviewService.getGeminiQuestionsBySkillId(id);
     }
 }

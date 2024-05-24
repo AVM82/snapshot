@@ -163,6 +163,20 @@ public class UserService implements UserDetailsService {
 
         List<InterviewEntity> interviews = interviewRepository.findBySearcherId(userId);
 
+        return getUserResultsByInterviewsResponseDtos(userId, interviews, userInterviewResults);
+    }
+
+    public List<UserResultsByInterviewsResponseDto> getUserInterviewsResultsByPeriod(Long userId, LocalDate fromDate, LocalDate toDate) {
+        findById(userId);
+
+        List<InterviewEntity> interviews = interviewRepository.findBySearcherIdAndEndDateTimeBetween(userId, fromDate.atStartOfDay(), toDate.atStartOfDay());
+
+        List<UserResultsByInterviewsResponseDto> userInterviewResults = new ArrayList<>();
+
+        return getUserResultsByInterviewsResponseDtos(userId, interviews, userInterviewResults);
+    }
+
+    public List<UserResultsByInterviewsResponseDto> getUserResultsByInterviewsResponseDtos(Long userId, List<InterviewEntity> interviews, List<UserResultsByInterviewsResponseDto> userInterviewResults) {
         for (InterviewEntity interview : interviews) {
             UserResultsByInterviewsResponseDto userInterviewDto = new UserResultsByInterviewsResponseDto();
             userInterviewDto.setInterviewId(interview.getId());
@@ -277,4 +291,8 @@ public class UserService implements UserDetailsService {
         return userStatisticsList;
     }
 
+    public void setPasswordForUserById(String password,
+                                       long id) {
+        repository.setPasswordForUserById(password, id);
+    }
 }

@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { getMyInterviews } from '../../store/reducers/profile/actions';
 import getInterval from '../../utils/notification/getInterval';
-import getTimeToInterview from '../../utils/notification/getTimeToInterview';
+import { getTimeToInterview } from '../../utils/notification/getTimeToInterview';
+import styles from './Header.module.scss';
 
 function Notification():React.JSX.Element {
   const { interviews } = useAppSelector((state) => state.profile);
-  const [remainingTimeInMillis, setRemainingTimeInMillis] = useState(0);
+  const [remainingTimeInMillis, setRemainingTimeInMillis] = useState(getTimeToInterview(interviews).time);
+  const [nearestInterviewDate, setNearestInterviewDate] = useState({ id: 0,title:'' });
   const dispatch = useAppDispatch();
   const weekInMillis = 604800000;
   const fifteenMinInMs = 900000;
@@ -15,15 +18,16 @@ function Notification():React.JSX.Element {
   useEffect(() => {
     (async (): Promise<void> => {
       await dispatch(getMyInterviews());
-      setRemainingTimeInMillis(getTimeToInterview(interviews));
     })();
   }, [dispatch]);
 
-  // eslint-disable-next-line consistent-return
   useEffect(() => {
     const updateInterval = (): void => {
-      const time = getTimeToInterview(interviews);
-      setRemainingTimeInMillis(time);
+      const nearestInterview = getTimeToInterview(interviews);
+
+      setRemainingTimeInMillis(nearestInterview.time);
+
+      setNearestInterviewDate({ id:nearestInterview.id, title:nearestInterview.title });
     };
     updateInterval();
 
@@ -37,7 +41,7 @@ function Notification():React.JSX.Element {
       clearInterval(intervalID);
     }
 
-    return () => clearInterval(intervalID);
+    return (): void => clearInterval(intervalID);
   }, [remainingTimeInMillis, interviews]);
 
   function formatTime():string {
@@ -62,16 +66,36 @@ function Notification():React.JSX.Element {
   }
 
   return (
-    <div style={{
-      fontSize: '20px',
-      color: remainingTimeInMillis >= 0 ? 'white' : 'red',
-    }}
+    <div className={styles.header_notification}
+    // style={{
+    //   fontSize: '10px',
+    //   // display:'none',
+    //   color: remainingTimeInMillis >= 0 ? 'black' : 'red',
+
+    // }}
     >
       {remainingTimeInMillis > -fifteenMinInMs && remainingTimeInMillis < weekInMillis
         ? (
-          <div>
+          <div className={styles.header_notification_inside}
+          // style={{
+          //   fontSize: '10px',
+          //   //
+          //   color: remainingTimeInMillis >= 0 ? 'black' : 'red',
+          //   display:'flex',
+          //   flexDirection:'row',
+          //   gap:'1rem',
+          //   textTransform:'capitalize'
+          // }}
+          >
+            <p className={styles.header_notification_message}>
             Наступне  інтерв&apos;ю:
-            {formatTime()}
+              {formatTime()}
+            </p>
+            <Link className={styles.header_notification_link} to={`interview/${nearestInterviewDate.id}`} >
+              переглянути деталі
+              {/* {nearestInterviewDate.title} */}
+            </Link>
+
           </div>
         ) : (<div>На цьому тижні у вас ще немає інтерв&apos;ю</div>)}
     </div>

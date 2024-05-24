@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/comma-dangle */
-/* eslint-disable comma-dangle */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import snapshotApi from '../../../api/request';
@@ -10,43 +8,55 @@ import IStatistics from '../../../models/profile/IStatistics';
 import ActionType from './common';
 
 type PatchQuestion = {
-  id: number,
-  interviewId: number,
-  grade: string,
+  id: number;
+  interviewId: number;
+  grade: string;
 };
 
 type PatchFeedBack = {
-  interviewId: number,
-  feedback: string,
+  interviewId: number;
+  feedback: string;
 };
 
 type PatchedQuestion = {
-  id: number,
-  grade: string,
+  id: number;
+  grade: string;
 };
 
 type GetStatistics = {
-  id: number,
-  from: string,
-  to: string
+  id: number;
+  from: string;
+  to: string;
+};
+
+type GetPortrait = {
+  id: string;
+  from?: string;
+  to?: string;
 };
 
 const changeGrade = createAsyncThunk(
   ActionType.CHANGE_GRADE,
   async (data: PatchQuestion): Promise<PatchedQuestion> => {
-    const response: PatchedQuestion = await snapshotApi.patch('/interviews/question/grade', data);
+    const response: PatchedQuestion = await snapshotApi.patch(
+      '/interviews/question/grade',
+      data
+    );
 
     return response;
-  },
+  }
 );
 
 const changeFeedback = createAsyncThunk(
   ActionType.CHANGE_FEEDBACK,
   async (data: PatchFeedBack): Promise<{ feedback: string }> => {
-    const response: { feedback: string } = await snapshotApi.patch(`/interviews/${data.interviewId}/feedback`, data);
+    const response: { feedback: string } = await snapshotApi.patch(
+      `/interviews/${data.interviewId}/feedback`,
+      data
+    );
 
     return response;
-  },
+  }
 );
 
 const getMyInterviews = createAsyncThunk(
@@ -55,7 +65,7 @@ const getMyInterviews = createAsyncThunk(
     const response: IInterviewPreview[] = await snapshotApi.get('/interviews');
 
     return response;
-  },
+  }
 );
 
 const getInterviewById = createAsyncThunk(
@@ -64,7 +74,7 @@ const getInterviewById = createAsyncThunk(
     const response: IInterview = await snapshotApi.get(`/interviews/${id}`);
 
     return response;
-  },
+  }
 );
 
 const getLowerSkills = createAsyncThunk(
@@ -78,8 +88,10 @@ const getLowerSkills = createAsyncThunk(
 
 const getPortrait = createAsyncThunk(
   ActionType.GET_PORTRAIT,
-  async (id: number): Promise<IPortrait[]> => {
-    const response: IPortrait[] = await snapshotApi.get(`/users/portrait/${id}`);
+  async ({ id, from, to }: GetPortrait): Promise<IPortrait[]> => {
+    const response: IPortrait[] = await snapshotApi.get(
+      `/users/portrait/${id}?${from && to ? `from=${from}&to=${to}` : ''}`
+    );
 
     return response;
   }
@@ -88,14 +100,20 @@ const getPortrait = createAsyncThunk(
 const getStatistics = createAsyncThunk(
   ActionType.GET_STATISTICS,
   async ({ id, from, to }: GetStatistics): Promise<IStatistics[]> => {
-    const response: IStatistics[] = await snapshotApi.get(`/users/statistic/${id}?from=${from}&to=${to}`);
+    const response: IStatistics[] = await snapshotApi.get(
+      `/users/statistic/${id}?from=${from}&to=${to}`
+    );
 
     return response;
   }
 );
 
 export {
-  changeFeedback, changeGrade, getInterviewById, getLowerSkills,
-  getMyInterviews, getPortrait, getStatistics
+  changeFeedback,
+  changeGrade,
+  getInterviewById,
+  getLowerSkills,
+  getMyInterviews,
+  getPortrait,
+  getStatistics
 };
-

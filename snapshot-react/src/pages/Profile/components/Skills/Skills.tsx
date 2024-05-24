@@ -91,8 +91,8 @@ export default function Skills(props:IRoles):React.JSX.Element {
     <div className={styles.container}>
       <h3>Ваші навички:</h3>
       <ul className={styles.selectedSkillsContainer}>
-        {selectedSkillsNames.map((skillName: string, id: number) => (
-          <li key={id.toString()}>{skillName}</li>
+        {selectedSkillsNames.map((skillName: string) => (
+          <li key={skillName}>{skillName}</li>
         ))}
       </ul>
       <button type="button" onClick={onSubmit}>

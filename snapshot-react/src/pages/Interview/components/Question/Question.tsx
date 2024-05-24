@@ -1,24 +1,57 @@
 import React, { useEffect, useState } from 'react';
 
+import snapshotApi from '../../../../api/request';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
-import { addQuestion, getSkillQuestions } from '../../../../store/reducers/interwiew/actions';
+import IQuestion from '../../../../models/profile/IQuestion';
+import { addQuestion } from '../../../../store/reducers/interwiew/actions';
 import styles from './Question.module.scss';
 
 interface IProps {
   skillId: number
-  onSubmit : () => void
+  interviewQuestions: string[]
+  onSubmit: () => void
 }
-export default function Question({ skillId, onSubmit }:IProps):React.JSX.Element {
+
+export default function Question({ skillId, interviewQuestions, onSubmit }: IProps): React.JSX.Element {
   const [questionText, setQuestionText] = useState('');
-  const { id, interviewer, currentSkillQuestions } = useAppSelector((state) => state.interview);
+  const { id, interviewer } = useAppSelector((state) => state.interview);
+  const [geminiQuestions, setGeminiQuestions] = useState<string[]>([]);
+  const [interviewerQuestions, setInterviewerQuestions] = useState<string[]>([]);
   const dispatch = useAppDispatch();
   const handleQuestionChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
     setQuestionText(e.target.value);
   };
+
   useEffect(() => {
-    dispatch(getSkillQuestions(skillId));
-  }, [dispatch, skillId]);
-  const handleAddNewQuestion = (e:React.FormEvent<HTMLFormElement>):void => {
+    const getQuestions = async (): Promise<void> => {
+      setInterviewerQuestions([]);
+      setGeminiQuestions([]);
+
+      const iQuestions: IQuestion[] = await snapshotApi.get(`/interviews/questions/skill/${skillId}`);
+
+      if (iQuestions) {
+        setInterviewerQuestions(iQuestions
+          .map((q) => q.question)
+          .filter((q) => interviewQuestions.indexOf(q) === -1)
+          .slice(0, 5)
+        );
+      }
+
+      const gQuestions: string[] = await snapshotApi.get(`/interviews/questions/gemini/skill/${skillId}`);
+
+      if (gQuestions) {
+        setGeminiQuestions(gQuestions
+          .filter((q) => interviewQuestions.indexOf(q) === -1)
+          .filter((q) => interviewerQuestions.indexOf(q) === -1)
+          .slice(0, 5)
+        );
+      }
+    };
+
+    getQuestions();
+  }, [skillId]);
+
+  const handleAddNewQuestion = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
     if (id) {
@@ -30,25 +63,41 @@ export default function Question({ skillId, onSubmit }:IProps):React.JSX.Element
       };
       dispatch(addQuestion(questionData));
     }
+
     onSubmit();
   };
-  const handleProposedQuestion = (text:string):void => {
+  const handleProposedQuestion = (text: string): void => {
     setQuestionText(text);
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.questionsList}>
-        {currentSkillQuestions.map((question) => (
+        {geminiQuestions.length === 0 && <p>Завантаження даних...</p>}
+        {geminiQuestions.map((question) => (
           <div
             role="button"
             tabIndex={0}
-            key={question.id}
+            key={question}
             onClick={
-              () => handleProposedQuestion(question.question)
+              () => handleProposedQuestion(question)
             }
           >
-            {question.question}
+            {question}
+          </div>
+        ))}
+      </div>
+      <div className={styles.questionsList}>
+        {interviewerQuestions.map((question) => (
+          <div
+            role="button"
+            tabIndex={0}
+            key={question}
+            onClick={
+              () => handleProposedQuestion(question)
+            }
+          >
+            {question}
           </div>
         ))}
       </div>

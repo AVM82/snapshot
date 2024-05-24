@@ -22,6 +22,7 @@ import java.util.Date;
 public class JwtService {
     private static final String AUTH_KEY = "auth";
     private static final String SUBMIT_KEY = "submit";
+    private static final String RESET_PASSWORD_KEY = "reset";
     private static final String KEY_NAME = "key";
 
     private final AppProps appProps;
@@ -41,27 +42,28 @@ public class JwtService {
         return generateToken(tempUserId, SUBMIT_KEY);
     }
 
+    public String generateResetPasswordToken(long userId) {
+        return generateToken(userId, RESET_PASSWORD_KEY);
+    }
+
     public long getUserIdFromToken(String token) {
-        try {
-            Claims claims = getClaims(token);
-
-            if (!AUTH_KEY.equals(claims.get(KEY_NAME, String.class))) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token key!");
-            }
-
-            return Long.parseLong(claims.getSubject());
-        } catch (ExpiredJwtException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Expired token time!", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token!", e);
-        }
+        return getUserIdFromTokenWithKey(token, AUTH_KEY);
     }
 
     public long getTempUserIdFromToken(String token) {
+        return getUserIdFromTokenWithKey(token, SUBMIT_KEY);
+    }
+
+    public long getUserIdFromResetPasswordToken(String token) {
+        return getUserIdFromTokenWithKey(token, RESET_PASSWORD_KEY);
+    }
+
+    private long getUserIdFromTokenWithKey(String token,
+                                           String key) {
         try {
             Claims claims = getClaims(token);
 
-            if (!SUBMIT_KEY.equals(claims.get(KEY_NAME, String.class))) {
+            if (!key.equals(claims.get(KEY_NAME, String.class))) {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token key!");
             }
 

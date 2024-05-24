@@ -16,10 +16,10 @@ import java.util.List;
 @Slf4j
 public class SpaWebFilter extends OncePerRequestFilter {
 
-    @Value("${back.notRedirectToFront.startWith}")
+    @Value("${back.not-redirect-to-front.start-with}")
     private List<String> startWith;
 
-    @Value("${back.notRedirectToFront.endsWith}")
+    @Value("${back.not-redirect-to-front.ends-with}")
     private List<String> endsWith;
 
     @Override

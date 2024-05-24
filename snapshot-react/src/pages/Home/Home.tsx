@@ -1,28 +1,34 @@
-import './Home.scss';
+// import { useNavigate } from 'react-router-dom';
 
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useAppDispatch } from '../../hooks/redux';
+// import { deleteUser } from '../../store/reducers/user/userSlice';
+import classNames from 'classnames';
 
-import snapshotApi from '../../api/request';
-import { useAppDispatch } from '../../hooks/redux';
-import { deleteUser } from '../../store/reducers/user/userSlice';
+import firstPagePicture from '../../assets/first-page-picture.svg';
+import styles from './Home.module.scss';
 
 function Home(): JSX.Element {
-  const [response, setResponse] = useState<{ [message: string]: string }>({});
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    const sayHello = async (): Promise<void> => {
-      const res: { message: string } = (await snapshotApi.get('/users/hello'));
-      setResponse(res);
-    };
-    sayHello();
-  }, []);
+  // const navigate = useNavigate();
+  // const dispatch = useAppDispatch();
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-      <button type="button" onClick={() => navigate('/sign-in')}>To sign-in</button>
+    <div className={styles.main_first_page}>
+      <div className={styles.main_first_page_container}>
+        <div className={styles.main_first_page_action_container}>
+          <div className={styles.main_first_page_action}>
+
+            <div className={styles.main_first_page_action_text}>
+              Готові підготуватися до своєї наступної співбесіди?
+            </div> 
+            <button type="submit" className={classNames(styles.submitButton, styles.main_first_page_action_button)}>
+              ПРАКТИКУВАТИ З КОЛЕГАМИ</button> 
+          </div>
+        </div>
+        <div className={styles.main_first_page_image_container}>
+          <img src={firstPagePicture} alt="First_page_picture" />
+        </div>
+       
+        {/* <button type="button" onClick={() => navigate('/sign-in')}>To sign-in</button>
       <button type="button" onClick={() => navigate('/sign-up')}>To sign-up</button>
       <button
         type="button"
@@ -34,11 +40,9 @@ function Home(): JSX.Element {
         }}
       >
         Вийти
-      </button>
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        {response?.message
-      && response.message.split('').map((item, index) => <p key={String(index)} className={item}>{item}</p>)}
+      </button> */}
       </div>
+      
     </div>
   );
 }
