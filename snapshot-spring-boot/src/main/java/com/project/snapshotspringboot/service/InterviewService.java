@@ -107,6 +107,10 @@ public class InterviewService {
     }
 
     private void checkForSchedulingConflicts(Long interviewerId, Long searcherId, LocalDateTime plannedTime) {
+        if (plannedTime == null) {
+            return;
+        }
+
         LocalDateTime start = plannedTime.minusHours(1);
         LocalDateTime end = plannedTime.plusHours(1);
 
