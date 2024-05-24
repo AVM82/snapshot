@@ -13,10 +13,8 @@ function Question({
   const userId = useAppSelector((state) => state.user.userData.id);
   const { id: interviewId } = useParams();
   const dispatch = useAppDispatch();
-  const handleChangeGrade = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (e.key === 'Enter') {
-      dispatch(changeGrade({ id, interviewId: Number(interviewId), grade: newGrade.endsWith('%') ? newGrade : `${newGrade}%` }));
-    }
+  const handleChangeGrade = (): void => {
+    dispatch(changeGrade({ id, interviewId: Number(interviewId), grade: newGrade.endsWith('%') ? newGrade : `${newGrade}%` }));
   };
 
   return (
