@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { useAppDispatch } from '../../../../../../hooks/redux';
 import { resetInterviewState } from '../../../../../../store/reducers/interwiew/interviewSlice';
+import styles from '../../../../profile.module.scss';
 import InterviewScheduler from '../InterviewScheduler/InterviewScheduler';
 
 function InterviewActionPanel(): React.JSX.Element {
@@ -19,23 +20,21 @@ function InterviewActionPanel(): React.JSX.Element {
   };
 
   const renderNewInterviewBlock = (): React.JSX.Element => (
-    <div>
-      <button type="button" onClick={handleLinkToInterview}>
-        <Link to="/interview">Розпочати</Link>
-      </button>
-      <button type="button" onClick={() => setShowInterviewScheduler(true)}>
+    <div className={styles.actionPanelButtonContainer}>
+      <Link to="/interview" className={styles.actionPanelButton} onClick={handleLinkToInterview}>Розпочати</Link>
+      <button type="button" className={styles.actionPanelButton} onClick={() => setShowInterviewScheduler(true)}>
         Запланувати
       </button>
-      <button type="button" onClick={() => setShowNewInterview(false)}>
+      <button type="button" className={styles.closeButton} onClick={() => setShowNewInterview(false)}>
         X
       </button>
     </div>
   );
 
   const renderNewInterviewButton = (): React.JSX.Element => (
-    <div>
+    <div className={styles.newInterviewButton}>
       {!showNewInterview ? (
-        <button type="button" onClick={handleNewInterviewClick}>
+        <button type="button" className={styles.actionPanelButton} onClick={handleNewInterviewClick}>
           Нове інтрев&apos;ю
         </button>
       ) : (

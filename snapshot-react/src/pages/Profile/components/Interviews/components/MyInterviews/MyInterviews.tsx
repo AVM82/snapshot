@@ -1,28 +1,23 @@
 import React, { useState } from 'react';
 
 import arrowDropDown from '../../../../../../assets/arrowDropDown.svg';
-import { useAppSelector } from '../../../../../../hooks/redux';
-import { InterviewStatuses } from '../../../../../../models/profile/IInterview';
 import IInterviewPreview from '../../../../../../models/profile/IInterviewPreview';
-import { getInterviewsByStatus } from '../../../../../../utils/notification/getTimeToInterview';
 import InterviewItemRow from '../InterviewItemRow/InterviewItemRow';
 import styles from './MyInterviews.module.scss';
 
-function MyInterviews({ status }:{ status:InterviewStatuses }): React.JSX.Element {
+function MyInterviews({ interviews }:{ interviews:IInterviewPreview[] }): React.JSX.Element {
   const [numberOfRows, setNumberOfRows] = useState(4);
-  const interviews = useAppSelector((state) => state.profile.interviews);
-  const actualStatus: InterviewStatuses = status || '';
-  const actualInterviews:IInterviewPreview[] = actualStatus === '' ? interviews :
-    getInterviewsByStatus(interviews, actualStatus);
+
   const renderTableBody = (): React.JSX.Element[] => (
 
-    [...actualInterviews].reverse().slice(0,numberOfRows).map((item) => (
+    [...interviews].reverse().slice(0,numberOfRows).map((item) => (
       <InterviewItemRow
         key={item.id}
         {...item}
       />
     ))
   );
+
   const increaseNumberOfRows = ():void =>{
     setNumberOfRows((currentNumber:number)=>currentNumber+4);
   };
@@ -43,7 +38,7 @@ function MyInterviews({ status }:{ status:InterviewStatuses }): React.JSX.Elemen
         </tbody>
 
       </table>
-      {numberOfRows<=actualInterviews.length&& (
+      {numberOfRows<=interviews.length&& (
         <div className={styles.DropDownButton}>
           <button type="button" onClick={increaseNumberOfRows}>
           завантажити ще
