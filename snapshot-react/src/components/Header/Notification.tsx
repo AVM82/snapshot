@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { getMyInterviews } from '../../store/reducers/profile/actions';
 import getInterval from '../../utils/notification/getInterval';
 import { getTimeToInterview } from '../../utils/notification/getTimeToInterview';
+import styles from './Header.module.scss';
 
 function Notification():React.JSX.Element {
   const { interviews } = useAppSelector((state) => state.profile);
@@ -65,30 +66,34 @@ function Notification():React.JSX.Element {
   }
 
   return (
-    <div style={{
-      fontSize: '10px',
-      // display:'none',
-      color: remainingTimeInMillis >= 0 ? 'black' : 'red',
+    <div className={styles.header_notification}
+    // style={{
+    //   fontSize: '10px',
+    //   // display:'none',
+    //   color: remainingTimeInMillis >= 0 ? 'black' : 'red',
 
-    }}
+    // }}
     >
       {remainingTimeInMillis > -fifteenMinInMs && remainingTimeInMillis < weekInMillis
         ? (
-          <div style={{
-            fontSize: '10px',
-            //
-            color: remainingTimeInMillis >= 0 ? 'black' : 'red',
-            display:'flex',
-            flexDirection:'row',
-            gap:'1rem',
-            textTransform:'capitalize'
-          }}>
-            <p>
+          <div className={styles.header_notification_inside}
+          // style={{
+          //   fontSize: '10px',
+          //   //
+          //   color: remainingTimeInMillis >= 0 ? 'black' : 'red',
+          //   display:'flex',
+          //   flexDirection:'row',
+          //   gap:'1rem',
+          //   textTransform:'capitalize'
+          // }}
+          >
+            <p className={styles.header_notification_message}>
             Наступне  інтерв&apos;ю:
               {formatTime()}
             </p>
-            <Link to={`interview/${nearestInterviewDate.id}`} >
-              {nearestInterviewDate.title}
+            <Link className={styles.header_notification_link} to={`interview/${nearestInterviewDate.id}`} >
+              переглянути деталі
+              {/* {nearestInterviewDate.title} */}
             </Link>
 
           </div>

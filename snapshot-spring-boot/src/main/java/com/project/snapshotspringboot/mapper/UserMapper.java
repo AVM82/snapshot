@@ -1,9 +1,6 @@
 package com.project.snapshotspringboot.mapper;
 
-import com.project.snapshotspringboot.dtos.RegisterRequest;
-import com.project.snapshotspringboot.dtos.RoleWithSkillsDto;
-import com.project.snapshotspringboot.dtos.UserResponseDto;
-import com.project.snapshotspringboot.dtos.UserSearchResponseDto;
+import com.project.snapshotspringboot.dtos.*;
 import com.project.snapshotspringboot.entity.TempUserEntity;
 import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.security.oauth2.model.OAuth2UserInfo;
