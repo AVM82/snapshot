@@ -105,7 +105,7 @@ public class MailService {
         }
     }
 
-    @Scheduled(cron = "0 0 9 * * ?")
+    @Scheduled(cron = "0 50 17 * * ?")
     public void sendInterviewReminders() {
         LocalDateTime tomorrow = LocalDateTime.now().plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
         LocalDateTime endOfTomorrow = tomorrow.plusDays(1).minusSeconds(1);
