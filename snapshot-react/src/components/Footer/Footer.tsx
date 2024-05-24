@@ -27,7 +27,7 @@ function Footer(): React.JSX.Element {
         <div className={styles.footer_link}>Довідник скілів</div>
       </div>
       <div className={styles.footer_social_copyright}>
-        <div>{version && <span className={styles.footer_num_version}> v{version.substring(0, 3)}</span>}
+        <div>{version && <span className={styles.footer_num_version}> v{version}</span>}
           <span className={styles.footer_copyright_name_project}>SNAPSHOT IT</span></div>
         <div className={styles.footer_socialMediaLinks}>
           <img src={iconF} alt="Facebook icon" />
