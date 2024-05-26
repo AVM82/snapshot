@@ -121,4 +121,13 @@ public class UserController {
                                                                    @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
         return service.getUserStatisticsByPeriod(userId, fromDate, toDate);
     }
+
+    @Operation(summary = "Get information about user by id.")
+    @ApiResponse(responseCode = "200",
+            content = {@Content(schema = @Schema(implementation = UserResponseDto.class), mediaType = "application/json")})
+    @ApiResponse(responseCode = "404", content = {@Content})
+    @GetMapping("/{id}")
+    public UserResponseDto getById(@PathVariable long id) {
+        return service.getById(id);
+    }
 }

@@ -295,4 +295,13 @@ public class UserService implements UserDetailsService {
                                        long id) {
         repository.setPasswordForUserById(password, id);
     }
+
+    public UserResponseDto getById(long id) {
+        UserEntity user = findById(id);
+        return userMapper.toDto(user)
+                .setRoles(userRoleSkillsToDto(
+                        user.getId(),
+                        user.getUserRoleSkillEntitySet()
+                ));
+    }
 }
