@@ -1,11 +1,12 @@
 import { InterviewStatuses } from './IInterview';
+import IUserPreview from './IUserPreview';
 
 interface IInterviewPreview {
   id: number,
   title: string,
   status: InterviewStatuses,
-  interviewerFullName: string,
-  searcherFullName: string,
+  interviewer:IUserPreview,
+  searcher:IUserPreview,
   plannedDateTime: string,
   startDateTime: string,
   endDateTime: string

@@ -183,7 +183,6 @@ export default function InterviewPage(): React.JSX.Element {
   };
 
   if (isLoading) return <div>Loading...</div>;
-  console.log(interviewStatus);
 
   return (
     <div className={styles.pageContainer}>
@@ -264,7 +263,7 @@ export default function InterviewPage(): React.JSX.Element {
             />
           ))}
           {showQuestionTextField
-            && <Question 
+            && <Question
               skillId={currentSkillId}
               interviewQuestions={interview.questions.map((q) => q.question)}
               onSubmit={() => setShowQuestionTextField(false)} />}

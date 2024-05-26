@@ -86,3 +86,21 @@
   background: $cyan;
   border-radius: 4px;
 }
+
+.tableRow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  width: 100%;
+  min-height: 6.96rem;
+  border: 1px solid $primary-purple;
+  border-top: none;
+
+  td {
+    max-width: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+  }
+}
