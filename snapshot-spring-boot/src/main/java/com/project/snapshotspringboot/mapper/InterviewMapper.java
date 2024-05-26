@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {RoleMapper.class})
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {RoleMapper.class, UserMapper.class})
 public abstract class InterviewMapper {
     protected UserMapper userMapper;
 
@@ -47,8 +47,8 @@ public abstract class InterviewMapper {
         return interviewFullDto;
     }
 
-    @Mapping(source = "interviewer", target = "interviewerFullName", qualifiedByName = "concatenateFullName")
-    @Mapping(source = "searcher", target = "searcherFullName", qualifiedByName = "concatenateFullName")
+    @Mapping(source = "interviewer", target = "interviewer")
+    @Mapping(source = "searcher", target = "searcher")
     public abstract  ShortInterviewDto toShortDto(InterviewEntity interviewEntity);
 
     @Named("concatenateFullName")
