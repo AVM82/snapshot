@@ -20,7 +20,7 @@ function InterviewStatusSelector({ onClick,status }:IInterviewStatusSelectorProp
     CANCELLED: 'Відмінені',
     '': ' Всі',
   };
-  const interviewStatuses:InterviewStatuses[] = ['COMPLETED', 'PLANNED', 'ACTIVE', 'FINISHED'];
+  const interviewStatuses:InterviewStatuses[] = [ 'PLANNED', 'ACTIVE','FINISHED','COMPLETED' ];
   const interviews = useAppSelector((state) => state.profile.interviews);
   const handleStatusChange = (newStatus: InterviewStatuses):void => {
     onClick(newStatus);

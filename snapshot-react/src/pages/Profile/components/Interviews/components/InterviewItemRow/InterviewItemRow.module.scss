@@ -23,6 +23,7 @@
   gap: 0.5rem;
   padding: 0.2rem 0.25rem;
   font-weight: 500;
+  font-size: 0.8rem;
   text-transform: uppercase;
   border-radius: 5px;
   cursor: pointer;
@@ -85,4 +86,22 @@
   margin: 1rem;
   background: $cyan;
   border-radius: 4px;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  width: 100%;
+  min-height: 6.96rem;
+  border: 1px solid $primary-purple;
+  border-top: none;
+
+  td {
+    max-width: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+  }
 }

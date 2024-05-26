@@ -16,7 +16,7 @@ import styles from './profile.module.scss';
 function Profile(): React.JSX.Element {
   const dispatch = useAppDispatch();
   const { userId } = useParams();
-  const [status, setStatus] = useState<InterviewStatuses>('COMPLETED');
+  const [status, setStatus] = useState<InterviewStatuses>('PLANNED');
   useEffect(() => {
     const fetchProfileData = async (): Promise<void> => {
       await dispatch(getMyInterviews());

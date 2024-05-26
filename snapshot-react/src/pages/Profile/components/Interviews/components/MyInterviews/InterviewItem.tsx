@@ -6,8 +6,8 @@ function InterviewItem({
   id,
   title,
   status,
-  interviewerFullName,
-  searcherFullName
+  interviewer,
+  searcher
 }: Partial<IInterviewPreview>): JSX.Element {
   return (
     <div
@@ -27,9 +27,9 @@ function InterviewItem({
       <p>{title}</p>
       <p>{status}</p>
       <p>
-        from: {interviewerFullName}
+        from: {interviewer?.userFullName}
         <br />
-        to: {searcherFullName}
+        to: {searcher?.userFullName}
       </p>
     </div>
   );

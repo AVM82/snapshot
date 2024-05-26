@@ -5,8 +5,14 @@ function buildInterviewPreview(payload: IInterview): IInterviewPreview {
   return {
     id: payload.id,
     title: payload.title,
-    interviewerFullName: `${payload.interviewer.username} ${payload.interviewer.lastname}`,
-    searcherFullName: `${payload.searcher.username} ${payload.searcher.lastname}`,
+    interviewer:{
+      id:payload.interviewer.id,
+      userFullName:`${payload.interviewer.username} ${payload.interviewer.lastname}`,
+    },
+    searcher:{
+      id:payload.searcher.id,
+      userFullName:`${payload.searcher.username} ${payload.searcher.lastname}`,
+    },
     status: payload.status || 'PLANNED',
     startDateTime: String(payload.startDateTime),
     endDateTime: String(payload.endDateTime),
