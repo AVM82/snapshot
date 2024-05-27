@@ -80,4 +80,7 @@ public abstract class UserMapper {
     protected String getFullName(UserEntity entity) {
         return entity.getLastname() + " " + entity.getFirstname();
     }
+
+    @Mapping(target = "roles", source = "userEntity", qualifiedByName = "mapSkills")
+    public abstract UserByIdDto toByIdDto(UserEntity userEntity);
 }

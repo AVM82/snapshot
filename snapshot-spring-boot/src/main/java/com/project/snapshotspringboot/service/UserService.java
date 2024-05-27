@@ -1,12 +1,15 @@
 package com.project.snapshotspringboot.service;
 
 import com.project.snapshotspringboot.dtos.*;
+import com.project.snapshotspringboot.dtos.interview.ShortInterviewDto;
 import com.project.snapshotspringboot.dtos.result.SkillResultDto;
 import com.project.snapshotspringboot.dtos.result.UserResultsByInterviewsResponseDto;
 import com.project.snapshotspringboot.dtos.search.SearchSkillGradeDto;
 import com.project.snapshotspringboot.dtos.statistic.QuestionGradeDto;
 import com.project.snapshotspringboot.dtos.statistic.UserStatisticsPeriodDto;
 import com.project.snapshotspringboot.entity.*;
+import com.project.snapshotspringboot.enumeration.InterviewStatus;
+import com.project.snapshotspringboot.mapper.InterviewMapper;
 import com.project.snapshotspringboot.mapper.UserMapper;
 import com.project.snapshotspringboot.repository.*;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
@@ -42,6 +45,7 @@ public class UserService implements UserDetailsService {
     private final RoleService roleService;
     private final SkillService skillService;
     private final UserMapper userMapper;
+    private final InterviewMapper interviewMapper;
 
     public UserEntity create(UserEntity user) {
 
@@ -296,12 +300,18 @@ public class UserService implements UserDetailsService {
         repository.setPasswordForUserById(password, id);
     }
 
-    public UserResponseDto getById(long id) {
+    public UserByIdDto getById(long id) {
         UserEntity user = findById(id);
-        return userMapper.toDto(user)
+        List<ShortInterviewDto> searcherCompleted = interviewRepository
+                .findAllBySearcherIdAndStatus(user.getId(), InterviewStatus.COMPLETED)
+                .stream()
+                .map(interviewMapper::toShortDto)
+                .toList();
+
+        return userMapper.toByIdDto(user)
                 .setRoles(userRoleSkillsToDto(
                         user.getId(),
-                        user.getUserRoleSkillEntitySet()
-                ));
+                        user.getUserRoleSkillEntitySet()))
+                .setCompletedInterviews(searcherCompleted);
     }
 }

@@ -33,4 +33,6 @@ public interface InterviewRepository extends JpaRepository<InterviewEntity, Long
         AND i.plannedDateTime <= :end
     """)
     boolean searcherHaveInterviewOn(@Param("id") Long id, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+    List<InterviewEntity> findAllBySearcherIdAndStatus(long searcherId, InterviewStatus status);
 }
