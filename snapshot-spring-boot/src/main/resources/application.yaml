@@ -5,8 +5,8 @@ rest:
   prefix: /rest
 
 domain:
-  back: ${BACK_URI:http://localhost:8080}
-  front: ${VITE_API_URL:http://localhost:5173}
+  back: ${VITE_BACK_URL:http://localhost:8080}
+  front: ${VITE_FRONT_URL:http://localhost:5173}
 
 spring:
   application:
