@@ -13,12 +13,12 @@ import java.util.Set;
 @Repository
 public interface SkillRepository extends JpaRepository<SkillEntity, Long> {
     @Query(value = """
-                WITH RECURSIVE rectree(id, name, parent_id) AS (
-                    SELECT id, name, COALESCE(parent_id, 0)
+                WITH RECURSIVE rectree(id, name, title, parent_id) AS (
+                    SELECT id, name, title, COALESCE(parent_id, 0)
                     FROM skills
                     WHERE COALESCE(parent_id, 0) = ?
                     UNION ALL
-                    SELECT s.id, s.name, COALESCE(s.parent_id, 0)
+                    SELECT s.id, s.name, s.title, COALESCE(s.parent_id, 0)
                     FROM skills s
                     JOIN rectree
                     ON s.parent_id = rectree.id
