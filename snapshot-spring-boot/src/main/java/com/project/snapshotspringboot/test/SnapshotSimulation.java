@@ -15,12 +15,13 @@ public class SnapshotSimulation extends Simulation {
     private static final Logger LOGGER = LoggerFactory.getLogger(SnapshotSimulation.class);
     private static final int USER_COUNT = Integer.parseInt(System.getProperty("USERS", "1"));
     private static final int RAMP_DURATION = Integer.parseInt(System.getProperty("RAMP_DURATION", "1"));
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String BEARER_JWT_TOKEN = "Bearer #{jwtToken}";
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_JWT_TOKEN = "Bearer #{jwtToken}";
+    private static final String HOST = System.getenv("TEST_URL");
 
     private final HttpProtocolBuilder httpProtocol =
             http
-                    .baseUrl("http://localhost:8080")
+                    .baseUrl(HOST)
                     .acceptHeader("application/json")
                     .contentTypeHeader("application/json");
 
