@@ -3,16 +3,15 @@ import './oauth2.scss';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import api from '../../common/api';
 import styles from './AuthPage.module.scss';
 
 interface OAuth2Params {
-  text:string
+  text: string
 }
 
-function OAuth2({ text }:OAuth2Params): React.JSX.Element {
-  const frontUri = 'http://localhost:5173';
-  const backUri = 'http://localhost:8080';
-  const googleAuthUri = `${backUri}/rest/oauth2/authorize/google?redirect_uri=${frontUri}/oauth2/redirect`;
+function OAuth2({ text }: OAuth2Params): React.JSX.Element {
+  const googleAuthUri = `${api.baseURL}/oauth2/authorize/google?redirect_uri=${api.frontURL}/oauth2/redirect`;
 
   return (
     <>
