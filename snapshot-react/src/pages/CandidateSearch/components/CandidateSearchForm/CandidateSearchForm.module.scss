@@ -12,12 +12,10 @@
 
 .skillForm {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-wrap: wrap;
   align-items: start;
-  align-self: start;
   gap: 10px;
-  width: 500px;
+  width: 100%;
   padding: 10px;
   border: $small-border;
   border-radius: 8px;
@@ -25,9 +23,8 @@
 
 .skillFormItem {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  width: 100%;
+  gap: 10px;
   padding: 8px;
   background-color: $medium-purple;
   border-radius: 8px;
@@ -38,9 +35,8 @@
 
   & label {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    width: 90%;
+    gap: 5px;
   }
 
   & img {
@@ -51,14 +47,14 @@
 .primaryButton {
   @include primary-button;
 
+  width: 10%;
   cursor: pointer;
 }
 
 .skillsBlock {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
-  gap: 6px;
+  gap: 5px;
   width: 100%;
   min-width: 100%;
   padding: 16px;
@@ -67,18 +63,27 @@
   border-radius: 24px;
 }
 
+.skillsWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
 .skillChip {
   height: 24px;
   padding: 0 8px;
-  background-color: $cyan;
   border-radius: 24px;
   cursor: pointer;
+
+  &:hover {
+    background-color: $cyan;
+  }
 }
 
 .chevronWrapper {
   display: flex;
   justify-content: center;
-  width: 5%;
+  width: 20px;
   padding: 4px 0;
 }
 

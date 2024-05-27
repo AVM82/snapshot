@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import snapshotApi from '../../../../api/request';
-import closeIcon from '../../../../assets/icon-close.svg';
 import AutocompleteInput from '../../../../components/AutocompleteInput/AutocompleteInput';
 import CandidateSearchFormProps from '../../../../models/candidateSearch/CandidateSearchProps';
 import styles from './CandidateSearchForm.module.scss';
+import SkillChip from './SkillChip';
+import SkillFormItem from './SkillFormItem';
 
 function CandidateSearchForm({
   setFormData,
@@ -88,56 +89,30 @@ function CandidateSearchForm({
         Оберіть навички кандидата (максимум 7):
       </h3>
       <div className={styles.skillsBlock}>
-        {[...selectOptions.sort()].slice(0, endOfSlice).map((skill) => (
-          <div
-            key={skill}
-            role="button"
-            tabIndex={0}
-            className={styles.skillChip}
-            id={skill}
-            onClick={getSelectedVal}
-          >
-            {skill}
-          </div>
-        ))}
+        <div className={styles.skillsWrapper}>
+          {[...selectOptions.sort()].slice(0, endOfSlice).map((skill) => (
+            <SkillChip skill={skill} getSelectedVal={getSelectedVal} selectedSkills={selectedSkills}/>
+          ))}
+        </div>
         <div className={styles.chevronWrapper}>
           <div
             aria-label="expand-skill-block"
             className={styles.chevron}
+            style={{ transform: `rotate(${isExpanded ? '-135deg' : '45deg'})` }}
             role="button"
             tabIndex={0}
             onClick={(): void => setIsExpanded(!isExpanded)}
           />
         </div>
       </div>
-      <form className={styles.skillForm} onSubmit={handleSubmit}>
-        {selectedSkills.map((value) => (
-          <div className={styles.skillFormItem} key={value}>
-            <label id={value}>
-              {value}{' '}
-              <input
-                type="text"
-                name={value}
-                id={value}
-                maxLength={2}
-                onChange={handleChange}
-                required
-              />
-            </label>
-            <div
-              role="button"
-              tabIndex={0}
-              id={value}
-              onClick={handleDeleteSkill}
-            >
-              <img src={closeIcon} alt="delete" width={20} height={20} />
-            </div>
-          </div>
+      {selectedSkills.length > 0 && <form className={styles.skillForm} onSubmit={handleSubmit}>
+        {selectedSkills.map((value, index) => (
+          <SkillFormItem value={value} index={index} handleDeleteSkill={handleDeleteSkill} handleChange={handleChange}/>
         ))}
         <button className={styles.primaryButton} type="submit">
           Знайти
         </button>
-      </form>
+      </form>}
     </div>
   );
 }
