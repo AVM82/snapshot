@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SkillDto {
     private String name;
+    private String title;
 }

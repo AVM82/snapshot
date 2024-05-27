@@ -7,7 +7,6 @@ import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import com.project.snapshotspringboot.service.SkillService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,7 +52,7 @@ public class SkillController {
     @Operation(summary = "Get all lower-level skills for the SEARCHER role")
     @ApiResponse(responseCode = "200", description = "Skills found successfully",
             content = {@Content(mediaType = "application/json")})
-    public List<String> getAllLastLevelSkills() {
+    public List<SkillDto> getAllLastLevelSkills() {
         return skillService.getLastLevelSkills();
     }
 }
