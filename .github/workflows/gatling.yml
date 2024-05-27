@@ -25,14 +25,14 @@ jobs:
 
       - name: Start test
         run: |
-          cd /home/runner/work/test2/test2/snapshot-spring-boot
+          cd /home/runner/work/snapshot/snapshot/snapshot-spring-boot
           mvn gatling:test
         env:
           TEST_URL: 'http://snapshot-env.eba-tkt77dky.eu-central-1.elasticbeanstalk.com/'
       
       - name: Set Gatling report path 
         run: 
-          echo "GATLING_REPORT_DIR=$(find /home/runner/work/test2/test2/snapshot-spring-boot/target/gatling/ -type d -name "snapshotsimulation-*")" >> $GITHUB_ENV
+          echo "GATLING_REPORT_DIR=$(find /home/runner/work/snapshot/snapshot/snapshot-spring-boot/target/gatling/ -type d -name "snapshotsimulation-*")" >> $GITHUB_ENV
 
     
       - name: Deploy Gatling report to S3
