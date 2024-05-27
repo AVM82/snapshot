@@ -1,9 +1,6 @@
 package com.project.snapshotspringboot.controller;
 
-import com.project.snapshotspringboot.dtos.EmailDto;
-import com.project.snapshotspringboot.dtos.RoleDto;
-import com.project.snapshotspringboot.dtos.UserResponseDto;
-import com.project.snapshotspringboot.dtos.UserSearchResponseDto;
+import com.project.snapshotspringboot.dtos.*;
 import com.project.snapshotspringboot.dtos.result.UserResultsByInterviewsResponseDto;
 import com.project.snapshotspringboot.dtos.search.SearchSkillGradeDto;
 import com.project.snapshotspringboot.dtos.statistic.UserStatisticsPeriodDto;
@@ -127,7 +124,7 @@ public class UserController {
             content = {@Content(schema = @Schema(implementation = UserResponseDto.class), mediaType = "application/json")})
     @ApiResponse(responseCode = "404", content = {@Content})
     @GetMapping("/{id}")
-    public UserResponseDto getById(@PathVariable long id) {
+    public UserByIdDto getById(@PathVariable long id) {
         return service.getById(id);
     }
 }
