@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-plusplus */
 
 import { Line, line, scaleLinear, select } from 'd3';
@@ -8,16 +9,6 @@ import { SkillGrade } from '../../../../models/candidateSearch/ICandidateSearch'
 interface Datum {
   x: number;
   y: number;
-}
-
-function randomColor(): string {
-  const r = Math.floor(Math.random() * 256);
-  const g = Math.floor(Math.random() * 256);
-  const b = Math.floor(Math.random() * 256);
-
-  const hex = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
-
-  return hex;
 }
 
 // const capitalize = (str: string): string =>
@@ -32,8 +23,8 @@ function TinyPortrait(skillGrades: SkillGrade): JSX.Element {
     left: 10
   };
 
-  const width = 125 - margin.left - margin.right;
-  const height = 125 - margin.top - margin.bottom;
+  const width = 150 - margin.left - margin.right;
+  const height = 150 - margin.top - margin.bottom;
 
   useEffect(() => {
     const data = [skillGrades];
@@ -67,11 +58,11 @@ function TinyPortrait(skillGrades: SkillGrade): JSX.Element {
     const keys = Object.keys(skillGrades);
 
     const centerX = width / 1.75;
-    const centerY = height / 0.75;
+    const centerY = height ;
 
     for (let i = 0; i < keys.length; i++) {
       const slice = Math.PI / 2 + (2 * Math.PI * i) / keys.length;
-      // const key = keys[i];
+      const number = i + 1;
 
       // axis values
       const { x, y } = cordForAngle(slice, radius);
@@ -82,50 +73,50 @@ function TinyPortrait(skillGrades: SkillGrade): JSX.Element {
         .attr('y2', y + centerY)
         .attr('x1', centerX)
         .attr('y1', centerY)
-        .attr('stroke', 'black')
+        .attr('stroke', 'gray')
         .attr('stroke-width', 1)
         .attr('stroke-linecap', 'round');
 
-      // svg
-      //   .append('text')
-      //   .attr('x', x + centerX)
-      //   .attr('y', y + centerY)
-      //   .text(capitalize(key))
-      //   .style('text-anchor', (_d) =>
-      //     i === 0
-      //       ? 'start'
-      //       : i === 1
-      //         ? 'start'
-      //         : i === 2
-      //           ? 'start'
-      //           : i === 2
-      //             ? 'end'
-      //             : 'start'
-      //   )
-      //   .attr('dx', (_d) =>
-      //     i === 0
-      //       ? '0.7em'
-      //       : i === 1
-      //         ? '-0.7em'
-      //         : i === 2
-      //           ? '-0.5em'
-      //           : i === 3
-      //             ? '0.3em'
-      //             : '0.6em'
-      //   )
-      //   .attr('dy', (_d) =>
-      //     i === 0
-      //       ? '1.3em'
-      //       : i === 1
-      //         ? '0.4em'
-      //         : i === 2
-      //           ? '-0.5em'
-      //           : i === 3
-      //             ? '-0.5em'
-      //             : '0.4em'
-      //   )
-      //   .attr('fill', 'black')
-      //   .attr('font-size', '12px');
+      svg
+        .append('text')
+        .attr('x', x + centerX)
+        .attr('y', y + centerY)
+        .text(number)
+        .style('text-anchor', (_d) =>
+          i === 0
+            ? 'start'
+            : i === 1
+              ? 'start'
+              : i === 2
+                ? 'start'
+                : i === 2
+                  ? 'end'
+                  : 'start'
+        )
+        .attr('dx', (_d) =>
+          i === 0
+            ? '-0.3em'
+            : i === 1
+              ? '-0.9em'
+              : i === 2
+                ? '-0.3em'
+                : i === 3
+                  ? '0.3em'
+                  : '0.3em'
+        )
+        .attr('dy', (_d) =>
+          i === 0
+            ? '1.3em'
+            : i === 1
+              ? '0.4em'
+              : i === 2
+                ? '-0.5em'
+                : i === 3
+                  ? '0.4em'
+                  : '0.1em'
+        )
+        .attr('fill', 'black')
+        .attr('font-size', '12px');
     }
 
     // circes levels
@@ -135,7 +126,7 @@ function TinyPortrait(skillGrades: SkillGrade): JSX.Element {
         .attr('cx', centerX)
         .attr('cy', centerY)
         .attr('fill', 'none')
-        .attr('stroke', 'black')
+        .attr('stroke', 'gray')
         .attr('stroke-width', 1)
         .attr('stroke-linecap', 'round')
         .attr('r', radAxis1(el));
@@ -176,9 +167,10 @@ function TinyPortrait(skillGrades: SkillGrade): JSX.Element {
         .datum(cord)
         .attr('class', 'areapath')
         .attr('d', lineGen)
-        .attr('stroke-width', 2)
+        .attr('stroke-width', 4)
+        .attr('stroke-linejoin', 'round')
         .attr('stroke-linecap', 'round')
-        .attr('stroke', () => randomColor())
+        .attr('stroke', '#574997')
         .attr('fill', 'none')
         .attr('opacity', 1)
         .attr('transform', `translate(${centerX}, ${centerY})`);

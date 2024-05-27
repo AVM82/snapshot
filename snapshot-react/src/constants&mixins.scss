@@ -24,6 +24,7 @@ $large-border: 3px solid $primary-purple;
   background: $primary-purple;
   border: 2px solid $primary-purple;
   border-radius: 4px;
+  cursor: pointer;
 
   &,
   & * {
@@ -52,6 +53,7 @@ $large-border: 3px solid $primary-purple;
   background: $dark-blue;
   border: 1px solid $dark-blue;
   border-radius: 4px;
+  cursor: pointer;
 
   &,
   & * {
@@ -80,6 +82,7 @@ $large-border: 3px solid $primary-purple;
   background: $white;
   border: 1px solid $primary-purple;
   border-radius: 4px;
+  cursor: pointer;
 
   &,
   & * {
