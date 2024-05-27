@@ -113,7 +113,9 @@ function Portrait(): JSX.Element {
         .attr('y2', y + height / 1.5)
         .attr('x1', width / 2.5)
         .attr('y1', height / 1.5)
-        .attr('stroke', 'black')
+        .attr('stroke', 'gray')
+        .attr('stroke-linejoin', 'round')
+        .attr('stroke-linecap', 'round')
         .attr('stroke-width', 1.5)
         .style('opacity', 0.1);
 
@@ -165,9 +167,11 @@ function Portrait(): JSX.Element {
         .attr('x', width / 2.5)
         .attr('y', height / 1.5 - radAxis1(el) - 0.85)
         .text(el)
-        .attr('fill', 'black')
+        .attr('fill', 'gray')
         .attr('stroke', 'none')
         .attr('opacity', '0.5')
+        .attr('stroke-linejoin', 'round')
+        .attr('stroke-linecap', 'round')
         .style('text-anchor', 'middle')
         .style('font-size', '0.825rem');
     });
@@ -179,7 +183,9 @@ function Portrait(): JSX.Element {
         .attr('cx', width / 2.5)
         .attr('cy', height / 1.5)
         .attr('fill', 'none')
-        .attr('stroke', 'black')
+        .attr('stroke', 'gray')
+        .attr('stroke-linejoin', 'round')
+        .attr('stroke-linecap', 'round')
         .attr('stroke-width', 1.0)
         .attr('r', radAxis1(el));
     });
@@ -220,6 +226,8 @@ function Portrait(): JSX.Element {
         .attr('class', 'areapath')
         .attr('d', lineGen)
         .attr('stroke-width', 4)
+        .attr('stroke-linejoin', 'round')
+        .attr('stroke-linecap', 'round')
         .attr('stroke', () => randomColor())
         .attr('fill', 'none')
         .attr('opacity', 1)

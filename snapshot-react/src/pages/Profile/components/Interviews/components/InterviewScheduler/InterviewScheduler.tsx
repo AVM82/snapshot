@@ -16,6 +16,7 @@ function InterviewScheduler({
   onClose,
   ...rest
 }: CombinedProps): React.JSX.Element {
+  const currentDateTime = new Date().toISOString().slice(0, 16);
   const { register, handleSubmit, watch } = useForm();
   const { searcher } = useAppSelector((state) => state.interview);
   const dispatch = useAppDispatch();
@@ -79,6 +80,7 @@ function InterviewScheduler({
                   message: 'оберіть дату та час інтрев&apos;ю'
                 }
               })}
+              min={currentDateTime}
             />
           </label>
           <label>

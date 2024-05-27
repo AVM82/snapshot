@@ -14,14 +14,14 @@ function CandidateSearchForm({
   handleSubmit
 }: CandidateSearchFormProps): JSX.Element {
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-  const [lowerSkills, setLowerSkills] = useState<string[]>([]);
-  const [selectOptions, setSelectOptions] = useState<string[]>([]);
+  const [lowerSkills, setLowerSkills] = useState<{ name: string, title: string }[]>([]);
+  const [selectOptions, setSelectOptions] = useState<{ name: string, title: string }[]>([]);
   const [isExpanded, setIsExpanded] = useState(false);
   const endOfSlice = isExpanded ? selectOptions.length : 8;
 
   useEffect(() => {
     const getLowerSkills = async (): Promise<void> => {
-      const response: string[] = await snapshotApi.get('/skills/lower-level');
+      const response: { name: string, title: string }[] = await snapshotApi.get('/skills/lower-level');
 
       setLowerSkills(response);
       setSelectOptions(response);
@@ -41,7 +41,7 @@ function CandidateSearchForm({
 
   const handleFindSkill = (skill: string): void => {
     setSelectOptions(
-      lowerSkills.filter((i) => i.toLowerCase().startsWith(skill.toLowerCase()))
+      lowerSkills.filter((i) => i.name.toLowerCase().startsWith(skill.toLowerCase()))
     );
   };
 
@@ -91,7 +91,8 @@ function CandidateSearchForm({
       <div className={styles.skillsBlock}>
         <div className={styles.skillsWrapper}>
           {[...selectOptions.sort()].slice(0, endOfSlice).map((skill) => (
-            <SkillChip skill={skill} getSelectedVal={getSelectedVal} selectedSkills={selectedSkills}/>
+            <SkillChip skill={skill.name.length > 20 ? skill.title : skill.name }
+              tooltip={skill.name}  getSelectedVal={getSelectedVal} selectedSkills={selectedSkills}/>
           ))}
         </div>
         <div className={styles.chevronWrapper}>
