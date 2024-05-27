@@ -22,6 +22,7 @@ jobs:
         run: |
           cd snapshot-spring-boot
           mvn clean install -DskipTests
+          echo "JAR=$(realpath $(find -name 'snapshot-spring-boot-*.jar' -type f))" >> $GITHUB_ENV
         env:
           VITE_API_URL: ${{secrets.VITE_API_URL}}
           BACK_URI: ${{secrets.BACK_URI}}
@@ -36,6 +37,6 @@ jobs:
           version_label: snapshot_${{ github.sha }}
           existing_bucket_name: elasticbeanstalk-eu-central-1-905418382196
           region: eu-central-1
-          deployment_package: /home/runner/work/snapshot/snapshot/snapshot-spring-boot/target/snapshot-spring-boot-1.2.0.jar
+          deployment_package: $JAR
           wait_for_deployment: true
           wait_for_environment_recovery: true
