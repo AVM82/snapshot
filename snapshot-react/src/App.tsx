@@ -89,10 +89,10 @@ function App(): React.JSX.Element {
         <Route element={<ProtectedRoute />}>
           <Route path="interview" element={<InterviewPage />} />
           <Route path="interview/:id" element={<InterviewPage />} />
+          <Route path="profile/:userId" element={<Profile />} />
           <Route path="profile/:userId/settings" element={<UserRoles />} />
           <Route path="profile/:userId/statistics" element={<Statistics />} />
           <Route path="profile/:userId/:id" element={<Feedback />} />
-          <Route path="profile/:userId" element={<Profile />} />
         </Route>
         <Route path="*" element={<p>404</p>} />
       </Route>

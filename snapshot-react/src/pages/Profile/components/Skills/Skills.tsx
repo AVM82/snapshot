@@ -19,7 +19,6 @@ export default function Skills(props:IRoles):React.JSX.Element {
   const [selectedSkillsNames, setSelectedSkillsNames] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isInputEmpty, setIsInputEmpty] = useState(false);
-
   useEffect(() => {
     dispatch(getRoleSkills(roleId));
   }, [dispatch, roleId]);

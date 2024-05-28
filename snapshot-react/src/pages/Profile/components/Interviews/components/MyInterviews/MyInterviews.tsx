@@ -8,7 +8,6 @@ import styles from './MyInterviews.module.scss';
 function MyInterviews({ interviews }:{ interviews:IInterviewPreview[] }): React.JSX.Element {
   const [numberOfRows, setNumberOfRows] = useState(4);
   const [interviewsRow, setInterviews] = useState<IInterviewPreview[]>([]);
-
   const updateInterviews = useCallback(() => {
     setInterviews([...interviews].reverse().slice(0, numberOfRows));
   }, [interviews, numberOfRows]);

@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import interactedUsersSlice from './reducers/interactedUsers/interactedUsersSlice';
 import interviewSlice from './reducers/interwiew/interviewSlice';
 import profileMiddleware from './reducers/profile/profileMiddleware';
 import profileSlice from './reducers/profile/profileSlice';
@@ -12,7 +13,7 @@ export const store = configureStore({
     userSkills: userSkillsSlice,
     interview: interviewSlice,
     profile: profileSlice,
-
+    interactedUsers:interactedUsersSlice,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(profileMiddleware),
 
