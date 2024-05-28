@@ -38,6 +38,8 @@ interface IInitialState extends IInterview {
   lowLvlSkills:ISkills[]
   questions:IQuestion[]
   currentSkillQuestions:IQuestion[]
+  socket: { status: string }
+
 }
 
 const initialState:IInitialState = {
@@ -57,6 +59,8 @@ const initialState:IInitialState = {
   lowLvlSkills: [],
   questions: [],
   currentSkillQuestions: [],
+  socket: { status: '' }
+
 };
 
 const interviewSlice = createSlice({
@@ -76,6 +80,18 @@ const interviewSlice = createSlice({
       ...state,
       title: action.payload,
     }),
+    setSocketStatus: (state, action) => (
+      {
+        ...state,
+        socket: {
+          status: action.payload
+        } }),
+
+    connectToWebSocket: (state, action: PayloadAction<{ interviewId: number }>) => ({
+      ...state,
+      ...action
+    }),
+    // disconnectFromWebSocket: () => {},
   },
   extraReducers: (builder) => {
     builder.addCase(getInterviewId.fulfilled, (state, action) => ({
@@ -131,10 +147,6 @@ const interviewSlice = createSlice({
           calculateAndSortSharedSkills(lowLvlSkills, action.payload, interviewSkills),
       };
     });
-    // builder.addCase(addQuestion.fulfilled, (state, action) => ({
-    //   ...state,
-    //   questions: [...state.questions, action.payload],
-    // }));
     builder.addCase(updateInterviewStatus.fulfilled, (state, action) => ({
       ...state,
       ...action.payload,
@@ -163,7 +175,13 @@ const interviewSlice = createSlice({
   },
 });
 export const {
-  setTitle, resetInterviewState, redefineQuestions, redefineStatus,
+  setTitle,
+  resetInterviewState,
+  redefineQuestions,
+  redefineStatus,
+  connectToWebSocket,
+  // disconnectFromWebSocket,
+  setSocketStatus
 } = interviewSlice.actions;
 
 export default interviewSlice.reducer;
