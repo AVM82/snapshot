@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
@@ -126,5 +127,14 @@ public class UserController {
     @GetMapping("/{id}")
     public UserByIdDto getById(@PathVariable long id) {
         return service.getById(id);
+    }
+
+    @Operation(summary = "Change user password.")
+    @ApiResponse(responseCode = "200",
+            content = {@Content(schema = @Schema(implementation = Boolean.class), mediaType = "application/json")})
+    @PatchMapping("/password")
+    public boolean changePassword(@AuthenticationPrincipal AuthDetails authDetails,
+                                  @RequestBody @Valid UserChangePasswordDto dto) {
+        return service.changePassword(authDetails, dto);
     }
 }
