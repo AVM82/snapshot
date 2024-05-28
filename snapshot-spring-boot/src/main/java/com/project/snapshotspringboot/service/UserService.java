@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -46,6 +47,7 @@ public class UserService implements UserDetailsService {
     private final SkillService skillService;
     private final UserMapper userMapper;
     private final InterviewMapper interviewMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public UserEntity create(UserEntity user) {
 
@@ -313,5 +315,20 @@ public class UserService implements UserDetailsService {
                         user.getId(),
                         user.getUserRoleSkillEntitySet()))
                 .setCompletedInterviews(searcherCompleted);
+    }
+
+    public boolean changePassword(AuthDetails authDetails,
+                                  UserChangePasswordDto dto) {
+        boolean isRepeatPasswordNotCorrect = !Objects.equals(dto.getNewPassword(), dto.getRepeatNewPassword());
+        boolean isPasswordNotCorrect = !passwordEncoder.matches(dto.getPassword(), authDetails.getPassword());
+        if (isRepeatPasswordNotCorrect || isPasswordNotCorrect) {
+            return false;
+        }
+
+        setPasswordForUserById(
+                passwordEncoder.encode(dto.getNewPassword()),
+                authDetails.getUserEntity().getId());
+
+        return true;
     }
 }
