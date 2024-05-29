@@ -10,8 +10,8 @@ import InterviewActionPanel from '../Interviews/components/InterviewActionPanel/
 import MyInterviews from '../Interviews/components/MyInterviews/MyInterviews';
 import InterviewStatusSelector from '../InterviewStatusSelector/InterviewStatusSelector';
 import ProfileVisibility from '../ProfileVisibility/ProfileVisibility';
-import UserSkills from '../UserSkills/UserSkills.tsx';
 import UserCard from '../UserCard/UserCard';
+import UserSkills from '../UserSkills/UserSkills';
 
 interface ICurrentUserProfile {
   user:IInteractedUser

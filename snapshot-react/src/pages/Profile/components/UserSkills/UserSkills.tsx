@@ -6,7 +6,6 @@ import SkillBlock from './SkillBlock';
 import styles from './UserSkills.module.scss';
 
 function UserSkills({ roles }: { roles: IRoles[] }): React.JSX.Element {
-  console.log(roles);
 
   return (
     <section className={styles.userSkills}>
@@ -15,7 +14,9 @@ function UserSkills({ roles }: { roles: IRoles[] }): React.JSX.Element {
         roles.map((role) => (
           <>
             <h3>{role.name}:</h3>
-            <SkillBlock skills={flattenSkillsHierarchy(role.skills)} />
+            <div className={`${styles.skillBlock} ${styles.blockBorder}`}>
+              <SkillBlock skills={flattenSkillsHierarchy(role.skills)}/>
+            </div>
           </>
         )
         )

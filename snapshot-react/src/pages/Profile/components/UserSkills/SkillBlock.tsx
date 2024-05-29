@@ -4,11 +4,16 @@ import { ISkills } from '../../../../models/profile/ISkills';
 import { flattenSkillsHierarchy } from '../../../../utils/interview/calculateAndSortSharedSkills';
 import styles from './UserSkills.module.scss';
 
-function SkillBlock({ skills }: Readonly<{ skills: ISkills[] }>): React.JSX.Element {
+interface SkillBlockProp {
+  skills: ISkills[],
+  onClick?: (num: number) => void
+}
+
+function SkillBlock({ skills, onClick = (): void => {} }: Readonly<SkillBlockProp>): React.JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className={`${styles.skillBlock} ${styles.blockBorder}`}>
+    <>
       {skills.length > 2 && (
         <button type="button" onClick={() => setIsExpanded(!isExpanded)} className={styles.toggleButton}>
           {isExpanded
@@ -17,12 +22,18 @@ function SkillBlock({ skills }: Readonly<{ skills: ISkills[] }>): React.JSX.Elem
         </button>
       )}
       {flattenSkillsHierarchy(skills).slice(0, 2)?.map((skill) => (
-        <p key={skill.id} className={styles.skillItem}>{skill.name}</p>
+        <button type="button" key={skill.id} className={styles.skillItem}
+          onClick={skill.shared ? ():void => onClick(skill.id) : ():null => null}>
+          {skill.name}
+        </button>
       ))}
       {isExpanded && flattenSkillsHierarchy(skills).slice(2).map((skill) => (
-        <p key={skill.id} className={styles.skillItem}>{skill.name}</p>
+        <button type="button" key={skill.id} className={styles.skillItem}
+          onClick={skill.shared ? ():void => onClick(skill.id) : ():null => null}>
+          {skill.name}
+        </button>
       ))}
-    </div>
+    </>
   );
 }
 
