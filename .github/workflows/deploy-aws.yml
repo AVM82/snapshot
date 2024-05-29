@@ -22,7 +22,7 @@ jobs:
         run: |
           cd snapshot-spring-boot
           mvn clean install -DskipTests
-          cd ../target
+          cd target
           echo "JAR=$(realpath $(find -name 'snapshot-spring-boot-*.jar' -type f))" >> $GITHUB_ENV
         env:
           VITE_BACK_URL: ${{secrets.BACK_URI}}
