@@ -38,6 +38,6 @@ jobs:
           version_label: snapshot_${{ github.sha }}
           existing_bucket_name: elasticbeanstalk-eu-central-1-905418382196
           region: eu-central-1
-          deployment_package: $JAR
+          deployment_package: ${{ env.JAR }}
           wait_for_deployment: true
           wait_for_environment_recovery: true
