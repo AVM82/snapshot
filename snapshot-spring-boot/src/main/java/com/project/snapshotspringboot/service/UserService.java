@@ -1,12 +1,15 @@
 package com.project.snapshotspringboot.service;
 
 import com.project.snapshotspringboot.dtos.*;
+import com.project.snapshotspringboot.dtos.interview.ShortInterviewDto;
 import com.project.snapshotspringboot.dtos.result.SkillResultDto;
 import com.project.snapshotspringboot.dtos.result.UserResultsByInterviewsResponseDto;
 import com.project.snapshotspringboot.dtos.search.SearchSkillGradeDto;
 import com.project.snapshotspringboot.dtos.statistic.QuestionGradeDto;
 import com.project.snapshotspringboot.dtos.statistic.UserStatisticsPeriodDto;
 import com.project.snapshotspringboot.entity.*;
+import com.project.snapshotspringboot.enumeration.InterviewStatus;
+import com.project.snapshotspringboot.mapper.InterviewMapper;
 import com.project.snapshotspringboot.mapper.UserMapper;
 import com.project.snapshotspringboot.repository.*;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
@@ -20,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -42,6 +46,8 @@ public class UserService implements UserDetailsService {
     private final RoleService roleService;
     private final SkillService skillService;
     private final UserMapper userMapper;
+    private final InterviewMapper interviewMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public UserEntity create(UserEntity user) {
 
@@ -294,5 +300,35 @@ public class UserService implements UserDetailsService {
     public void setPasswordForUserById(String password,
                                        long id) {
         repository.setPasswordForUserById(password, id);
+    }
+
+    public UserByIdDto getById(long id) {
+        UserEntity user = findById(id);
+        List<ShortInterviewDto> searcherCompleted = interviewRepository
+                .findAllBySearcherIdAndStatus(user.getId(), InterviewStatus.COMPLETED)
+                .stream()
+                .map(interviewMapper::toShortDto)
+                .toList();
+
+        return userMapper.toByIdDto(user)
+                .setRoles(userRoleSkillsToDto(
+                        user.getId(),
+                        user.getUserRoleSkillEntitySet()))
+                .setCompletedInterviews(searcherCompleted);
+    }
+
+    public boolean changePassword(AuthDetails authDetails,
+                                  UserChangePasswordDto dto) {
+        boolean isRepeatPasswordNotCorrect = !Objects.equals(dto.getNewPassword(), dto.getRepeatNewPassword());
+        boolean isPasswordNotCorrect = !passwordEncoder.matches(dto.getPassword(), authDetails.getPassword());
+        if (isRepeatPasswordNotCorrect || isPasswordNotCorrect) {
+            return false;
+        }
+
+        setPasswordForUserById(
+                passwordEncoder.encode(dto.getNewPassword()),
+                authDetails.getUserEntity().getId());
+
+        return true;
     }
 }

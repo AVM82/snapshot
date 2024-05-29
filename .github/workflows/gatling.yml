@@ -1,0 +1,46 @@
+name: Gatling tests
+
+on:
+  workflow_run:
+    workflows: ["Deploy snapshot to AWS"]
+    branches: [test]
+    types:
+      - completed
+jobs:
+  gatling:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: test
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Start test
+        run: |
+          cd /home/runner/work/snapshot/snapshot/snapshot-spring-boot
+          mvn gatling:test
+        env:
+          TEST_URL: 'http://snapshot-env.eba-tkt77dky.eu-central-1.elasticbeanstalk.com/'
+      
+      - name: Set Gatling report path 
+        run: 
+          echo "GATLING_REPORT_DIR=$(find /home/runner/work/snapshot/snapshot/snapshot-spring-boot/target/gatling/ -type d -name "snapshotsimulation-*")" >> $GITHUB_ENV
+
+    
+      - name: Deploy Gatling report to S3
+        run: 
+          aws s3 sync $GATLING_REPORT_DIR s3://snapshot-gatling-test-report --acl public-read
+        env:
+          AWS_S3_BUCKET: snapshot-gatling-test-report
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: eu-central-1
+  

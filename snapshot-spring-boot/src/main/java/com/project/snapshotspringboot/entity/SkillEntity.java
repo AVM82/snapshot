@@ -18,6 +18,8 @@ public class SkillEntity {
     private Long id;
     @Column(name = "name", nullable = false, length = 124)
     private String name;
+    @Column(name = "title", nullable = false, length = 12)
+    private String title;
     @Column(name = "parent_id")
     private Long parentId;
     @OneToMany(mappedBy = "skill")

@@ -72,4 +72,15 @@ public abstract class UserMapper {
     }
 
     public abstract UserSearchResponseDto toSearchResponseDto(UserEntity userEntity);
+
+    @Mapping(target = "userFullName", source = "userEntity", qualifiedByName = "getFullName")
+    public abstract UserShortInfo toShortInfo(UserEntity userEntity);
+
+    @Named("getFullName")
+    protected String getFullName(UserEntity entity) {
+        return entity.getLastname() + " " + entity.getFirstname();
+    }
+
+    @Mapping(target = "roles", source = "userEntity", qualifiedByName = "mapSkills")
+    public abstract UserByIdDto toByIdDto(UserEntity userEntity);
 }

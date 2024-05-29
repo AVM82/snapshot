@@ -1,9 +1,11 @@
 package com.project.snapshotspringboot.service;
 
+import com.project.snapshotspringboot.dtos.SkillDto;
 import com.project.snapshotspringboot.dtos.SkillTreeDto;
 import com.project.snapshotspringboot.dtos.UserSkillAddDto;
 import com.project.snapshotspringboot.entity.SkillEntity;
 import com.project.snapshotspringboot.entity.UserEntity;
+import com.project.snapshotspringboot.mapper.SkillMapper;
 import com.project.snapshotspringboot.repository.SkillRepository;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SkillService {
     private final SkillRepository skillRepository;
+    private final SkillMapper skillMapper;
 
     public void addUserSkills(AuthDetails authDetails, UserSkillAddDto skillDto, Long roleId) {
         UserEntity user = authDetails.getUserEntity();
@@ -130,22 +133,18 @@ public class SkillService {
     }
 
     @Cacheable("lastLevelSkills")
-    public List<String> getLastLevelSkills() {
-        List<SkillTreeDto> skillTreeDtoList = getSkillsByRoleId(1L);
-        List<String> lastLevelSkills = new ArrayList<>();
-        for (SkillTreeDto skillTreeDto : skillTreeDtoList) {
-            findLastLevelSkills(skillTreeDto, lastLevelSkills);
-        }
-        return lastLevelSkills;
-    }
+    public List<SkillDto> getLastLevelSkills() {
+        List<SkillEntity> skillEntities = skillRepository.findAll();
 
-    public void findLastLevelSkills(SkillTreeDto skillTreeDto, List<String> lastLevelSkills) {
-        if (skillTreeDto.getChildren().isEmpty()) {
-            lastLevelSkills.add(skillTreeDto.getName());
-        } else {
-            for (SkillTreeDto subSkill : skillTreeDto.getChildren()) {
-                findLastLevelSkills(subSkill, lastLevelSkills);
-            }
-        }
+        Set<Long> parentIds = skillEntities
+                .stream()
+                .map(SkillEntity::getParentId)
+                .collect(Collectors.toSet());
+
+        return skillEntities
+                .stream()
+                .filter(s -> !parentIds.contains(s.getId()))
+                .map(skillMapper::toDto)
+                .toList();
     }
 }

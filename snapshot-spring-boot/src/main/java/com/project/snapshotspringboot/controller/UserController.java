@@ -1,9 +1,6 @@
 package com.project.snapshotspringboot.controller;
 
-import com.project.snapshotspringboot.dtos.EmailDto;
-import com.project.snapshotspringboot.dtos.RoleDto;
-import com.project.snapshotspringboot.dtos.UserResponseDto;
-import com.project.snapshotspringboot.dtos.UserSearchResponseDto;
+import com.project.snapshotspringboot.dtos.*;
 import com.project.snapshotspringboot.dtos.result.UserResultsByInterviewsResponseDto;
 import com.project.snapshotspringboot.dtos.search.SearchSkillGradeDto;
 import com.project.snapshotspringboot.dtos.statistic.UserStatisticsPeriodDto;
@@ -16,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
@@ -120,5 +118,23 @@ public class UserController {
                                                                    @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
                                                                    @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
         return service.getUserStatisticsByPeriod(userId, fromDate, toDate);
+    }
+
+    @Operation(summary = "Get information about user by id.")
+    @ApiResponse(responseCode = "200",
+            content = {@Content(schema = @Schema(implementation = UserResponseDto.class), mediaType = "application/json")})
+    @ApiResponse(responseCode = "404", content = {@Content})
+    @GetMapping("/{id}")
+    public UserByIdDto getById(@PathVariable long id) {
+        return service.getById(id);
+    }
+
+    @Operation(summary = "Change user password.")
+    @ApiResponse(responseCode = "200",
+            content = {@Content(schema = @Schema(implementation = Boolean.class), mediaType = "application/json")})
+    @PatchMapping("/password")
+    public boolean changePassword(@AuthenticationPrincipal AuthDetails authDetails,
+                                  @RequestBody @Valid UserChangePasswordDto dto) {
+        return service.changePassword(authDetails, dto);
     }
 }
