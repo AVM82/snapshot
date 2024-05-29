@@ -16,6 +16,5 @@ public class SearchSkillGradeDto {
     @NotBlank
     private String skill;
     @NotNull
-    @NotBlank
-    private String grade;
+    private Integer grade;
 }
