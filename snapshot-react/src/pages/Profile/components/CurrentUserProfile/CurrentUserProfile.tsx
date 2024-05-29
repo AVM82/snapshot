@@ -10,9 +10,8 @@ import InterviewActionPanel from '../Interviews/components/InterviewActionPanel/
 import MyInterviews from '../Interviews/components/MyInterviews/MyInterviews';
 import InterviewStatusSelector from '../InterviewStatusSelector/InterviewStatusSelector';
 import ProfileVisibility from '../ProfileVisibility/ProfileVisibility';
+import UserSkills from '../UserSkills/UserSkills.tsx';
 import UserCard from '../UserCard/UserCard';
-import SkillBlock from "../SkillBox/SkillBlock.tsx";
-import {flattenSkillsHierarchy} from "../../../../utils/interview/calculateAndSortSharedSkills.ts";
 
 interface ICurrentUserProfile {
   user:IInteractedUser
@@ -22,7 +21,6 @@ function CurrentUserProfile({ user }:ICurrentUserProfile):React.JSX.Element{
   const [status, setStatus] = useState<InterviewStatuses>('PLANNED');
   const interviews = useAppSelector((state) => state.profile.interviews);
   const { roles } = useAppSelector((state) => state.user.userData);
-  const skillSet: string[] = ['abc', 'def'];
 
   const isInterviewer = roles.some((role)=>role.id === 2);
   const actualStatus: InterviewStatuses = status || '';
@@ -31,7 +29,6 @@ function CurrentUserProfile({ user }:ICurrentUserProfile):React.JSX.Element{
   const handleChangeStatus=(newStatus: InterviewStatuses):void => {
     setStatus(newStatus as InterviewStatuses);
   };
-  console.log(flattenSkillsHierarchy(roles[0].skills));
 
   return (
     <section className={styles.profileContainer}>
@@ -43,7 +40,7 @@ function CurrentUserProfile({ user }:ICurrentUserProfile):React.JSX.Element{
         <section className={styles.avatar}>
           <ProfileVisibility/>
           <UserCard user={user}/>
-          <SkillBlock skills={flattenSkillsHierarchy(roles[0].skills)}/>
+          <UserSkills roles={roles}/>
           <div/>
         </section>
         <section className={styles.InterviewStatisticsContainer}>

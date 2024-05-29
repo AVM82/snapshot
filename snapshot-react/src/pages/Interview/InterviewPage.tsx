@@ -22,7 +22,6 @@ import Skill from '../Profile/components/Skills/Skill';
 import Question from './components/Question/Question';
 import Timer from './components/Timer/Timer';
 import styles from './InterviewPage.module.scss';
-import DropDownSkillBlock from "../Profile/components/SkillBox/DropDown/DropDownSkillBlock.tsx";
 
 type Headers = {
   login: string,
@@ -238,43 +237,42 @@ export default function InterviewPage(): React.JSX.Element {
       </div>
 
       <div>
-        <DropDownSkillBlock skills={sharedSkills} />
-        {/*{sharedSkills.length > 5 && (*/}
-        {/*  <button type="button" onClick={() => setIsExpanded(!isExpanded)} className={styles.toggleButton}>*/}
-        {/*    {isExpanded*/}
-        {/*      ? <div className={styles.arrowUp}>{'>'}</div>*/}
-        {/*      : <div className={styles.arrowDown}>{'>'}</div>}*/}
-        {/*  </button>*/}
-        {/*)}*/}
-        {/*<div className={styles.blockSkills}>*/}
-        {/*  {sharedSkills.slice(0, 7).map((skill) => (*/}
-        {/*    <Skill*/}
-        {/*      key={skill.id}*/}
-        {/*      className={skill.shared ? `${styles.active}` : ''}*/}
-        {/*      onClick={skill.shared ? ():void => handleSkillOnClick(skill.id) : ():null => null}*/}
-        {/*      title={skill.name}*/}
-        {/*    />*/}
+        {sharedSkills.length > 5 && (
+          <button type="button" onClick={() => setIsExpanded(!isExpanded)} className={styles.toggleButton}>
+            {isExpanded
+              ? <div className={styles.arrowUp}>{'>'}</div>
+              : <div className={styles.arrowDown}>{'>'}</div>}
+          </button>
+        )}
+        <div className={styles.blockSkills}>
+          {sharedSkills.slice(0, 7).map((skill) => (
+            <Skill
+              key={skill.id}
+              className={skill.shared ? `${styles.active}` : ''}
+              onClick={skill.shared ? ():void => handleSkillOnClick(skill.id) : ():null => null}
+              title={skill.name}
+            />
 
-        {/*  ))}*/}
-        {/*  {isExpanded && sharedSkills.slice(7).map((skill) => (*/}
-        {/*    <Skill*/}
-        {/*      key={skill.id}*/}
-        {/*      className={skill.shared ? `${styles.active}` : ''}*/}
-        {/*      onClick={skill.shared ? ():void => handleSkillOnClick(skill.id) : ():null => null}*/}
-        {/*      title={skill.name}*/}
-        {/*    />*/}
-        {/*  ))}*/}
-        {/*  {showQuestionTextField*/}
-        {/*    && <Question*/}
-        {/*      skillId={currentSkillId}*/}
-        {/*      interviewQuestions={interview.questions.map((q) => q.question)}*/}
-        {/*      onSubmit={() => setShowQuestionTextField(false)} />}*/}
-        {/*</div>*/}
-        {/*{interviewStatus === 'FINISHED' ? <Feedback /> : (*/}
-        {/*  <div className={styles.questionList}>*/}
-        {/*    <Questions {...interview} />*/}
-        {/*  </div>*/}
-        {/*)}*/}
+          ))}
+          {isExpanded && sharedSkills.slice(7).map((skill) => (
+            <Skill
+              key={skill.id}
+              className={skill.shared ? `${styles.active}` : ''}
+              onClick={skill.shared ? ():void => handleSkillOnClick(skill.id) : ():null => null}
+              title={skill.name}
+            />
+          ))}
+          {showQuestionTextField
+            && <Question
+              skillId={currentSkillId}
+              interviewQuestions={interview.questions.map((q) => q.question)}
+              onSubmit={() => setShowQuestionTextField(false)} />}
+        </div>
+        {interviewStatus === 'FINISHED' ? <Feedback /> : (
+          <div className={styles.questionList}>
+            <Questions {...interview} />
+          </div>
+        )}
       </div>
     </div>
   );

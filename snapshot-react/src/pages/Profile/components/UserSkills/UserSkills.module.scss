@@ -1,16 +1,21 @@
 @import "/src/constants&mixins";
 
-.userRoleSkill {
+.userSkills {
   padding-top: 3rem;
+  h3 {
+    padding-top: 1rem;
+  }
 }
 
 .skillBlock {
+  position: relative;
   display: flex;
   flex-flow: wrap;
   flex-direction: row;
   gap: 12px;
   width: 18.125rem;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
+
 }
 
 .blockBorder {
@@ -27,11 +32,18 @@
 }
 
 .toggleButton {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
   border: none;
+  background: transparent;
+  cursor: pointer;
 
   .arrowUp,
   .arrowDown {
     border: none;
+    display: inline-block;
+    transition: transform 0.3s ease;
   }
 
   .arrowDown {
