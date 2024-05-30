@@ -12,12 +12,12 @@ function UserSkills({ roles }: { roles: IRoles[] }): React.JSX.Element {
       <h3>Мої навички</h3>
       {
         roles.map((role) => (
-          <>
+          <div key={role.id}>
             <h3>{role.name}:</h3>
             <div className={`${styles.skillBlock} ${styles.blockBorder}`}>
-              <SkillBlock skills={flattenSkillsHierarchy(role.skills)}/>
+              <SkillBlock skills={flattenSkillsHierarchy(role.skills) } />
             </div>
-          </>
+          </div>
         )
         )
       }

@@ -22,6 +22,7 @@ public interface InterviewQuestionMapper {
     InterviewQuestionGradeResponseDto toDto(InterviewQuestionEntity interviewQuestionEntity);
 
     @Mapping(target = "skillName", source = "skill", qualifiedByName = "getSkillName")
+    @Mapping(target = "grade", source = "grade", qualifiedByName = "mapToPercent")
     @Mapping(source = "createAt", target = "createdAt", qualifiedByName = "formatDateTime")
     QuestionScoreDto toScoreDto(InterviewQuestionEntity interviewQuestionEntity);
 
@@ -32,6 +33,11 @@ public interface InterviewQuestionMapper {
     @Named("getSkillName")
     default String getSkillName(SkillEntity skillEntity) {
         return skillEntity.getName();
+    }
+
+    @Named("mapToPercent")
+    default String getPercent(Integer grade) {
+        return grade + "%";
     }
 
     @Named("formatDateTime")

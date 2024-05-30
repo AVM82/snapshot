@@ -29,7 +29,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             WHERE s.name = ? AND iq.grade >= ?
             GROUP BY searcher_id;
             """, nativeQuery = true)
-    List<Object[]> findSearcherIdsAndMaxGradeBySkillNameAndSkillGrade(String skillName, Integer skillGrade);
+    List<Object[]> findSearcherIdsAndMaxGradeBySkillNameAndSkillGrade(String skillName, String skillGrade);
 
     @Modifying
     @Query("update UserEntity u set u.password = :password where u.id = :id")

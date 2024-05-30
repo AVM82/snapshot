@@ -19,7 +19,7 @@ public class InterviewQuestionGradeRequestDto {
     private Long interviewId;
 
     @NotNull(message = "Grade is required.")
-//    @NotBlank(message = "An estimate must be issued.")
-//    @Pattern(regexp = "^(100|[1-9]?[0-9])%$", message = "Grade must be in the format X%, where X is a number from 0 to 100.")
-    private Integer grade;
+    @NotBlank(message = "An estimate must be issued.")
+    @Pattern(regexp = "^(100|[1-9]?[0-9])%$", message = "Grade must be in the format X%, where X is a number from 0 to 100.")
+    private String grade;
 }

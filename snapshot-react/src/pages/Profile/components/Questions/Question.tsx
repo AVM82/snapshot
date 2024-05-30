@@ -8,14 +8,13 @@ import { changeGrade } from '../../../../store/reducers/profile/actions';
 function Question({
   question, skillName, grade, id, searcherId, createdAt,
 }: IQuestion): JSX.Element {
-  const [newGrade, setNewGrade] = useState(grade === 'null%' ? '' : grade);
+  const [newGrade, setNewGrade] = useState(grade ? 0 : grade);
   const [changeGradeClicked, setChangeGradeClicked] = useState(false);
   const userId = useAppSelector((state) => state.user.userData.id);
   const { id: interviewId } = useParams();
   const dispatch = useAppDispatch();
   const handleChangeGrade = (): void => {
-    dispatch(changeGrade({ id, interviewId: Number(interviewId), grade: newGrade.endsWith('%') ? newGrade : `${newGrade}%` }));
-  };
+    dispatch(changeGrade({ id,grade:newGrade, interviewId: Number(interviewId) }));};
 
   return (
     <div
@@ -36,7 +35,7 @@ function Question({
             <input
               type="text"
               id={`${id}`}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewGrade(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewGrade(+e.target.value)}
               value={newGrade}
               onKeyDown={handleChangeGrade}
               placeholder="Вкажіть нову оцінку у %"

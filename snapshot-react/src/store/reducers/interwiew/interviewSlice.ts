@@ -9,10 +9,10 @@ import {
   calculateAndSortSharedSkills,
   flattenSkillsHierarchy,
 } from '../../../utils/interview/calculateAndSortSharedSkills';
-import { getInterviewById } from '../profile/actions';
+import { changeGrade, getInterviewById } from '../profile/actions';
 import getUser from '../user/actions';
 import {
-  getAllSkills, getInterviewId, getSkillQuestions, getUserByEmail, updateInterviewStatus,
+  getAllSkills, getGeminiQuestions, getInterviewId, getSkillQuestions, getUserByEmail, updateInterviewStatus,
 } from './actions';
 
 const defaultUser:IUser = {
@@ -38,6 +38,7 @@ interface IInitialState extends IInterview {
   lowLvlSkills:ISkills[]
   questions:IQuestion[]
   currentSkillQuestions:IQuestion[]
+  geminiQuestions:string[]
   socket: { status: string }
 
 }
@@ -56,6 +57,7 @@ const initialState:IInitialState = {
   startDateTime: null,
   endDateTime: null,
   feedback: '',
+  geminiQuestions:[],
   lowLvlSkills: [],
   questions: [],
   currentSkillQuestions: [],
@@ -91,7 +93,7 @@ const interviewSlice = createSlice({
       ...state,
       ...action
     }),
-    // disconnectFromWebSocket: () => {},
+    disconnectFromWebSocket: () => {},
   },
   extraReducers: (builder) => {
     builder.addCase(getInterviewId.fulfilled, (state, action) => ({
@@ -155,6 +157,10 @@ const interviewSlice = createSlice({
       ...state,
       currentSkillQuestions: action.payload,
     }));
+    builder.addCase(getGeminiQuestions.fulfilled,(state,action)=>({
+      ...state,
+      geminiQuestions:action.payload
+    }));
     builder.addCase(getInterviewById.fulfilled, (state, action) => {
       const searcherSkills = action.payload.searcher.roles.find((roles:IRoles) => roles.id === 1)?.skills ?? [];
       const interviewSkills = action.payload.interviewer.roles.find((roles:IRoles) => roles.id === 2)?.skills ?? [];
@@ -172,6 +178,18 @@ const interviewSlice = createSlice({
         sharedSkills,
       };
     });
+    builder.addCase(changeGrade.fulfilled,(state,action)=>{
+      const updatedQuestion = action.payload;
+      const updatedQuestions = state.questions.map((question) => {
+        if (question.id === updatedQuestion.id) {
+          return { ...question, grade: updatedQuestion.grade };
+        }
+
+        return question;
+      });
+
+      return { ...state, questions: updatedQuestions };
+    });
   },
 });
 export const {
@@ -180,7 +198,7 @@ export const {
   redefineQuestions,
   redefineStatus,
   connectToWebSocket,
-  // disconnectFromWebSocket,
+  disconnectFromWebSocket,
   setSocketStatus
 } = interviewSlice.actions;
 

@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class InterviewQuestionGradeResponseDto {
     private Long id;
-    private Integer grade;
+    private String grade;
 }

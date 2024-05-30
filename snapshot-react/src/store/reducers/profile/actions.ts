@@ -10,7 +10,7 @@ import ActionType from './common';
 type PatchQuestion = {
   id: number;
   interviewId: number;
-  grade: string;
+  grade: number;
 };
 
 type PatchFeedBack = {
@@ -20,7 +20,7 @@ type PatchFeedBack = {
 
 type PatchedQuestion = {
   id: number;
-  grade: string;
+  grade: number;
 };
 
 type GetStatistics = {
@@ -38,10 +38,8 @@ type GetPortrait = {
 const changeGrade = createAsyncThunk(
   ActionType.CHANGE_GRADE,
   async (data: PatchQuestion): Promise<PatchedQuestion> => {
-    const response: PatchedQuestion = await snapshotApi.patch(
-      '/interviews/question/grade',
-      data
-    );
+    const response: PatchedQuestion = await snapshotApi.patch('/interviews/question/grade',  data);
+    console.log(response);
 
     return response;
   }

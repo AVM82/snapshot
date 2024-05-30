@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class QuestionScoreDto {
     Long id;
     String question;
-    Integer grade;
+    String grade;
     String skillName;
     LocalDateTime createdAt;
 }

@@ -16,8 +16,11 @@ export const store = configureStore({
     profile: profileSlice,
     interactedUsers:interactedUsersSlice,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(profileMiddleware,socketMiddleware()),
-
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
+    profileMiddleware,
+    socketMiddleware()),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
