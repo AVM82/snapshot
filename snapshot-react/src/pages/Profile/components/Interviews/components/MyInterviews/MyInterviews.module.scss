@@ -34,23 +34,7 @@
   min-height: 32rem;
   overflow: hidden;
 
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: $white;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    width: 5px;
-    background: $medium-purple;
-    border-radius: 10px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: $primary-purple;
-  }
+  @include scroll-bar;
 
   .interviewTableHeader {
     width: 100%;

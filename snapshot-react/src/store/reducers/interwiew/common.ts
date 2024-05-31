@@ -6,6 +6,7 @@ enum ActionType {
   ADD_QUESTION_TO_SKILL = 'interview/skill/addQuestion',
   CHANGE_INTERVIEW_STATUS = 'interview/changeStatus',
   GET_SKILL_QUESTIONS_BY_ID = 'interview/getSkillQuestions',
+  GET_GEMINI_QUESTIONS_BY_ID = 'interview/getGeminiQuestions',
   UPDATE_INTERVIEW_BY_ID = 'interview/updateInterview',
 }
 

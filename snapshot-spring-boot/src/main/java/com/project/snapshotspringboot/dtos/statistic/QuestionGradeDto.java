@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class QuestionGradeDto {
     private String question;
-    private String grade;
+    private Integer grade;
 }

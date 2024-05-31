@@ -1,8 +1,51 @@
+@import "src/constants&mixins";
+
 .pageContainer {
   display: flex;
   flex-direction: column;
-  gap: 5rem;
-  padding-top: 1rem;
+  gap: 3rem;
+  max-width: 90rem;
+  padding: 0 1rem;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .flexRowBlock {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .interviewInfoContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: fit-content;
+  }
+
+  .interviewsParticipantsContainer {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    width: 100%;
+    min-height: 15rem;
+    padding: 1rem 1.25rem;
+    border: $small-border;
+    border-radius: $large-border-radius;
+  }
+
+  .questionsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+    border: $small-border;
+    border-radius: $large-border-radius;
+  }
 }
 
 .blockSkills {
@@ -10,27 +53,6 @@
   display: flex;
   flex-flow: row wrap;
   gap: 1rem;
-}
-
-.header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.status {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 1rem;
-
-  div {
-    width: 8px;
-    height: 8px;
-    background: green;
-    border-radius: 50%;
-  }
 }
 
 .skillContainer {
@@ -57,10 +79,4 @@
 .active {
   background: #8de3db !important;
   cursor: pointer;
-}
-
-.questionList {
-  display: flex;
-  flex-direction: column;
-  max-height: 500px;
 }

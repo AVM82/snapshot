@@ -11,6 +11,7 @@ import MyInterviews from '../Interviews/components/MyInterviews/MyInterviews';
 import InterviewStatusSelector from '../InterviewStatusSelector/InterviewStatusSelector';
 import ProfileVisibility from '../ProfileVisibility/ProfileVisibility';
 import UserCard from '../UserCard/UserCard';
+import UserSkills from '../UserSkills/UserSkills';
 
 interface ICurrentUserProfile {
   user:IInteractedUser
@@ -39,6 +40,7 @@ function CurrentUserProfile({ user }:ICurrentUserProfile):React.JSX.Element{
         <section className={styles.avatar}>
           <ProfileVisibility/>
           <UserCard user={user}/>
+          <UserSkills roles={roles}/>
           <div/>
         </section>
         <section className={styles.InterviewStatisticsContainer}>
