@@ -19,8 +19,10 @@
         <starter.mail.version>3.2.5</starter.mail.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <h2.version>2.2.220</h2.version>
+        <postgresql.version>42.7.3</postgresql.version>
         <starter.data.jpa.version>3.2.4</starter.data.jpa.version>
-        <flyway.version>10.11.0</flyway.version>
+        <hibernate-core.version>6.5.2.Final</hibernate-core.version>
+        <flyway.version>10.13.0</flyway.version>
         <oauth2.client.version>6.2.4</oauth2.client.version>
         <jjwt.version>0.12.5</jjwt.version>
         <springdoc.openapi.starter.webmvc.ui.version>2.5.0</springdoc.openapi.starter.webmvc.ui.version>
@@ -31,6 +33,8 @@
         <maven.resources.plugin.version>3.3.1</maven.resources.plugin.version>
         <caffeine.version>3.1.8</caffeine.version>
         <gatling-maven-plugin.version>4.9.0</gatling-maven-plugin.version>
+        <spring-boot-starter-actuator.version>3.2.3</spring-boot-starter-actuator.version>
+        <micrometer-registry-prometheus.version>1.12.3</micrometer-registry-prometheus.version>
     </properties>
 
     <dependencies>
@@ -50,17 +54,31 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
             <version>${starter.data.jpa.version}</version>
         </dependency>
 
-        <!-- flyway-core -->
+        <!--        hibernate-->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate-core.version}</version>
+        </dependency>
+
+        <!-- flyway -->
         <dependency>
             <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
+            <artifactId>flyway-database-postgresql</artifactId>
             <version>${flyway.version}</version>
+            <scope>runtime</scope>
         </dependency>
+
 
         <!-- starter-web -->
         <dependency>
@@ -136,6 +154,20 @@
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
             <version>${caffeine.version}</version>
+        </dependency>
+
+        <!--        actuator-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>${spring-boot-starter-actuator.version}</version>
+        </dependency>
+
+        <!--        prometheus-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>${micrometer-registry-prometheus.version}</version>
         </dependency>
 
 
