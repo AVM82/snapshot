@@ -38,6 +38,7 @@ function AddQuestion({ onClose,skillId }:AddQuestionProps):React.JSX.Element{
   const handleAddQuestion = (e: React.FormEvent<HTMLFormElement>):void=>{
     e.preventDefault();
     dispatch(addQuestion({ interviewId,interviewerId ,skillId ,question:questionText }));
+
     onClose();
   };
 
@@ -52,10 +53,10 @@ function AddQuestion({ onClose,skillId }:AddQuestionProps):React.JSX.Element{
           <h3 className={styles.formHeader}>Ваші запитання:</h3>
           <div className={styles.questionContainer}>
             {currentSkillQuestions.slice(0, 5).map((q) => (
-              <div className={styles.textButtonContainer}>
+              <div  key={q.id} className={styles.textButtonContainer}>
 
                 <button
-                  key={q.id}
+
                   type="button"
                   className={styles.textButton}
                   onClick={() => handleProposedQuestion(q.question)}>{q.question}</button>
@@ -68,10 +69,10 @@ function AddQuestion({ onClose,skillId }:AddQuestionProps):React.JSX.Element{
           <div className={styles.questionContainer}>
 
             {geminiQuestions.slice(0, 5).map((q) => (
-              <div className={styles.textButtonContainer}>
+              <div key={q} className={styles.textButtonContainer}>
 
                 <button
-                  key={q}
+
                   type="button"
                   className={styles.textButton}
                   onClick={() => handleProposedQuestion(q)}>{q}</button>
