@@ -54,7 +54,6 @@ public class InterviewService {
     final UserDetailsService userDetailsService;
     final InterviewMapper interviewMapper;
     final InterviewerQuestionMapper interviewerQuestionMapper;
-    final SkillMapper skillMapper;
     final InterviewQuestionMapper interviewQuestionMapper;
     final GeminiService geminiService;
 
@@ -73,13 +72,10 @@ public class InterviewService {
     }
 
     public InterviewFullDto getInterviewById(Long interviewId) {
-        Optional<InterviewEntity> interviewEntity = interviewRepository.findById(interviewId);
-        if (interviewEntity.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Interview not found");
-        }
-        List<InterviewQuestionEntity> questions = interviewQuestionRepository.findByInterviewId(interviewId);
-        List<QuestionScoreDto> questionScores = interviewQuestionMapper.toScoreDtoList(questions);
-        return interviewMapper.toFullDto(interviewEntity.get(), questionScores);
+        InterviewEntity interviewEntity = interviewRepository.findById(interviewId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Interview not found"));
+        List<QuestionScoreDto> questionScores = interviewQuestionMapper.toScoreDtoList(interviewEntity.getQuestions());
+        return interviewMapper.toFullDto(interviewEntity, questionScores);
     }
 
     public InterviewDto createInterview(AuthDetails authDetails, InterviewCreationDto interviewCreationDto) {
@@ -264,19 +260,14 @@ public class InterviewService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "The interview Id for question Id does not match the interview Id provided in the request");
         }
-        String grade = interviewQuestionDto.getGrade();
-        String gradeWithoutPercentage = grade.replaceAll("[^\\d.]", "");
 
-        interviewQuestionEntity.setGrade(Integer.parseInt(gradeWithoutPercentage));
+        interviewQuestionEntity.setGrade(interviewQuestionDto.getGrade());
         InterviewQuestionEntity savedEntity = interviewQuestionRepository.save(interviewQuestionEntity);
         if (savedEntity.getId() == null) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save question grade.");
         } else {
             log.info("The grade was saved successfully. Id: {}", savedEntity.getId());
-            return InterviewQuestionGradeResponseDto.builder()
-                    .id(savedEntity.getId())
-                    .grade(grade)
-                    .build();
+            return new InterviewQuestionGradeResponseDto(savedEntity.getId(), interviewQuestionDto.getGrade());
         }
     }
 
