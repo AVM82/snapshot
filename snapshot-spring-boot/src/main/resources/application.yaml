@@ -4,6 +4,9 @@ project:
 rest:
   prefix: /rest
 
+h2:
+  enable-test-data: true
+
 domain:
   back: ${VITE_BACK_URL:http://localhost:8080}
   front: ${VITE_FRONT_URL:http://localhost:5173}
@@ -19,7 +22,6 @@ spring:
     password: password
 
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: validate
   #    show-sql: true

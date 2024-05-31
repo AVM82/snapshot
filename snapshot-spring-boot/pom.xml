@@ -21,7 +21,8 @@
         <h2.version>2.2.220</h2.version>
         <postgresql.version>42.7.3</postgresql.version>
         <starter.data.jpa.version>3.2.4</starter.data.jpa.version>
-        <flyway.version>10.11.0</flyway.version>
+        <hibernate-core.version>6.5.2.Final</hibernate-core.version>
+        <flyway.version>10.13.0</flyway.version>
         <oauth2.client.version>6.2.4</oauth2.client.version>
         <jjwt.version>0.12.5</jjwt.version>
         <springdoc.openapi.starter.webmvc.ui.version>2.5.0</springdoc.openapi.starter.webmvc.ui.version>
@@ -63,12 +64,21 @@
             <version>${starter.data.jpa.version}</version>
         </dependency>
 
-        <!-- flyway-core -->
+        <!--        hibernate-->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate-core.version}</version>
+        </dependency>
+
+        <!-- flyway -->
         <dependency>
             <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
+            <artifactId>flyway-database-postgresql</artifactId>
             <version>${flyway.version}</version>
+            <scope>runtime</scope>
         </dependency>
+
 
         <!-- starter-web -->
         <dependency>
