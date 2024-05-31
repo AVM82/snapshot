@@ -1,7 +1,6 @@
 import './oauth2.scss';
 
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import api from '../../common/api';
 import styles from './AuthPage.module.scss';
@@ -17,11 +16,11 @@ function OAuth2({ text }: OAuth2Params): React.JSX.Element {
     <>
       <h4 className={styles.text}>{text}</h4>
       <div className={styles.googleButtonContainer}>
-        <Link to={googleAuthUri} className={styles.googleButtonText}>
+        <a href={googleAuthUri} className={styles.googleButtonText}>
           <button type="button" tabIndex={0} className={styles.googleButton}>
             GOOGLE
           </button>
-        </Link>
+        </a>
       </div>
 
     </>
