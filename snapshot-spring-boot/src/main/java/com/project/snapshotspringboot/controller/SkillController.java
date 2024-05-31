@@ -2,6 +2,7 @@ package com.project.snapshotspringboot.controller;
 
 import com.project.snapshotspringboot.dtos.SkillDto;
 import com.project.snapshotspringboot.dtos.SkillTreeDto;
+import com.project.snapshotspringboot.dtos.SkillWithIdDto;
 import com.project.snapshotspringboot.dtos.UserSkillAddDto;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import com.project.snapshotspringboot.service.SkillService;
@@ -56,11 +57,11 @@ public class SkillController {
         return skillService.getLastLevelSkills();
     }
 
-    //skills/${user.id}/role/${selectedRole}
-    @GetMapping("/{userId}/role/{roleId}")
-    public List<String> getAllSkillsByUserIdAndRoleId(@PathVariable Long userId, @PathVariable Long roleId) {
-        return skillService.getAllSkillsByUserIdAndRoleId(userId, roleId);
-    }
+
+//    @GetMapping("/{userId}/role/{roleId}")
+//    public List<String> getAllSkillsByUserIdAndRoleId(@PathVariable Long userId, @PathVariable Long roleId) {
+//        return skillService.getAllSkillsByUserIdAndRoleId(userId, roleId);
+//    }
 
     @DeleteMapping("/{userId}/role/{roleId}/skill/{skillId}")
     public boolean deleteSkill(@PathVariable Long userId,
@@ -68,4 +69,14 @@ public class SkillController {
                                @PathVariable Long skillId) {
         return skillService.deleteSkill(userId, roleId, skillId);
     }
+
+    //    @GetMapping("/{userId}/role/{roleId}")
+//       public List<SkillTreeDto> getAllSkillsByUserIdAndRoleId(@PathVariable Long userId, @PathVariable Long roleId) {
+//        return skillService.getUserSkillsTree(userId, roleId);
+//    }
+    @GetMapping("/{userId}/role/{roleId}")
+    public List<SkillWithIdDto> getAllSkillsByUserIdAndRoleId(@PathVariable Long userId, @PathVariable Long roleId) {
+        return skillService.getAllSkillsByUserIdAndRoleId(userId, roleId);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.project.snapshotspringboot.service;
 
 import com.project.snapshotspringboot.dtos.SkillDto;
 import com.project.snapshotspringboot.dtos.SkillTreeDto;
+import com.project.snapshotspringboot.dtos.SkillWithIdDto;
 import com.project.snapshotspringboot.dtos.UserSkillAddDto;
 import com.project.snapshotspringboot.entity.SkillEntity;
 import com.project.snapshotspringboot.entity.UserEntity;
@@ -153,13 +154,26 @@ public class SkillService {
                 .toList();
     }
 
-    public List<String> getAllSkillsByUserIdAndRoleId(Long userId, Long roleId) {
-        List<String> skillDtoList = new ArrayList<>();
+    public List<SkillWithIdDto> getAllSkillsByUserIdAndRoleId(Long userId, Long roleId) {
+        List<SkillWithIdDto> skillDtoList = new ArrayList<>();
         List<SkillTreeDto> skillTreeDtoList = getUserSkillsTree(userId, roleId);
         for (SkillTreeDto skillTreeDto : skillTreeDtoList) {
-            addLastLevelSkillNames(skillTreeDto, skillDtoList);
+            addLastLevelSkillNamesWithId(skillTreeDto, skillDtoList);
         }
         return skillDtoList;
+    }
+
+    public void addLastLevelSkillNamesWithId(SkillTreeDto skillTreeDto, List<SkillWithIdDto> skillDtoList) {
+        if (skillTreeDto.getChildren().isEmpty()) {
+            SkillWithIdDto skillWithIdDto = new SkillWithIdDto();
+            skillWithIdDto.setId(skillTreeDto.getId());
+            skillWithIdDto.setName(skillTreeDto.getName());
+            skillDtoList.add(skillWithIdDto);
+        } else {
+            for (SkillTreeDto subSkill : skillTreeDto.getChildren()) {
+                addLastLevelSkillNamesWithId(subSkill, skillDtoList);
+            }
+        }
     }
 
     public boolean deleteSkill(Long userId, Long roleId, Long skillId) {
