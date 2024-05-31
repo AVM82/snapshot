@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import snapshotApi from '../../../../../api/request';
 import { useAppSelector } from '../../../../../hooks/redux';
 import { ISkills } from '../../../../../models/profile/ISkills';
-import { IRoles, RolesTypes } from '../../../../../models/user/IRoles';
+import { IRoles } from '../../../../../models/user/IRoles';
 import UserRoles from '../../Roles/UserRoles';
 import Skills from '../../Skills/Skills';
 import styles from './SkillCard.module.scss';
 
 function SkillCard(): React.JSX.Element {
   const user = useAppSelector((state) => state.user.userData);
-  const [selectedRole, setSelectedRole] = useState<string | null>(null);
-  const [userSkills, setUserSkills] = useState<ISkills[]>([]);
+  const [selectedRole, setSelectedRole] = useState<IRoles | null>(null);
+  const [userSkills, setUserSkills] = useState<string[]>([]);
   const [showNewComponent, setShowNewComponent] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -23,21 +23,22 @@ function SkillCard(): React.JSX.Element {
   // const [expanded, setExpanded] = useState(false);
   // const [lowerSkills, setLowerSkills] = useState<string[]>([]);
 
-  const getRoleId = (roleName: RolesTypes): number => {
-    switch (roleName) {
-      case 'SEARCHER':
-        return 1;
-      case 'INTERVIEWER':
-        return 2;
-      default:
-        return 0;
-    }
-  };
+  // const getRoleId = (roleName: RolesTypes): number => {
+  //   switch (roleName) {
+  //     case 'SEARCHER':
+  //       return 1;
+  //     case 'INTERVIEWER':
+  //       return 2;
+  //     default:
+  //       return 0;
+  //   }
+  // };
   useEffect(() => {
     if (selectedRole) {
-      const fetchUserSkills = async () => {
-        const roleId = getRoleId(selectedRole);
-        const response = await snapshotApi.get(`skills/${user.id}/role/${roleId}`);
+      const fetchUserSkills = async ():Promise<void> => {
+        const roleId = selectedRole.id;
+        const response:string[] = await snapshotApi.get(`skills/${user.id}/role/${roleId}`);
+        console.log(response);
         setUserSkills(response);
       };
       fetchUserSkills();
@@ -47,16 +48,16 @@ function SkillCard(): React.JSX.Element {
   const handleButtonClick = (): void => {
     if (selectedRole) {
       setShowNewComponent((prevShowNewComponent) => !prevShowNewComponent);
-      setButtonVisible(false); 
-      
+      setButtonVisible(false);
+
     } else {
       alert('Будь ласка, виберіть роль перед додаванням навичок.');
     }
   };
   const visibleSkills = isExpanded ? userSkills : userSkills.slice(0, 10);
 
-  const handleSkillRemove = async (skill: ISkills) => {
-    const roleId = getRoleId(selectedRole);
+  const handleSkillRemove = async (skill: ISkills):Promise<void> => {
+    const roleId = selectedRole;
     await snapshotApi.delete(`skills/${user.id}/role/${roleId}/skill/${skill.id}`);
     setUserSkills((prevSkills) => prevSkills.filter((s) => s.id !== skill.id));
   };
@@ -67,7 +68,7 @@ function SkillCard(): React.JSX.Element {
         {/* <UserRoles /> */}
         <UserRoles setSelectedRole={setSelectedRole} />
       </div>
-     
+
       <div className={styles.main_skill_settings_exist}>
         <div
           aria-label="expand-skill-block"
@@ -85,8 +86,8 @@ function SkillCard(): React.JSX.Element {
         />
 
         {visibleSkills.map((skill) => (
-          <div key={skill.id} className={`${styles.skillChip} ${styles.existingSkill}`}>
-            {skill.name}
+          <div key={skill} className={`${styles.skillChip} ${styles.existingSkill}`}>
+            {skill}
             <span
               className={styles.closeIcon}
               role="button"
@@ -109,12 +110,12 @@ function SkillCard(): React.JSX.Element {
         <div className={styles.main_skill_settings_title}>Мої навички</div>
         {showNewComponent && selectedRole && (
           <Skills roleId={setSelectedRole} setAllSkills={setAllSkills} />
-          
+
         )}
-        <button 
-          type="button" 
-          className={styles.submitButtonSkill} 
-          onClick={handleButtonClick} 
+        <button
+          type="button"
+          className={styles.submitButtonSkill}
+          onClick={handleButtonClick}
           style={{ display: buttonVisible ? 'block' : 'none' }} >
           ДОДАТИ НАВИЧКИ
         </button>

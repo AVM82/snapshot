@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { set } from 'react-hook-form';
 
 import snapshotApi from '../../../../api/request';
 import { IRoles } from '../../../../models/user/IRoles';
 import styles from './UserRoles.module.scss';
 
 interface UserRolesProps {
-  setSelectedRole: React.Dispatch<React.SetStateAction<string | null>>;
+  setSelectedRole: React.Dispatch<React.SetStateAction<IRoles | null>>;
 }
 
 // export default function UserRoles({ setSelectedRole }: UserRolesProps): React.JSX.Element {
@@ -17,16 +16,14 @@ interface UserRolesProps {
 //   const handleOnClick = (role: IRoles): void => {
 //     // setSelectedRoleState(role);
 //     setSelectedRole(role.name);
-   
+
 //   };
 
 export default function UserRoles({ setSelectedRole }: UserRolesProps): React.JSX.Element {
   const [userRoles, setUserRoles] = useState<IRoles[]>([]);
-  const [userRole, setUserRole] = useState<IRoles>();
 
   const handleOnClick = (selectedRole: IRoles): void => {
-    setUserRole(selectedRole);
-    setSelectedRole(selectedRole.name);
+    setSelectedRole(selectedRole);
   };
 
   useEffect(() => {
