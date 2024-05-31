@@ -24,7 +24,10 @@ import Timer from '../Timer/Timer';
 function InterviewerInterviewPage():React.JSX.Element{
   const [selectedQuestionId, setSelectedQuestionId] = useState(0);
   const [selectedSkillId, setSelectedSkillId] = useState(0);
-  const { id: interviewId,  status: interviewStatus,currentProfileRole } = useAppSelector((state) => state.interview);
+  const { id: interviewId,
+    status: interviewStatus,
+    currentProfileRole,
+    questions } = useAppSelector((state) => state.interview);
   const [showAddQuestion, setShowAddQuestion] = useState(false);
   const { id='0' } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
@@ -56,6 +59,14 @@ function InterviewerInterviewPage():React.JSX.Element{
     setSelectedSkillId(skillId);
     setShowAddQuestion(true);
   };
+  const handleCloseNewQuestionMenu=():void=>{
+    setShowAddQuestion(false);
+  };
+  useEffect(() => {
+    if (questions.length){
+
+      setSelectedQuestionId(questions[questions.length-1].id);
+    }  }, [questions]);
 
   return (
     <div className={styles.pageContainer}>
@@ -91,7 +102,7 @@ function InterviewerInterviewPage():React.JSX.Element{
       <div>
         <QuestionsNumberList onClick={handleSetSelectedQuestion}/>
       </div>
-      {showAddQuestion && <AddQuestion skillId={selectedSkillId} onClose={() => setShowAddQuestion(false)} />}
+      {showAddQuestion && <AddQuestion skillId={selectedSkillId} onClose={handleCloseNewQuestionMenu} />}
     </div>
   );
 }

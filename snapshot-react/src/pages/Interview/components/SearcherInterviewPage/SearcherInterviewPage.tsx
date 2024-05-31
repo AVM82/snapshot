@@ -20,7 +20,10 @@ import Timer from '../Timer/Timer';
 
 function SearcherInterviewPage():React.JSX.Element{
   const [selectedQuestionId, setSelectedQuestionId] = useState(0);
-  const { id: interviewId,  status: interviewStatus,currentProfileRole } = useAppSelector((state) => state.interview);
+  const { id: interviewId,
+    status: interviewStatus,
+    currentProfileRole,
+    questions } = useAppSelector((state) => state.interview);
   const { id='0' } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
 
@@ -39,7 +42,7 @@ function SearcherInterviewPage():React.JSX.Element{
   }, [dispatch, id, currentProfileRole]);
 
   useEffect(() => {
-    if (interviewStatus === 'ACTIVE') dispatch(connectToWebSocket({ interviewId }));
+    if (interviewStatus === 'ACTIVE'||interviewStatus === 'PLANNED') dispatch(connectToWebSocket({ interviewId }));
 
     if (interviewStatus === 'FINISHED') dispatch(disconnectFromWebSocket());
   }, [dispatch, interviewId, interviewStatus]);
@@ -47,6 +50,13 @@ function SearcherInterviewPage():React.JSX.Element{
   const handleSetSelectedQuestion = (questionId:number):void=>{
     setSelectedQuestionId(questionId);
   };
+
+  useEffect(() => {
+    if (questions.length){
+
+      setSelectedQuestionId(questions[questions.length-1].id);
+    }
+  }, [questions]);
 
   return (
     <div className={styles.pageContainer}>

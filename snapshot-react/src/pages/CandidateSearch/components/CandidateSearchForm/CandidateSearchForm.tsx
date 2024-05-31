@@ -51,6 +51,7 @@ function CandidateSearchForm({
     if (id) {
       const newSelectedSkills = selectedSkills.filter((item) => item !== id);
       setSelectedSkills(newSelectedSkills);
+      setFormData((prev)=>prev.filter((item)=>item.skill !== id));
     }
   };
 

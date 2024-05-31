@@ -42,6 +42,7 @@ const socketMiddleware = () => {
               if (!message.body) return;
 
               const receivedMessage = JSON.parse(message.body);
+              console.log(receivedMessage);
 
               if (!receivedMessage.status) {
                 storeAPI.dispatch(redefineQuestions(receivedMessage || []));
