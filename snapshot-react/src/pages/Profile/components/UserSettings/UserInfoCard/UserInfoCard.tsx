@@ -1,50 +1,40 @@
-// import classNames from 'classnames';
-// import React, { memo } from 'react';
-// import { Link,useLocation, useNavigate } from 'react-router-dom';
-
-// import { useAppDispatch,useAppSelector } from '../../../../hooks/redux';
-// import { deleteUser } from '../../../../store/reducers/user/userSlice';
-// import useForce from '../../../../utils/useForce';
-// import { useAppSelector } from '../../../../hooks/redux';
-// import { register } from 'module';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import userDefaultPhoto from '../../../../../assets/default-full-photo.svg';
 import iconPen from '../../../../../assets/icon-pen.svg';
-// import iconPenBackground from '../../../../assets/icon-pen-background.svg';
 import Input from '../../../../Auth/components/Input';
-import CustomCountryDropdown from '../CustomCountryDropdown';
 import styles from '../UserProfileNavigator.module.scss';
 
 function UserInfoCard(): React.JSX.Element {
 
-  return ( 
+  return (
     <div className={styles.main_user_settings}>
       <div className={styles.main_user_settings_title}>Особиста інформація</div>
       <div className={styles.main_user_settings_photo}>
-        
+
         <img src={userDefaultPhoto} alt="User Default" className={styles.user_default_photo} />
         <div className={styles.user_icon_container}>
           <Link className={styles.icon_pen}
             to="/">
             <img src={iconPen} alt="Edit pen" />
-          </Link> 
+          </Link>
         </div>
       </div>
       <div className={styles.main_user_settings_input_name}>
-        <Input 
+        <Input
           inputName="Прізвище та ім'я"
           type="text"
           id="login"
-          placeholder="Введіть прізвище та ім'я" error={undefined}            
-        /> 
+          placeholder="Введіть прізвище та ім'я" error={undefined}
+        />
       </div>
       <div  className={styles.main_user_settings_input_username}>
         <Input
           inputName="Користувацьке ім'я"
           type="text"
           id="password"
-          placeholder="Введіть користувацьке ім'я" error={undefined}          
+          placeholder="Введіть користувацьке ім'я" error={undefined}
         />
       </div>
       <div className={styles.main_user_settings_location}>
@@ -52,14 +42,14 @@ function UserInfoCard(): React.JSX.Element {
           inputName="Країна"
           type="text"
           id="login"
-          placeholder="country" error={undefined}            
+          placeholder="country" error={undefined}
         />
         {/* <CustomCountryDropdown /> */}
         <Input className={styles.main_user_settings_input_town}
           inputName="Місто"
           type="select"
           id="login"
-          placeholder="town" error={undefined}            
+          placeholder="town" error={undefined}
         />
       </div>
     </div>

@@ -61,7 +61,7 @@
     align-items: flex-start;
     width: 100%;
     min-height: 10rem;
-    padding: 1rem;
+    padding: 0.3rem;
     border: 2px solid $light-purple;
     border-radius: $large-border-radius;
 
@@ -70,22 +70,38 @@
       outline: none;
     }
 
+    .textButtonContainer {
+      position: relative;
+      width: 100%;
+      min-height: 2rem;
+    }
+
     .textButton {
       @include reset-button-styles;
 
-      position: relative;
-      max-width: 100%;
-      min-height: 2rem;
+      width: 100%;
+      padding: 0.5rem;
       overflow: hidden;
       white-space: nowrap;
+      text-align: left;
       text-overflow: ellipsis;
       background-color: white;
       border-bottom: 2px solid $light-purple;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
 
       &:hover {
         position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        width: 100%;
+        padding: 0.5rem;
         overflow: visible;
+        white-space: wrap;
         text-overflow: clip;
+        background-color: $light-purple;
+        border-radius: $large-border-radius;
       }
     }
   }

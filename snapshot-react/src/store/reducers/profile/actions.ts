@@ -47,11 +47,9 @@ const changeGrade = createAsyncThunk(
 
 const changeFeedback = createAsyncThunk(
   ActionType.CHANGE_FEEDBACK,
-  async (data: PatchFeedBack): Promise<{ feedback: string }> => {
-    const response: { feedback: string } = await snapshotApi.patch(
-      `/interviews/${data.interviewId}/feedback`,
-      data
-    );
+  async (data: PatchFeedBack): Promise<string > => {
+    const response:  string  = await snapshotApi.patch(
+      `/interviews/${data.interviewId}/feedback`, data.feedback );
 
     return response;
   }

@@ -6,10 +6,11 @@ import styles from '../../InterviewItemRow.module.scss';
 
 interface CancelButtonProps{
   id:number,
+  // eslint-disable-next-line react/require-default-props
   disabled?:boolean
 }
 
-function CancelButton({ id,disabled=false }:CancelButtonProps):React.JSX.Element{
+function CancelButton({ id,disabled = false }:CancelButtonProps):React.JSX.Element{
   const dispatch = useAppDispatch();
   const handleCancelInterview = () :void => {
     dispatch(updateInterviewStatus({ id, status: 'CANCELLED' }));
@@ -22,7 +23,4 @@ function CancelButton({ id,disabled=false }:CancelButtonProps):React.JSX.Element
     </button>);
 }
 
-CancelButton.defaultProps = {
-  disabled: false,
-};
 export default CancelButton;

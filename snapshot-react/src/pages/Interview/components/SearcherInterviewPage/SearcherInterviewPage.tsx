@@ -7,13 +7,10 @@ import { connectToWebSocket, disconnectFromWebSocket } from '../../../../store/r
 import { getInterviewById } from '../../../../store/reducers/profile/actions';
 import getUser from '../../../../store/reducers/user/actions';
 import styles from '../../InterviewPage.module.scss';
-import ChangeStatusButton from '../ChangeStatusButton/ChangeStatusButton';
-import Feedback from '../Feedback/Feedback';
+import FeedBackSearcher from '../Feedback/FeedBackSearcher';
 import InterviewDate from '../InterviewDate/InterviewDate';
 import InterviewerInfo from '../InterviewerInfo/InterviewerInfo';
 import InterviewTitle from '../InterviewTitle/InterviewTitle';
-import AddQuestion from '../Questions/AddQuestion';
-import GradeQuestion from '../Questions/GradeQuestion';
 import QuestionInfo from '../Questions/QuestionInfo';
 import QuestionsNumberList from '../Questions/QuestionsNumberList';
 import SearcherInfo from '../SearcherInfo/SearcherInfo';
@@ -21,11 +18,9 @@ import InterviewSkills from '../Skills/InterviewSkills';
 import Status from '../Status/Status';
 import Timer from '../Timer/Timer';
 
-function InterviewerInterviewPage():React.JSX.Element{
+function SearcherInterviewPage():React.JSX.Element{
   const [selectedQuestionId, setSelectedQuestionId] = useState(0);
-  const [selectedSkillId, setSelectedSkillId] = useState(0);
   const { id: interviewId,  status: interviewStatus,currentProfileRole } = useAppSelector((state) => state.interview);
-  const [showAddQuestion, setShowAddQuestion] = useState(false);
   const { id='0' } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
 
@@ -52,10 +47,6 @@ function InterviewerInterviewPage():React.JSX.Element{
   const handleSetSelectedQuestion = (questionId:number):void=>{
     setSelectedQuestionId(questionId);
   };
-  const handleSkillOnClick = (skillId:number):void => {
-    setSelectedSkillId(skillId);
-    setShowAddQuestion(true);
-  };
 
   return (
     <div className={styles.pageContainer}>
@@ -64,7 +55,6 @@ function InterviewerInterviewPage():React.JSX.Element{
           <Timer />
           <Status />
         </div>
-        <ChangeStatusButton />
       </section>
 
       <section className={styles.interviewInfoContainer}>
@@ -76,24 +66,20 @@ function InterviewerInterviewPage():React.JSX.Element{
         <InterviewerInfo />
         <div>
           <SearcherInfo />
-          <InterviewSkills onClick={handleSkillOnClick}/>
+          <InterviewSkills/>
         </div>
       </section>
 
       <div className={styles.questionsContainer}>
         <QuestionInfo questionId={selectedQuestionId}/>
-        {interviewStatus === 'FINISHED' ? (
-          <Feedback/>
-        ) : (
-          <GradeQuestion questionId={selectedQuestionId}/>
-        )}
+        {interviewStatus === 'FINISHED' &&
+          <FeedBackSearcher/>}
       </div>
       <div>
         <QuestionsNumberList onClick={handleSetSelectedQuestion}/>
       </div>
-      {showAddQuestion && <AddQuestion skillId={selectedSkillId} onClose={() => setShowAddQuestion(false)} />}
     </div>
   );
 }
 
-export default InterviewerInterviewPage;
+export default SearcherInterviewPage;

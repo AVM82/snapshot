@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ function UseEffectAfterSuccess(): React.JSX.Element {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const success = useSelector((state: RootState) => state.account.success);
-  
+
   useEffect(() => {
     if (success) {
       localStorage.removeItem('token');
@@ -20,12 +20,13 @@ function UseEffectAfterSuccess(): React.JSX.Element {
       setTimeout(() => {
         navigate('/');
         dispatch(clearState());
-      }, 3000); 
-      
+      }, 3000);
+
     }
   }, [success, navigate, dispatch]);
-  
-  return null;
-};
+
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  return <></>;
+}
 
 export default UseEffectAfterSuccess;

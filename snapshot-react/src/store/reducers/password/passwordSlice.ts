@@ -29,9 +29,7 @@ const passwordSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(changePassword.fulfilled, (state) => ({ ...state, success: true, error: null }))
-      .addCase(changePassword.rejected, 
-        (state, action: PayloadAction<string>) => ({ ...state, success: false, error: action.payload }));
+      .addCase(changePassword.fulfilled, (state) => ({ ...state, success: true, error: null }));
   },
 });
 

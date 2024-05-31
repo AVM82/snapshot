@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 import deleteAccount from './actions';
 
@@ -16,19 +16,25 @@ const accountSlice = createSlice({
   name: 'account',
   initialState,
   reducers: {
-    clearState: (state) => {
-      state.error = null;
-      state.success = false;
-    },
+    clearState: (state) => ({
+      ...state,
+      error: null,
+      success: false,
+    }),
   },
   extraReducers: (builder) => {
-    builder.addCase(deleteAccount.fulfilled, (state) => {
-      state.success = true;
-      state.error = null;
-    });
-    builder.addCase(deleteAccount.rejected, (state, action: PayloadAction<string>) => {
-      state.success = false;
-      state.error = action.payload;
+    builder.addCase(deleteAccount.fulfilled, (state) => ({
+      ...state,
+      success: true,
+      error: null
+    })).addCase(deleteAccount.rejected, (state, action) => {
+      const error = action.payload?'ok' : 'ne ok';
+
+      return{
+        ...state,
+        success: false,
+        error
+      };
     });
   },
 });

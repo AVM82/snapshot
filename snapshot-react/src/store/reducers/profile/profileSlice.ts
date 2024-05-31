@@ -6,7 +6,7 @@ import IInterviewPreview from '../../../models/profile/IInterviewPreview';
 import { IPortrait } from '../../../models/profile/IPortrait';
 import IStatistics from '../../../models/profile/IStatistics';
 import {
-  changeFeedback, changeGrade, getInterviewById, getLowerSkills, getMyInterviews,
+  changeGrade, getInterviewById, getLowerSkills, getMyInterviews,
   getPortrait,
   getStatistics,
 } from './actions';
@@ -69,9 +69,7 @@ const profileSlice = createSlice({
       .addCase(getInterviewById.fulfilled, (state, { payload }) => {
         state.interview = payload;
       })
-      .addCase(changeFeedback.fulfilled, (state, { payload }) => {
-        state.interview.feedback = payload.feedback;
-      })
+
       .addCase(changeGrade.fulfilled, (state, { payload }) => {
         state.interview.questions.forEach((question) => {
           if (question.id === payload.id) {

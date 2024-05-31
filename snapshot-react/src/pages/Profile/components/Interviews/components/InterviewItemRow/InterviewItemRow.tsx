@@ -11,6 +11,7 @@ function InterviewTable({
   id,
   status, interviewer,searcher, plannedDateTime, endDateTime,title
 }: IInterviewPreview): React.JSX.Element {
+  console.log(plannedDateTime);
   const date = endDateTime ? toLocalDate(endDateTime) : toLocalDate(plannedDateTime);
   const { id:userId } = useAppSelector((state) => state.user.userData);
   const navigate = useNavigate();

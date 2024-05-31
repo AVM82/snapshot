@@ -52,23 +52,30 @@ function AddQuestion({ onClose,skillId }:AddQuestionProps):React.JSX.Element{
           <h3 className={styles.formHeader}>Ваші запитання:</h3>
           <div className={styles.questionContainer}>
             {currentSkillQuestions.slice(0, 5).map((q) => (
-              <button
-                key={q.id}
-                type="button"
-                className={styles.textButton}
-                onClick={() => handleProposedQuestion(q.question)}>{q.question}</button>
+              <div className={styles.textButtonContainer}>
+
+                <button
+                  key={q.id}
+                  type="button"
+                  className={styles.textButton}
+                  onClick={() => handleProposedQuestion(q.question)}>{q.question}</button>
+              </div>
             ))}
           </div>
 
           <h3 className={styles.formHeader}>Запропановані запитання:</h3>
 
           <div className={styles.questionContainer}>
+
             {geminiQuestions.slice(0, 5).map((q) => (
-              <button
-                key={q}
-                type="button"
-                className={styles.textButton}
-                onClick={() => handleProposedQuestion(q)}>{q}</button>
+              <div className={styles.textButtonContainer}>
+
+                <button
+                  key={q}
+                  type="button"
+                  className={styles.textButton}
+                  onClick={() => handleProposedQuestion(q)}>{q}</button>
+              </div>
             ))}
           </div>
           <textarea
