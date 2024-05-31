@@ -215,12 +215,12 @@ public class UserService implements UserDetailsService {
     }
 
     public List<UserSearchResponseDto> findSearcherIdBySkillsAndGrades(List<SearchSkillGradeDto> skillGradesList) {
-        Map<String, String> skillGrades = skillGradesList.stream()
+        Map<String, Integer> skillGrades = skillGradesList.stream()
                 .collect(Collectors.toMap(SearchSkillGradeDto::getSkill, SearchSkillGradeDto::getGrade));
         Map<Long, Integer> searcherIdsCount = new HashMap<>();
         Map<Long, Long> searcherIdAndSumGrade = new HashMap<>();
         Map<Long, Map<String, Integer>> searcherIdAndSkillGrade = new HashMap<>();
-        for (Map.Entry<String, String> entry : skillGrades.entrySet()) {
+        for (Map.Entry<String, Integer> entry : skillGrades.entrySet()) {
             List<Object[]> searcherIdsAndGrade = repository.findSearcherIdsAndMaxGradeBySkillNameAndSkillGrade(entry.getKey(), entry.getValue());
             for (Object[] result : searcherIdsAndGrade) {
                 Long searcherId = (Long) result[0];
@@ -274,7 +274,7 @@ public class UserService implements UserDetailsService {
                 Integer grade = question.getGrade();
                 skillGradeMap.computeIfAbsent(skillId, k -> new ArrayList<>()).add(grade);
                 skillQuestioGradeMap.computeIfAbsent(skillId, k -> new ArrayList<>()).add(new QuestionGradeDto(
-                        question.getQuestion(), question.getGrade().toString() + "%"));
+                        question.getQuestion(), question.getGrade()));
                 questionCountMap.put(skillId, questionCountMap.getOrDefault(skillId, 0) + 1);
             }
             for (Map.Entry<Long, List<Integer>> entry : skillGradeMap.entrySet()) {
@@ -329,6 +329,17 @@ public class UserService implements UserDetailsService {
                 passwordEncoder.encode(dto.getNewPassword()),
                 authDetails.getUserEntity().getId());
 
+        return true;
+    }
+
+    @Transactional
+    public boolean deleteMe(Long userId) {
+//        repository.nullifyInterviewerId(userId);
+//        userRepository.nullifySearcherId(userId);
+//        repository.deleteInterviewerQuestion(userId);
+        repository.deleteRefreshTokens(userId);
+        repository.deleteUserRoleSkills(userId);
+        repository.deleteUserById(userId);
         return true;
     }
 }

@@ -15,9 +15,9 @@ import SuccessfulSignUp from './pages/Auth/SuccessfulSignUp';
 import CandidateSearch from './pages/CandidateSearch/CandidateSearch';
 import Home from './pages/Home/Home';
 import InterviewPage from './pages/Interview/InterviewPage';
-import Feedback from './pages/Profile/components/Feedback/Feedback';
-import UserRoles from './pages/Profile/components/Roles/UserRoles';
 import Statistics from './pages/Profile/components/Statistics/Statistics';
+import UserInfoCard from './pages/Profile/components/UserSettings/UserInfoCard/UserInfoCard';
+import UserProfileNavigator from './pages/Profile/components/UserSettings/UserProfileNavigator';
 import Profile from './pages/Profile/Profile';
 import ProtectedRoute from './utils/ProtectedRoute';
 
@@ -90,9 +90,9 @@ function App(): React.JSX.Element {
           <Route path="interview" element={<InterviewPage />} />
           <Route path="interview/:id" element={<InterviewPage />} />
           <Route path="profile/:userId" element={<Profile />} />
-          <Route path="profile/:userId/settings" element={<UserRoles />} />
+          <Route path="profile/:userId/settings" element={<UserProfileNavigator />} />
+          <Route path="profile/:userId/info" element={<UserInfoCard />} />
           <Route path="profile/:userId/statistics" element={<Statistics />} />
-          <Route path="profile/:userId/:id" element={<Feedback />} />
         </Route>
         <Route path="*" element={<p>404</p>} />
       </Route>

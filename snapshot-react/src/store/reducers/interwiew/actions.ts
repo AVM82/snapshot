@@ -25,7 +25,7 @@ const addQuestion = createAsyncThunk(
     interviewerId: number,
     skillId: number,
     question:string
-  }):Promise<IQuestion> => snapshotApi.post('/interviews/question', { ...data }),
+  }):Promise<IQuestion> =>  snapshotApi.post('/interviews/question', { ...data })
 );
 
 const addInterview = createAsyncThunk(
@@ -46,7 +46,11 @@ const getInterviewId = createAsyncThunk(
 );
 const getSkillQuestions = createAsyncThunk(
   ActionType.GET_SKILL_QUESTIONS_BY_ID,
-  async (skillId:number):Promise<IQuestion[]> => snapshotApi.get(`interviews/questions/skill/${skillId}?id=${skillId}`),
+  async (skillId:number):Promise<IQuestion[]> => snapshotApi.get(`interviews/questions/skill/${skillId}`),
+);
+const getGeminiQuestions = createAsyncThunk(
+  ActionType.GET_GEMINI_QUESTIONS_BY_ID,
+  async (skillId:number):Promise<string[]> => snapshotApi.get(`interviews/questions/gemini/skill/${skillId}`),
 );
 const updateInterviewById = createAsyncThunk(
   ActionType.UPDATE_INTERVIEW_BY_ID,
@@ -56,10 +60,10 @@ const updateInterviewById = createAsyncThunk(
 );
 
 export {
-  addInterview, addQuestion, getAllSkills, getInterviewId,
+  addInterview, addQuestion, getAllSkills,   getGeminiQuestions,
+  getInterviewId,
   getSkillQuestions,
   getUserByEmail,
   updateInterviewById,
-  updateInterviewStatus,
-};
+  updateInterviewStatus };
 

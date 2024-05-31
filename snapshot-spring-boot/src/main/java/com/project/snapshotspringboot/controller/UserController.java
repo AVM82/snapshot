@@ -137,4 +137,9 @@ public class UserController {
                                   @RequestBody @Valid UserChangePasswordDto dto) {
         return service.changePassword(authDetails, dto);
     }
+
+    @DeleteMapping
+    public boolean deleteUser(@AuthenticationPrincipal AuthDetails authDetails) {
+        return service.deleteMe(authDetails.getUserEntity().getId());
+    }
 }

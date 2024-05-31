@@ -1,7 +1,7 @@
 interface IQuestion {
   id: number;
   question: string;
-  grade: string;
+  grade: number;
   skillName: string;
   searcherId: number;
   createdAt:string
