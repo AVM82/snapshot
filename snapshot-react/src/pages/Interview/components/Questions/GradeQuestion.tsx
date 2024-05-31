@@ -1,4 +1,5 @@
-import  Slider  from '@mui/material/Slider';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Slider  from '@mui/material/Slider';
 import React, { useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
