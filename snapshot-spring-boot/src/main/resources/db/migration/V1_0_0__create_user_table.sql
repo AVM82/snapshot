@@ -51,8 +51,8 @@ create table interviews
     id                bigint primary key auto_increment,
     title             varchar(100),
     status            varchar(255) not null,
-    interviewer_id    bigint references users (id),
-    searcher_id       bigint references users (id),
+    interviewer_id    bigint references users (id) on delete set null,
+    searcher_id       bigint references users (id) on delete set null,
     planned_date_time timestamp,
     start_date_time   timestamp,
     end_date_time     timestamp,
@@ -73,7 +73,7 @@ create table interviewer_questions
 (
     id             bigint primary key auto_increment,
     skill_id       bigint references skills (id),
-    interviewer_id bigint references users (id),
+    interviewer_id bigint references users (id) on delete set null,
     question       varchar(500),
     updated_at     timestamp
 );

@@ -2,15 +2,19 @@ package com.project.snapshotspringboot.service;
 
 import com.project.snapshotspringboot.dtos.SkillDto;
 import com.project.snapshotspringboot.dtos.SkillTreeDto;
+import com.project.snapshotspringboot.dtos.SkillWithIdDto;
 import com.project.snapshotspringboot.dtos.UserSkillAddDto;
 import com.project.snapshotspringboot.entity.SkillEntity;
 import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.mapper.SkillMapper;
 import com.project.snapshotspringboot.repository.SkillRepository;
+import com.project.snapshotspringboot.repository.UserRoleSkillRepository;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +26,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SkillService {
     private final SkillRepository skillRepository;
+    private final UserRoleSkillRepository userRoleSkillRepository;
     private final SkillMapper skillMapper;
 
     public void addUserSkills(AuthDetails authDetails, UserSkillAddDto skillDto, Long roleId) {
         UserEntity user = authDetails.getUserEntity();
+        userRoleSkillRepository.deleteByUserIdAndRoleId(user.getId(), roleId);
         skillDto.getSkillIds().forEach(skillId -> skillRepository.addSkillToUser(user.getId(), roleId, skillId));
     }
 
@@ -147,4 +153,44 @@ public class SkillService {
                 .map(skillMapper::toDto)
                 .toList();
     }
+
+    public List<SkillWithIdDto> getAllSkillsByUserIdAndRoleId(Long userId, Long roleId) {
+        List<SkillWithIdDto> skillDtoList = new ArrayList<>();
+        List<SkillTreeDto> skillTreeDtoList = getUserSkillsTree(userId, roleId);
+        for (SkillTreeDto skillTreeDto : skillTreeDtoList) {
+            addLastLevelSkillNamesWithId(skillTreeDto, skillDtoList);
+        }
+        return skillDtoList;
+    }
+
+    public void addLastLevelSkillNamesWithId(SkillTreeDto skillTreeDto, List<SkillWithIdDto> skillDtoList) {
+        if (skillTreeDto.getChildren().isEmpty()) {
+            SkillWithIdDto skillWithIdDto = new SkillWithIdDto();
+            skillWithIdDto.setId(skillTreeDto.getId());
+            skillWithIdDto.setName(skillTreeDto.getName());
+            skillDtoList.add(skillWithIdDto);
+        } else {
+            for (SkillTreeDto subSkill : skillTreeDto.getChildren()) {
+                addLastLevelSkillNamesWithId(subSkill, skillDtoList);
+            }
+        }
+    }
+
+    public boolean deleteSkill(Long userId, Long roleId, Long skillId) {
+
+//        List<String> userRoleSkills = getAllSkillsByUserIdAndRoleId(userId, roleId);
+        Set<Long> getUserRoleSkills = skillRepository.getUserSkills(userId, roleId);
+        Long findSkillId = getUserRoleSkills.stream()
+                .filter(s -> s.equals(skillId))
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Skill not found with Id: " + skillId));
+
+//        List<Skill> userRoleSkills = skillRepository.findSkillsByUserIdAndRoleId(userId, roleId);
+
+        userRoleSkillRepository.deleteByUserIdAndRoleIdAndSkillId(userId, roleId, findSkillId);
+        return true;
+
+
+    }
+
 }
