@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import Slider  from '@mui/material/Slider';
 import React, { useState } from 'react';
 

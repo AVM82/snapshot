@@ -37,71 +37,42 @@ type GetPortrait = {
 
 const changeGrade = createAsyncThunk(
   ActionType.CHANGE_GRADE,
-  async (data: PatchQuestion): Promise<PatchedQuestion> => {
-    const response: PatchedQuestion = await snapshotApi.patch('/interviews/question/grade',  data);
-    console.log(response);
-
-    return response;
-  }
+  async (data: PatchQuestion): Promise<PatchedQuestion> => snapshotApi.patch('/interviews/question/grade', data)
 );
 
 const changeFeedback = createAsyncThunk(
   ActionType.CHANGE_FEEDBACK,
-  async (data: PatchFeedBack): Promise<string > => {
-    const response:  string  = await snapshotApi.patch(
-      `/interviews/${data.interviewId}/feedback`, data.feedback );
-
-    return response;
-  }
+  async (data: PatchFeedBack): Promise<string > => snapshotApi.patch(
+    `/interviews/${data.interviewId}/feedback`, data.feedback)
 );
 
 const getMyInterviews = createAsyncThunk(
   ActionType.GET_MY_INTERVIEWS,
-  async (): Promise<IInterviewPreview[]> => {
-    const response: IInterviewPreview[] = await snapshotApi.get('/interviews');
-
-    return response;
-  }
+  async (): Promise<IInterviewPreview[]> => snapshotApi.get('/interviews')
 );
 
 const getInterviewById = createAsyncThunk(
   ActionType.GET_INTERVIEW_BY_ID,
-  async (id: number): Promise<IInterview> => {
-    const response: IInterview = await snapshotApi.get(`/interviews/${id}`);
-
-    return response;
-  }
+  async (id: number): Promise<IInterview> => snapshotApi.get(`/interviews/${id}`)
 );
 
 const getLowerSkills = createAsyncThunk(
   ActionType.GET_LOWER_SKILLS,
-  async (id: number): Promise<string[]> => {
-    const response: string[] = await snapshotApi.get(`/skills/${id}`);
-
-    return response;
-  }
+  async (id: number): Promise<string[]> => snapshotApi.get(`/skills/${id}`)
 );
 
 const getPortrait = createAsyncThunk(
   ActionType.GET_PORTRAIT,
-  async ({ id, from, to }: GetPortrait): Promise<IPortrait[]> => {
-    const response: IPortrait[] = await snapshotApi.get(
-      `/users/portrait/${id}?${from && to ? `from=${from}&to=${to}` : ''}`
-    );
-
-    return response;
-  }
+  async ({ id, from, to }: GetPortrait): Promise<IPortrait[]> => snapshotApi.get(
+    `/users/portrait/${id}?${from && to ? `from=${from}&to=${to}` : ''}`
+  )
 );
 
 const getStatistics = createAsyncThunk(
   ActionType.GET_STATISTICS,
-  async ({ id, from, to }: GetStatistics): Promise<IStatistics[]> => {
-    const response: IStatistics[] = await snapshotApi.get(
-      `/users/statistic/${id}?from=${from}&to=${to}`
-    );
-
-    return response;
-  }
+  async ({ id, from, to }: GetStatistics): Promise<IStatistics[]> => snapshotApi.get(
+    `/users/statistic/${id}?from=${from}&to=${to}`
+  )
 );
 
 export {

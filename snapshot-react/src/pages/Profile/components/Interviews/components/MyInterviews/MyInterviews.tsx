@@ -12,7 +12,6 @@ function MyInterviews({ interviews }:{ interviews:IInterviewPreview[] }): React.
   const updateInterviews = useCallback(() => {
     setInterviews([...interviews].reverse().slice(0, numberOfRows));
   }, [interviews, numberOfRows]);
-  console.log(interviewsRow);
   useEffect(() => {
     updateInterviews();
   },[interviews, numberOfRows, updateInterviews]);
