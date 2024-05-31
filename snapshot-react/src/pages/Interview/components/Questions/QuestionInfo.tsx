@@ -23,7 +23,6 @@ function QuestionInfo({ questionId }: IProps): React.JSX.Element {
   );
 
   if (!question) return defaultRender();
-  console.log(question.grade);
 
   return (
     <section className={styles.skillInfoContainer}>
@@ -37,7 +36,7 @@ function QuestionInfo({ questionId }: IProps): React.JSX.Element {
       </div>
       <div className={styles.textContainer}>
         <p  className={styles.text}>{question.question}</p>
-        <p className={styles.grade}>Оцінка: {question? `${question.grade}%`:0}</p>
+        <p className={styles.grade}>Оцінка: {question.grade? `${question.grade}%`:0}</p>
       </div>
     </section>
   );

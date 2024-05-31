@@ -73,6 +73,7 @@ const interviewSlice = createSlice({
     redefineQuestions: (state, action) => ({
       ...state,
       questions: action.payload,
+
     }),
     redefineStatus: (state, action) => ({
       ...state,

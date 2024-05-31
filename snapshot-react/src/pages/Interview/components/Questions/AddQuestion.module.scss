@@ -56,6 +56,9 @@
   }
 
   .questionContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     width: 100%;
     min-height: 10rem;
     padding: 1rem;
@@ -67,14 +70,22 @@
       outline: none;
     }
 
-    button {
+    .textButton {
       @include reset-button-styles;
 
+      position: relative;
+      max-width: 100%;
+      min-height: 2rem;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      background-color: white;
       border-bottom: 2px solid $light-purple;
 
       &:hover {
-        background-color: $light-purple;
-        border-radius: $large-border-radius;
+        position: absolute;
+        overflow: visible;
+        text-overflow: clip;
       }
     }
   }
