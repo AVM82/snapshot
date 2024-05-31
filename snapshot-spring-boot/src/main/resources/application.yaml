@@ -144,3 +144,27 @@ reset-password:
       <a href="%s"><h3>Відновити пароль<h3/></a>
       <p>Посилання дійсне протягом %d хв.<p/>
       <p>Якщо ви не відправляли запит на відновлення паролю, то просто проігноруйте це повідомлення!<p/>
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - shutdown
+          - prometheus
+  endpoint:
+    shutdown:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+
+logging:
+  file:
+    path: ./logs

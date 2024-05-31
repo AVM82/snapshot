@@ -30,6 +30,13 @@ public class SpaWebFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI().toLowerCase();
         log.info("SpaWebFilter path: " + path);
+        log.info("Server name: {}", request.getServerName());
+
+        if ("/actuator/shutdown".equals(path) && !"localhost".equals(request.getServerName())) {
+            log.info("Access denied!");
+            request.getRequestDispatcher("/index.html").forward(request, response);
+            return;
+        }
 
         if (!path.equals("/")
                 && startWith.stream().noneMatch(path::startsWith)
