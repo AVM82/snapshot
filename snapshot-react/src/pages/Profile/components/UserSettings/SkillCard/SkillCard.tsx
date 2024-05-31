@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-import snapshotApi from '../../../../../api/request';
-import { useAppSelector } from '../../../../../hooks/redux';
-import { ISkills } from '../../../../../models/profile/ISkills';
+import { useAppDispatch, useAppSelector } from '../../../../../hooks/redux';
+import { ISkills } from '../../../../../models/profile/ISkills.ts';
 import { IRoles } from '../../../../../models/user/IRoles';
+import { getUserSkillsByRole } from '../../../../../store/reducers/skills/actions.ts';
+import { removeSkill } from '../../../../../store/reducers/skills/userSkillsSlice.ts';
 import UserRoles from '../../Roles/UserRoles';
 import Skills from '../../Skills/Skills';
 import styles from './SkillCard.module.scss';
@@ -11,37 +12,21 @@ import styles from './SkillCard.module.scss';
 function SkillCard(): React.JSX.Element {
   const user = useAppSelector((state) => state.user.userData);
   const [selectedRole, setSelectedRole] = useState<IRoles | null>(null);
-  const [userSkills, setUserSkills] = useState<string[]>([]);
+  // const [userSkills, setUserSkills] = useState<ISkills[]>([]);
   const [showNewComponent, setShowNewComponent] = useState(false);
+  const dispatch = useAppDispatch();
   const [buttonVisible, setButtonVisible] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
-  // const role = useAppSelector((state) => state.)
-  const [selectedRoleN, setSelectedRoleN] = useState<IRoles | null>(null);
+  const { userSkills } = useAppSelector((state) => state.userSkills);
   // const [userSkills, setUserSkills] = useState<string[]>([]);
   // const [buttonText, setButtonText] = useState('ДОДАТИ НАВИЧКИ');
   // const [allSkills, setAllSkills] = useState<string[]>([]);
   // const [expanded, setExpanded] = useState(false);
   // const [lowerSkills, setLowerSkills] = useState<string[]>([]);
 
-  // const getRoleId = (roleName: RolesTypes): number => {
-  //   switch (roleName) {
-  //     case 'SEARCHER':
-  //       return 1;
-  //     case 'INTERVIEWER':
-  //       return 2;
-  //     default:
-  //       return 0;
-  //   }
-  // };
   useEffect(() => {
     if (selectedRole) {
-      const fetchUserSkills = async ():Promise<void> => {
-        const roleId = selectedRole.id;
-        const response:string[] = await snapshotApi.get(`skills/${user.id}/role/${roleId}`);
-        console.log(response);
-        setUserSkills(response);
-      };
-      fetchUserSkills();
+      dispatch(getUserSkillsByRole({ userId:user.id, roleId:selectedRole.id }));
     }
   }, [selectedRole, user.id]);
 
@@ -57,9 +42,7 @@ function SkillCard(): React.JSX.Element {
   const visibleSkills = isExpanded ? userSkills : userSkills.slice(0, 10);
 
   const handleSkillRemove = async (skill: ISkills):Promise<void> => {
-    const roleId = selectedRole;
-    await snapshotApi.delete(`skills/${user.id}/role/${roleId}/skill/${skill.id}`);
-    setUserSkills((prevSkills) => prevSkills.filter((s) => s.id !== skill.id));
+    dispatch(removeSkill(skill));
   };
 
   return (
@@ -69,7 +52,7 @@ function SkillCard(): React.JSX.Element {
         <UserRoles setSelectedRole={setSelectedRole} />
       </div>
 
-      <div className={styles.main_skill_settings_exist}>
+      <div  className={styles.main_skill_settings_exist}>
         <div
           aria-label="expand-skill-block"
           className={styles.chevron}
@@ -86,18 +69,16 @@ function SkillCard(): React.JSX.Element {
         />
 
         {visibleSkills.map((skill) => (
-          <div key={skill} className={`${styles.skillChip} ${styles.existingSkill}`}>
-            {skill}
+          <div
+            key={skill.name}
+            className={`${styles.skillChip}
+            ${styles.existingSkill}`}>
+            {skill.name}
             <span
               className={styles.closeIcon}
               role="button"
               tabIndex={0}
               onClick={() => handleSkillRemove(skill)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  handleSkillRemove(skill);
-                }
-              }}
             >
               &times;
             </span>
@@ -109,8 +90,7 @@ function SkillCard(): React.JSX.Element {
       <div className={styles.main_skill_settings}>
         <div className={styles.main_skill_settings_title}>Мої навички</div>
         {showNewComponent && selectedRole && (
-          <Skills roleId={setSelectedRole} setAllSkills={setAllSkills} />
-
+          <Skills roleId={selectedRole.id}  />
         )}
         <button
           type="button"

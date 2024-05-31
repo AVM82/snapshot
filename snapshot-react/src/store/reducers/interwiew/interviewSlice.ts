@@ -120,7 +120,7 @@ const interviewSlice = createSlice({
       };
     });
     builder.addCase(getAllSkills.fulfilled, (state, action) => {
-      const lowLvlSkills:ISkills[] = flattenSkillsHierarchy(action.payload);
+      const lowLvlSkills:ISkills[] = flattenSkillsHierarchy(action.payload||[]);
       const interviewSkills:ISkills[] = state.interviewer.roles.find((roles:IRoles) => roles.id === 2)?.skills ?? [];
 
       return {
@@ -131,10 +131,7 @@ const interviewSlice = createSlice({
           calculateAndSortSharedSkills(lowLvlSkills, action.payload, interviewSkills),
       };
     });
-    // builder.addCase(addQuestion.fulfilled, (state, action) => ({
-    //   ...state,
-    //   questions: [...state.questions, action.payload],
-    // }));
+
     builder.addCase(updateInterviewStatus.fulfilled, (state, action) => ({
       ...state,
       ...action.payload,

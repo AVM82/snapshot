@@ -8,23 +8,12 @@ interface UserRolesProps {
   setSelectedRole: React.Dispatch<React.SetStateAction<IRoles | null>>;
 }
 
-// export default function UserRoles({ setSelectedRole }: UserRolesProps): React.JSX.Element {
-// // export default function UserRoles(): React.JSX.Element {
-//   const [userRoles, setUserRoles] = useState<IRoles[]>([]);
-//   // const [selectedRole, setSelectedRoleState] = useState<IRoles | null>(null);
-
-//   const handleOnClick = (role: IRoles): void => {
-//     // setSelectedRoleState(role);
-//     setSelectedRole(role.name);
-
-//   };
-
 export default function UserRoles({ setSelectedRole }: UserRolesProps): React.JSX.Element {
   const [userRoles, setUserRoles] = useState<IRoles[]>([]);
 
-  const handleOnClick = (selectedRole: IRoles): void => {
-    setSelectedRole(selectedRole);
-  };
+  // const handleOnClick = (selectedRole: IRoles): void => {
+  //   setSelectedRole(selectedRole);
+  // };
 
   useEffect(() => {
     (async (): Promise<void> => {
@@ -48,7 +37,7 @@ export default function UserRoles({ setSelectedRole }: UserRolesProps): React.JS
                   type="radio"
                   name="preference"
                   value={role.name}
-                  onClick={() => handleOnClick(role)}
+                  onClick={() => setSelectedRole(role)}
                 />
                 {role.name}
               </>
