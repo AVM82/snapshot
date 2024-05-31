@@ -19,6 +19,7 @@
         <starter.mail.version>3.2.5</starter.mail.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <h2.version>2.2.220</h2.version>
+        <postgresql.version>42.7.3</postgresql.version>
         <starter.data.jpa.version>3.2.4</starter.data.jpa.version>
         <flyway.version>10.11.0</flyway.version>
         <oauth2.client.version>6.2.4</oauth2.client.version>
@@ -50,6 +51,11 @@
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
