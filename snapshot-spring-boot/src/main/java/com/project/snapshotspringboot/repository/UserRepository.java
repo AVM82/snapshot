@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,4 +36,35 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query("update UserEntity u set u.password = :password where u.id = :id")
     void setPasswordForUserById(@Param("password") String password,
                                   @Param("id") long id);
+
+//
+//    @Modifying
+//    @Transactional
+//    @Query("update InterviewEntity i set i.interviewer.id = null where i.interviewer.id = :userId")
+//    void nullifyInterviewerId(@Param("userId") Long userId);
+//
+//    @Modifying
+//    @Transactional
+//    @Query("update InterviewEntity i set i.searcher.id = null where i.searcher.id = :userId")
+//    void nullifySearcherId(@Param("userId") Long userId);
+
+    @Modifying
+    @Transactional
+    @Query("delete from RefreshToken rt where rt.userEntity.id = :userId")
+    void deleteRefreshTokens(@Param("userId") Long userId);
+
+//    @Modifying
+//    @Transactional
+//    @Query("delete from I iq where iq.interviewer.id = :userId")
+//    void deleteInterviewerQuestion(@Param("userId") Long userId);
+
+    @Modifying
+    @Transactional
+    @Query("delete from UserRoleSkillEntity urs where urs.user.id = :userId")
+    void deleteUserRoleSkills(@Param("userId") Long userId);
+
+    @Modifying
+    @Transactional
+    @Query("delete from UserEntity u where u.id = :userId")
+    void deleteUserById(@Param("userId") Long userId);
 }

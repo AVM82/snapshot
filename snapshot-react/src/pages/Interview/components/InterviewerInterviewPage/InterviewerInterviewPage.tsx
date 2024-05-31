@@ -8,6 +8,7 @@ import { getInterviewById } from '../../../../store/reducers/profile/actions';
 import getUser from '../../../../store/reducers/user/actions';
 import styles from '../../InterviewPage.module.scss';
 import ChangeStatusButton from '../ChangeStatusButton/ChangeStatusButton';
+import Feedback from '../Feedback/Feedback';
 import InterviewDate from '../InterviewDate/InterviewDate';
 import InterviewerInfo from '../InterviewerInfo/InterviewerInfo';
 import InterviewTitle from '../InterviewTitle/InterviewTitle';
@@ -79,16 +80,18 @@ function InterviewerInterviewPage():React.JSX.Element{
         </div>
       </section>
 
-      {/* {interviewStatus === 'FINISHED' ? <Feedback/> : ( */}
-      {/*  */}
       <div className={styles.questionsContainer}>
         <QuestionInfo questionId={selectedQuestionId}/>
-        <GradeQuestion questionId={selectedQuestionId}/>
+        {interviewStatus === 'FINISHED' ? (
+          <Feedback/>
+        ) : (
+          <GradeQuestion questionId={selectedQuestionId}/>
+        )}
       </div>
       <div>
         <QuestionsNumberList onClick={handleSetSelectedQuestion}/>
       </div>
-      {showAddQuestion&&<AddQuestion skillId={selectedSkillId} onClose={()=>setShowAddQuestion(false)}/>}
+      {showAddQuestion && <AddQuestion skillId={selectedSkillId} onClose={() => setShowAddQuestion(false)} />}
     </div>
   );
 }

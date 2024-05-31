@@ -38,12 +38,12 @@ const socketMiddleware = () => {
             storeAPI.dispatch(setSocketStatus('connected'));
 
             stompClient?.subscribe(`/interview/${typedAction.payload.interviewId}/questions`, (message) => {
+
               if (!message.body) return;
 
               const receivedMessage = JSON.parse(message.body);
 
               if (!receivedMessage.status) {
-                console.log(receivedMessage);
                 storeAPI.dispatch(redefineQuestions(receivedMessage || []));
               } else {
                 storeAPI.dispatch(redefineStatus(receivedMessage.status));

@@ -331,4 +331,15 @@ public class UserService implements UserDetailsService {
 
         return true;
     }
+
+    @Transactional
+    public boolean deleteMe(Long userId) {
+//        repository.nullifyInterviewerId(userId);
+//        userRepository.nullifySearcherId(userId);
+//        repository.deleteInterviewerQuestion(userId);
+        repository.deleteRefreshTokens(userId);
+        repository.deleteUserRoleSkills(userId);
+        repository.deleteUserById(userId);
+        return true;
+    }
 }

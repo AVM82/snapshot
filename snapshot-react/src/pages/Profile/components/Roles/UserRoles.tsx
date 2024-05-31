@@ -2,20 +2,23 @@ import React, { useEffect, useState } from 'react';
 
 import snapshotApi from '../../../../api/request';
 import { IRoles } from '../../../../models/user/IRoles';
-import Skills from '../Skills/Skills';
 import styles from './UserRoles.module.scss';
 
-export default function UserRoles(): React.JSX.Element {
+interface UserRolesProps {
+  setSelectedRole: React.Dispatch<React.SetStateAction<IRoles | null>>;
+}
+
+export default function UserRoles({ setSelectedRole }: UserRolesProps): React.JSX.Element {
   const [userRoles, setUserRoles] = useState<IRoles[]>([]);
-  const [userRole, setUserRole] = useState<IRoles>();
-  const handleOnClick = (selectedRole: IRoles): void => {
-    setUserRole(selectedRole);
-  };
+
+  // const handleOnClick = (selectedRole: IRoles): void => {
+  //   setSelectedRole(selectedRole);
+  // };
 
   useEffect(() => {
     (async (): Promise<void> => {
       const response: IRoles[] = await snapshotApi.get('users/all-roles');
-      setUserRoles(response);
+      setUserRoles(response.filter((role) => role.name !== 'HR'));
     })();
   }, []);
 
@@ -23,28 +26,32 @@ export default function UserRoles(): React.JSX.Element {
 
   return (
     <div className={styles.userProfileContainer}>
-      {userRole ? (
-        <Skills id={userRole.id} name={userRole.name} />
-      ) : (
-        <div className={styles.rolesContainer}>
-          <h3>Вибиріть вашу роль:</h3>
-          {userRoles.map((role: IRoles) => (
-            <label key={role.id}>
-              {role.name !== 'ADMIN' && (
-                <>
-                  <input
-                    type="radio"
-                    name="preference"
-                    value={role.name}
-                    onClick={() => handleOnClick(role)}
-                  />
-                  {role.name}
-                </>
-              )}
-            </label>
-          ))}
-        </div>
-      )}
+      {/* {!selectedRole ? ( */}
+      <div className={styles.rolesContainer}>
+        <div className={styles.main_role_settings_title}>Виберіть вашу роль:</div>
+        {userRoles.map((role: IRoles) => (
+          <label key={role.id}>
+            {role.name !== 'ADMIN' && (
+              <>
+                <input
+                  type="radio"
+                  name="preference"
+                  value={role.name}
+                  onClick={() => setSelectedRole(role)}
+                />
+                {role.name}
+              </>
+            )}
+          </label>
+        ))}
+      </div>
+      {/* ) : ( */}
+      {/* <div className={styles.selectedRoleContainer}>
+          Вибрана роль:
+          <p>{selectedRole.name}</p>
+        </div> */}
+      {/* )} */}
     </div>
   );
 }
+
