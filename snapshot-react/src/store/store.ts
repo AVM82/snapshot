@@ -1,7 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import accountSlice from './reducers/account/accountSlice';
 import interactedUsersSlice from './reducers/interactedUsers/interactedUsersSlice';
 import interviewSlice from './reducers/interwiew/interviewSlice';
+import passwordSlice from './reducers/password/passwordSlice';
 import profileMiddleware from './reducers/profile/profileMiddleware';
 import profileSlice from './reducers/profile/profileSlice';
 import userSkillsSlice from './reducers/skills/userSkillsSlice';
@@ -14,6 +16,8 @@ export const store = configureStore({
     interview: interviewSlice,
     profile: profileSlice,
     interactedUsers:interactedUsersSlice,
+    password: passwordSlice,
+    account: accountSlice,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(profileMiddleware),
 

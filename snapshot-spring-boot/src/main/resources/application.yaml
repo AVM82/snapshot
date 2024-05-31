@@ -122,7 +122,7 @@ reminder:
 admin:
   email: snapshot.it.project@gmail.com
 
-host: http://snapshot-env.eba-tkt77dky.eu-central-1.elasticbeanstalk.com/
+host: https://snapshot.k-points.in.ua/
 
 submit:
   email:

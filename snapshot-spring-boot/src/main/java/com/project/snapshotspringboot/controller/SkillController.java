@@ -55,4 +55,17 @@ public class SkillController {
     public List<SkillDto> getAllLastLevelSkills() {
         return skillService.getLastLevelSkills();
     }
+
+    //skills/${user.id}/role/${selectedRole}
+    @GetMapping("/{userId}/role/{roleId}")
+    public List<String> getAllSkillsByUserIdAndRoleId(@PathVariable Long userId, @PathVariable Long roleId) {
+        return skillService.getAllSkillsByUserIdAndRoleId(userId, roleId);
+    }
+
+    @DeleteMapping("/{userId}/role/{roleId}/skill/{skillId}")
+    public boolean deleteSkill(@PathVariable Long userId,
+                               @PathVariable Long roleId,
+                               @PathVariable Long skillId) {
+        return skillService.deleteSkill(userId, roleId, skillId);
+    }
 }
