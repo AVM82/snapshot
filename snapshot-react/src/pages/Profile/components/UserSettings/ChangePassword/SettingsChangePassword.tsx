@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import changePassword  from '../../../../../store/reducers/password/actions';
-import { setConfirmNewPassword, setCurrentPassword, setError,setNewPassword } 
+import { setConfirmNewPassword, setCurrentPassword, setError,setNewPassword }
   from '../../../../../store/reducers/password/passwordSlice';
 import { AppDispatch, RootState } from '../../../../../store/store';
 import Input from '../../../../Auth/components/Input';
@@ -10,7 +10,7 @@ import styles from './SettingsChangePassword.module.scss';
 
 function SettingsChangePassword(): React.JSX.Element {
   const dispatch: AppDispatch = useDispatch();
-  const { password, newPassword, repeatNewPassword, error, success } = 
+  const { password, newPassword, repeatNewPassword, error, success } =
   useSelector((state: RootState) => state.password);
 
   const handlePasswordChange = (): void => {
@@ -60,7 +60,7 @@ function SettingsChangePassword(): React.JSX.Element {
       </div>
       {error && <div className={styles.error}>{error}</div>}
       {success && <div className={styles.success}>Пароль успішно змінено</div>}
-      <button onClick={handlePasswordChange} className={styles.submitChangePassword}>
+      <button type="button" onClick={handlePasswordChange} className={styles.submitChangePassword}>
         Змінити пароль
       </button>
     </div>

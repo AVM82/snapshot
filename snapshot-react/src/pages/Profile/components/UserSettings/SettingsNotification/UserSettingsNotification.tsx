@@ -3,7 +3,7 @@ import styles from './UserSettingsNotification.module.scss';
 
 function UserInfoCard(): React.JSX.Element {
 
-  return ( 
+  return (
     <div className={styles.main_user_settings_notification}>
       <div className={styles.main_user_settings_title_notification}>Параметри сповіщень</div>
       <div className={styles.settings_profileVisibility}>
@@ -13,7 +13,7 @@ function UserInfoCard(): React.JSX.Element {
           <span className={styles.slider}/>
         </label>
         <p>Сповістити про заплановану співбесіду?</p>
-        
+
       </div>
       <div className={styles.settings_profileVisibility}>
         {/* <span className={styles.info}/> */}
@@ -21,10 +21,10 @@ function UserInfoCard(): React.JSX.Element {
           <input type="checkbox"/>
           <span className={styles.slider}/>
         </label>
-        <p>Сповістити про відгук по завершеному інтерв'ю?</p>
-        
+        <p>Сповістити про відгук по завершеному інтерв&apos;ю?</p>
+
       </div>
-      
+
     </div>
   );
 }

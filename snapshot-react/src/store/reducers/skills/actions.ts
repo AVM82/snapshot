@@ -14,10 +14,7 @@ const getUserSkillsByRole = createAsyncThunk(
 );
 const addRoleSkills = createAsyncThunk(
   ActionType.ADD_ROLE_SKILLS,
-  async ({ skillIds, roleId }:{ skillIds: number[], roleId:number } ):Promise<void> =>  {
-    console.log(skillIds);
-    await snapshotApi.post(`/skills/user/${roleId}`, { skillIds });
-  },
+  async ({ skillIds, roleId }:{ skillIds: number[], roleId:number } ):Promise<void> =>   snapshotApi.post(`/skills/user/${roleId}`, { skillIds }),
 );
 export { addRoleSkills,getRoleSkills,
   getUserSkillsByRole };

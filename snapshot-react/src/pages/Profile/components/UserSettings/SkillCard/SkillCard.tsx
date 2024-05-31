@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../hooks/redux';
-import { ISkills } from '../../../../../models/profile/ISkills.ts';
+import { ISkills } from '../../../../../models/profile/ISkills';
 import { IRoles } from '../../../../../models/user/IRoles';
-import { getUserSkillsByRole } from '../../../../../store/reducers/skills/actions.ts';
-import { removeSkill } from '../../../../../store/reducers/skills/userSkillsSlice.ts';
+import { getUserSkillsByRole } from '../../../../../store/reducers/skills/actions';
+import { removeSkill } from '../../../../../store/reducers/skills/userSkillsSlice';
 import UserRoles from '../../Roles/UserRoles';
 import Skills from '../../Skills/Skills';
 import styles from './SkillCard.module.scss';
@@ -12,23 +12,17 @@ import styles from './SkillCard.module.scss';
 function SkillCard(): React.JSX.Element {
   const user = useAppSelector((state) => state.user.userData);
   const [selectedRole, setSelectedRole] = useState<IRoles | null>(null);
-  // const [userSkills, setUserSkills] = useState<ISkills[]>([]);
   const [showNewComponent, setShowNewComponent] = useState(false);
   const dispatch = useAppDispatch();
   const [buttonVisible, setButtonVisible] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const { userSkills } = useAppSelector((state) => state.userSkills);
-  // const [userSkills, setUserSkills] = useState<string[]>([]);
-  // const [buttonText, setButtonText] = useState('ДОДАТИ НАВИЧКИ');
-  // const [allSkills, setAllSkills] = useState<string[]>([]);
-  // const [expanded, setExpanded] = useState(false);
-  // const [lowerSkills, setLowerSkills] = useState<string[]>([]);
 
   useEffect(() => {
     if (selectedRole) {
       dispatch(getUserSkillsByRole({ userId:user.id, roleId:selectedRole.id }));
     }
-  }, [selectedRole, user.id]);
+  }, [dispatch,selectedRole, user.id]);
 
   const handleButtonClick = (): void => {
     if (selectedRole) {

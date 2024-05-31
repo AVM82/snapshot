@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
 import { ISkills } from '../../../../models/profile/ISkills';
-import { addRoleSkills, getRoleSkills } from '../../../../store/reducers/skills/actions.ts';
+import { addRoleSkills, getRoleSkills } from '../../../../store/reducers/skills/actions';
 import { addUserSkill, getFilterSkillsByInput } from '../../../../store/reducers/skills/userSkillsSlice';
 import { RootState } from '../../../../store/store';
 import styles from './Skills.module.scss';

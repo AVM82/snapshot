@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { ISkills } from '../../../models/profile/ISkills';
-import { getRoleSkills, getUserSkillsByRole } from './actions.ts';
+import { getRoleSkills, getUserSkillsByRole } from './actions';
 
 interface IInitialState {
   id: string,
@@ -59,15 +59,16 @@ const userSkillsSlice = createSlice({
     addUserSkill:(state,action)=>{
       state.userSkills.push(action.payload);
     },
-    removeSkill:(state,action)=>{
-      state.userSkills= state.userSkills.filter((skill)=>skill.id !== action.payload.id);
-    }
+    removeSkill:(state,action)=>({
+      ...state,
+      userSkills: state.userSkills.filter((skill) => skill.id !== action.payload.id) })
   },
   extraReducers: (builder) => {
     builder.addCase(getRoleSkills.fulfilled, (state, action) => handleFulfilledGetSkills(state, action));
-    builder.addCase(getUserSkillsByRole.fulfilled,(state,action)=>{
-      state.userSkills = action.payload;
-    });
+    builder.addCase(getUserSkillsByRole.fulfilled,(state,action)=>({
+      ...state,
+      userSkills:action.payload
+    }));
   },
 
 });
