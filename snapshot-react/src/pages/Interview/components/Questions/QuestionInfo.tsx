@@ -23,6 +23,7 @@ function QuestionInfo({ questionId }: IProps): React.JSX.Element {
   );
 
   if (!question) return defaultRender();
+  console.log(question.grade);
 
   return (
     <section className={styles.skillInfoContainer}>

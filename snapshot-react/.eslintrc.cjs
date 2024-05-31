@@ -125,5 +125,11 @@ module.exports = {
     'import/no-duplicates': 'error',
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: ['@mui/*/*/*']
+      }
+    ],
   },
 };

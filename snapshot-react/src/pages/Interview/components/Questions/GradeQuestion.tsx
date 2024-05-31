@@ -1,4 +1,4 @@
-import { Slider } from '@mui/material';
+import  Slider  from '@mui/material/Slider';
 import React, { useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
