@@ -19,7 +19,7 @@ function HeaderAccount(): React.JSX.Element {
     <header className={styles.header}>
       <div className={styles.header_top}>
         <div className={styles.header_top_location}>Location</div>
-        
+
         <div className={styles.header_top_user}>
           {user.firstname}
           <div className={styles.drop_down_profile}>
@@ -60,13 +60,11 @@ function HeaderAccount(): React.JSX.Element {
           <div className={styles.header_title_notification}>{Boolean(user.id) && <Notification/>}</div>
           {/* <div><Link className={styles.header_link} to={}></Link></div> */}
         </div>
-        
+
       </div>
-      
+
       <div className={styles.header_linksContainer}>
-        <div><Link className={styles.header_link} to={`/profile/${user.id}/interview-journal`}>Співбесіда</Link></div>
         <div><Link className={styles.header_link} to={`/profile/${user.id}/statistics`}>Статистика</Link></div>
-        <div><Link className={styles.header_link} to={`/profile/${user.id}/statistics`}>Довідник скілів</Link></div>
         <div><Link className={styles.header_link} to="/candidate-search">Знайти кандидата</Link></div>
       </div>
 
