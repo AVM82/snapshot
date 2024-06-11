@@ -21,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -89,7 +90,7 @@ public class AuthenticationService {
     public void createUser(String token,
                            HttpServletResponse response) {
         long tempUserId = jwtService.getTempUserIdFromToken(token);
-        tempUserRepository.deleteAllByExpireAtBefore(LocalDateTime.now());
+        tempUserRepository.deleteAllByExpireAtBefore(LocalDateTime.now(ZoneOffset.UTC));
 
         Optional<TempUserEntity> tempUserEntity = tempUserRepository.findById(tempUserId);
         UriComponentsBuilder redirectUriComponentBuilder = UriComponentsBuilder.fromUriString(submitRedirectUri);
