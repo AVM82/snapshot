@@ -2,6 +2,7 @@ package com.project.snapshotspringboot.security.oauth2;
 
 import com.project.snapshotspringboot.entity.UserEntity;
 import com.project.snapshotspringboot.mapper.UserMapper;
+import com.project.snapshotspringboot.repository.TempUserRepository;
 import com.project.snapshotspringboot.security.oauth2.model.AuthDetails;
 import com.project.snapshotspringboot.security.oauth2.model.OAuth2UserInfo;
 import com.project.snapshotspringboot.security.oauth2.model.OAuth2UserInfoFactory;
@@ -24,6 +25,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserService userService;
     private final UserMapper userMapper;
+    private final TempUserRepository tempUserRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
@@ -57,6 +59,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private UserEntity registerNewUser(OAuth2UserInfo oAuth2UserInfo) {
+        tempUserRepository.deleteByEmail(oAuth2UserInfo.getEmail());
         return userService.saveNewUserWithDefaultRole(userMapper.oauth2InfoToEntity(oAuth2UserInfo));
     }
 }

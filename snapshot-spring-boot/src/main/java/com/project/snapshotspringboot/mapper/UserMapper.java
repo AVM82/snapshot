@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Set;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = {RoleMapper.class})
@@ -53,7 +54,7 @@ public abstract class UserMapper {
 
     @Named("createExpireAt")
     protected LocalDateTime currentLocalDateTime(RegisterRequest registerRequest) {
-        return LocalDateTime.now().plusMinutes(registrationEmailTokenExpireTimeInMinutes);
+        return LocalDateTime.now(ZoneOffset.UTC).plusMinutes(registrationEmailTokenExpireTimeInMinutes);
     }
 
     @Named("encodePassword")
