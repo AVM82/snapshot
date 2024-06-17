@@ -1,8 +1,8 @@
-name: Run Te
+name: Deploy to prod
 on:
   push:
     branches:
-    - gatling
+    - prod
     
 jobs:
   build-and-deploy:
