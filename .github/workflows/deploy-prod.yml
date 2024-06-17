@@ -1,0 +1,66 @@
+name: Run Te
+on:
+  push:
+    branches:
+    - gatling
+    
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build with Maven
+        run: |
+          cd snapshot-spring-boot
+          mvn clean install -DskipTests
+          cd target
+          echo "JAR=$(realpath $(find -name 'snapshot-spring-boot-*.jar' -type f))" >> $GITHUB_ENV
+        env:
+          VITE_BACK_URL: ${{ secrets.BACK_URI }}
+          VITE_FRONT_URL: ${{ secrets.BACK_URI }}
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Check existing JAR file version on EC2
+        id: check-version
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@ec2-16-170-108-49.eu-north-1.compute.amazonaws.com "ls /opt/shpp/snapshot/*.jar" > remote_jar.txt
+          local_jar=$(basename ${{ env.JAR }})
+          remote_jar=$(cat remote_jar.txt)
+          echo "local_jar=${local_jar}" >> $GITHUB_ENV
+          echo "remote_jar=${remote_jar}" >> $GITHUB_ENV
+          if [[ "${local_jar}" == "$(basename ${remote_jar})" ]]; then
+            echo "same_version=true" >> $GITHUB_ENV
+          else
+            echo "same_version=false" >> $GITHUB_ENV
+          fi
+          echo "local_jar=${local_jar}" >> $GITHUB_ENV
+          echo "remote_jar=${remote_jar}" >> $GITHUB_ENV
+
+      - name: Deploy JAR to EC2
+        if: env.same_version == 'false'
+        run: |
+          scp -o StrictHostKeyChecking=no ${{ env.JAR }} ec2-user@ec2-16-170-108-49.eu-north-1.compute.amazonaws.com:/opt/shpp/snapshot/
+          ssh -o StrictHostKeyChecking=no ec2-user@ec2-16-170-108-49.eu-north-1.compute.amazonaws.com << EOF
+
+            curl -v -X POST http://localhost:8080/actuator/shutdown
+
+            rm ${remote_jar}
+
+            setsid java -jar /opt/shpp/snapshot/$(basename ${{ env.JAR }}) &
+          EOF
+
+
+      
