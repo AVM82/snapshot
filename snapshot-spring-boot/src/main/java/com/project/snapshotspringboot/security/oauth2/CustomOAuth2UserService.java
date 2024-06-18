@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -28,6 +29,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final TempUserRepository tempUserRepository;
 
     @Override
+    @Transactional
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
 
