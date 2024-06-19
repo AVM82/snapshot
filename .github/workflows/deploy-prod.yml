@@ -25,8 +25,8 @@ jobs:
           cd target
           echo "JAR=$(realpath $(find -name 'snapshot-spring-boot-*.jar' -type f))" >> $GITHUB_ENV
         env:
-          VITE_BACK_URL: ${{ secrets.BACK_URI }}
-          VITE_FRONT_URL: ${{ secrets.BACK_URI }}
+          VITE_BACK_URL: ${{ secrets.PROD_URL }}
+          VITE_FRONT_URL: ${{ secrets.PROD_URL }}
 
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
